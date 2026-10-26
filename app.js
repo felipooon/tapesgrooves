@@ -4410,6 +4410,9 @@ class RecordStoreApp {
     this.tracklistItemsList = document.getElementById('tracklist-items-list');
     this.currentTracklist = [];
     this.activeTrackIndex = -1;
+    this.nextTrackTimeout = null;
+    this.fadeInterval = null;
+    this.fadeInInterval = null;
 
     this.initEventListeners();
     this.applyVolume(this.currentVolume);
@@ -5365,6 +5368,14 @@ class RecordStoreApp {
     if (!this.selectedAlbum || !this.selectedAlbum.previewUrl) return;
 
     if (this.isPlayingAudio) {
+      if (this.nextTrackTimeout) {
+        clearTimeout(this.nextTrackTimeout);
+        this.nextTrackTimeout = null;
+      }
+      if (this.fadeInterval) {
+        clearInterval(this.fadeInterval);
+        this.fadeInterval = null;
+      }
       this.audioElement.pause();
       this.isPlayingAudio = false;
       this.playPauseBtn.querySelector('.deck-key').textContent = '▶';
@@ -5375,6 +5386,11 @@ class RecordStoreApp {
       this.stopVuMeterAnimation();
       document.getElementById('preview-status-text').textContent = 'Pausado';
     } else {
+      if (this.nextTrackTimeout) {
+        clearTimeout(this.nextTrackTimeout);
+        this.nextTrackTimeout = null;
+      }
+      this.audioElement.volume = this.currentVolume;
       this.audioElement.play().then(() => {
         this.isPlayingAudio = true;
         this.playPauseBtn.querySelector('.deck-key').textContent = '⏸';
@@ -5383,6 +5399,7 @@ class RecordStoreApp {
         this.statusLedDot.classList.add('playing');
         this.setReelsSpinning(true);
         this.startVuMeterAnimation();
+        this.startTrackFadeIn(250);
         document.getElementById('preview-status-text').textContent = 'Reproduciendo en auriculares (30s)...';
       }).catch(err => {
         console.warn('Autoplay prevented or audio load error:', err);
@@ -5391,8 +5408,21 @@ class RecordStoreApp {
   }
 
   stopAudioPreview() {
+    if (this.nextTrackTimeout) {
+      clearTimeout(this.nextTrackTimeout);
+      this.nextTrackTimeout = null;
+    }
+    if (this.fadeInterval) {
+      clearInterval(this.fadeInterval);
+      this.fadeInterval = null;
+    }
+    if (this.fadeInInterval) {
+      clearInterval(this.fadeInInterval);
+      this.fadeInInterval = null;
+    }
     this.audioElement.pause();
     this.audioElement.currentTime = 0;
+    this.audioElement.volume = this.currentVolume;
     this.isPlayingAudio = false;
     this.playPauseBtn.querySelector('.deck-key').textContent = '▶';
     this.playPauseBtn.querySelector('.deck-label').textContent = 'PLAY';
@@ -5405,6 +5435,47 @@ class RecordStoreApp {
     document.getElementById('preview-status-text').textContent = 'Detenido';
   }
 
+  // Fade out suave de 1 segundo
+  startTrackFadeOut(durationMs = 1000) {
+    if (this.fadeInterval) return;
+    const startVol = this.audioElement.volume;
+    const startTime = performance.now();
+
+    this.fadeInterval = setInterval(() => {
+      const elapsed = performance.now() - startTime;
+      const progress = Math.min(1, elapsed / durationMs);
+      this.audioElement.volume = Math.max(0, startVol * (1 - progress));
+
+      if (progress >= 1) {
+        clearInterval(this.fadeInterval);
+        this.fadeInterval = null;
+      }
+    }, 40);
+  }
+
+  // Micro fade-in para arranque suave y sin chasquidos
+  startTrackFadeIn(durationMs = 250) {
+    if (this.fadeInInterval) {
+      clearInterval(this.fadeInInterval);
+      this.fadeInInterval = null;
+    }
+    const targetVol = this.currentVolume;
+    this.audioElement.volume = 0;
+    const startTime = performance.now();
+
+    this.fadeInInterval = setInterval(() => {
+      const elapsed = performance.now() - startTime;
+      const progress = Math.min(1, elapsed / durationMs);
+      this.audioElement.volume = Math.min(targetVol, targetVol * progress);
+
+      if (progress >= 1) {
+        clearInterval(this.fadeInInterval);
+        this.fadeInInterval = null;
+        this.audioElement.volume = targetVol;
+      }
+    }, 25);
+  }
+
   updateAudioProgress() {
     if (!this.audioElement.duration) return;
     const current = this.audioElement.currentTime;
@@ -5415,18 +5486,96 @@ class RecordStoreApp {
     const mins = Math.floor(current / 60);
     const secs = Math.floor(current % 60).toString().padStart(2, '0');
     document.getElementById('player-time-badge').textContent = `0${mins}:${secs}`;
+
+    const timeLeft = dur - current;
+
+    // Si el usuario rebobina antes de la zona de fade out, restablecer volumen
+    if (timeLeft > 1.4 && this.fadeInterval) {
+      clearInterval(this.fadeInterval);
+      this.fadeInterval = null;
+      this.audioElement.volume = this.currentVolume;
+    }
+
+    // 1 segundo de fade out progresivo antes de terminar la canción
+    if (timeLeft <= 1.05 && timeLeft > 0 && this.isPlayingAudio && !this.fadeInterval) {
+      this.startTrackFadeOut(1000);
+    }
   }
 
   onAudioEnded() {
-    this.isPlayingAudio = false;
-    this.playPauseBtn.querySelector('.deck-key').textContent = '▶';
-    this.playPauseBtn.querySelector('.deck-label').textContent = 'PLAY';
-    this.lcdModeText.textContent = 'END';
-    this.statusLedDot.classList.remove('playing');
-    this.setReelsSpinning(false);
-    this.stopVuMeterAnimation();
-    document.getElementById('player-progress-bar').style.width = '100%';
-    document.getElementById('preview-status-text').textContent = 'Fin de la cinta (¿te gustó? búscala en Spotify)';
+    if (this.fadeInterval) {
+      clearInterval(this.fadeInterval);
+      this.fadeInterval = null;
+    }
+    this.audioElement.volume = 0;
+
+    // Buscar la siguiente pista con muestra disponible
+    let nextIndex = -1;
+    if (this.currentTracklist && this.currentTracklist.length > 0) {
+      const currentIdx = typeof this.activeTrackIndex === 'number' ? this.activeTrackIndex : 0;
+
+      // Buscar hacia adelante
+      for (let i = currentIdx + 1; i < this.currentTracklist.length; i++) {
+        if (this.currentTracklist[i] && this.currentTracklist[i].previewUrl) {
+          nextIndex = i;
+          break;
+        }
+      }
+
+      // Si llegó al final, volver a la primera pista con muestra para reproducción continua
+      if (nextIndex === -1 && this.currentTracklist.length > 1) {
+        for (let i = 0; i < currentIdx; i++) {
+          if (this.currentTracklist[i] && this.currentTracklist[i].previewUrl) {
+            nextIndex = i;
+            break;
+          }
+        }
+      }
+    }
+
+    if (nextIndex !== -1 && this.currentTracklist[nextIndex]) {
+      const nextTrack = this.currentTracklist[nextIndex];
+      const nextNum = (nextIndex + 1).toString().padStart(2, '0');
+
+      // Interfaz LCD durante el segundo de separación
+      const isTape = this.selectedAlbum && this.selectedAlbum.format === 'cassette';
+      this.lcdModeText.textContent = isTape ? `TAPE ${nextNum}` : `CD ${nextNum}`;
+      document.getElementById('preview-status-text').textContent = `Siguiente pista en 1s: "${nextTrack.title}"...`;
+      sounds.playMechanicalClick();
+
+      // Destacar de inmediato la siguiente fila en el cancionero
+      if (this.tracklistItemsList) {
+        const rows = this.tracklistItemsList.querySelectorAll('.track-row-item');
+        rows.forEach((r, i) => {
+          r.classList.toggle('is-playing', i === nextIndex);
+        });
+        if (rows[nextIndex]) {
+          rows[nextIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }
+
+      // 1 segundo de separación antes de reproducir automáticamente la siguiente
+      if (this.nextTrackTimeout) clearTimeout(this.nextTrackTimeout);
+      this.nextTrackTimeout = setTimeout(() => {
+        this.nextTrackTimeout = null;
+        if (this.currentScene === 'inspect' && this.selectedAlbum) {
+          this.playTrackFromList(nextTrack, nextIndex);
+        }
+      }, 1000);
+
+    } else {
+      // No hay más pistas de muestra disponibles
+      this.isPlayingAudio = false;
+      this.playPauseBtn.querySelector('.deck-key').textContent = '▶';
+      this.playPauseBtn.querySelector('.deck-label').textContent = 'PLAY';
+      this.lcdModeText.textContent = 'END';
+      this.statusLedDot.classList.remove('playing');
+      this.setReelsSpinning(false);
+      this.stopVuMeterAnimation();
+      document.getElementById('player-progress-bar').style.width = '100%';
+      document.getElementById('preview-status-text').textContent = 'Fin del álbum (¿te gustó? escúchalo completo en Spotify)';
+      this.audioElement.volume = this.currentVolume;
+    }
   }
 
   // Realistic Equalizer Spectrum Animation
@@ -5532,6 +5681,14 @@ class RecordStoreApp {
   }
 
   playTrackFromList(track, idx) {
+    if (this.nextTrackTimeout) {
+      clearTimeout(this.nextTrackTimeout);
+      this.nextTrackTimeout = null;
+    }
+    if (this.fadeInterval) {
+      clearInterval(this.fadeInterval);
+      this.fadeInterval = null;
+    }
     this.activeTrackIndex = idx;
 
     // Update active highlight in UI
@@ -5551,6 +5708,7 @@ class RecordStoreApp {
 
     if (track.previewUrl) {
       this.audioElement.src = track.previewUrl;
+      this.audioElement.currentTime = 0;
       this.playPauseBtn.disabled = false;
       this.playPauseBtn.style.opacity = '1';
       document.getElementById('preview-status-text').textContent = `Reproduciendo "${track.title}" (30s)...`;
@@ -5563,10 +5721,12 @@ class RecordStoreApp {
         this.statusLedDot.classList.add('playing');
         this.setReelsSpinning(true);
         this.startVuMeterAnimation();
+        this.startTrackFadeIn(250);
       }).catch(err => {
         console.warn('Playback error or user gesture required', err);
       });
     } else {
+      this.audioElement.volume = this.currentVolume;
       document.getElementById('preview-status-text').textContent = `Pista elegida: "${track.title}" (Escúchala completa en Spotify/Apple)`;
     }
   }
