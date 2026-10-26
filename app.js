@@ -4177,6 +4177,7 @@ class RecordStoreApp {
     this.activeTrackIndex = -1;
 
     this.initEventListeners();
+    this.updateTracklistPlacement();
     this.loadCrateCategory('all');
   }
 
@@ -4404,6 +4405,11 @@ class RecordStoreApp {
           sounds.playCrateClack();
         }
       }
+    });
+
+    // Handle viewport resize for tracklist placement (desktop vs mobile player attachment)
+    window.addEventListener('resize', () => {
+      this.updateTracklistPlacement();
     });
   }
 
@@ -4978,7 +4984,8 @@ class RecordStoreApp {
       this.playPauseBtn.style.opacity = '0.4';
     }
 
-    // Setup tracklist UI mode (Desktop: open below cover; Mobile: hidden collapsible tab)
+    // Setup tracklist UI mode (Desktop: open below cover; Mobile: attached under player)
+    this.updateTracklistPlacement();
     if (this.tracklistSection) {
       const isMobile = window.innerWidth <= 768;
       if (isMobile) {
@@ -4993,6 +5000,25 @@ class RecordStoreApp {
     this.loadAlbumTracklist(album);
 
     this.switchScene('inspect');
+  }
+
+  // Relocate tracklist: below cover on desktop, attached directly under Walkman/Discman on mobile
+  updateTracklistPlacement() {
+    const isMobile = window.innerWidth <= 768;
+    const tracklist = document.getElementById('album-tracklist-section');
+    const deviceStation = document.getElementById('vintage-device-station');
+    const mediaCol = document.querySelector('.media-display-col');
+    if (!tracklist || !deviceStation || !mediaCol) return;
+
+    if (isMobile) {
+      if (tracklist.previousElementSibling !== deviceStation) {
+        deviceStation.after(tracklist);
+      }
+    } else {
+      if (tracklist.parentNode !== mediaCol) {
+        mediaCol.appendChild(tracklist);
+      }
+    }
   }
 
   // Audio Preview Controls

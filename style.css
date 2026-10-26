@@ -2264,22 +2264,55 @@ body {
     width: 100%;
   }
 
-  /* Tracklist en Móvil: pestaña oculta por defecto */
+  /* Walkman & Discman on Mobile (Continuous hardware chassis with tracklist attached below) */
+  .vintage-device-station {
+    padding: 0.9rem;
+    border-radius: 14px 14px 0 0;
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  /* Tracklist attached directly below Walkman/Discman as part of the unit in Mobile */
   .album-tracklist-section {
     max-width: 100%;
-    margin-top: 0.8rem;
-    border-color: rgba(255, 184, 51, 0.35);
+    margin-top: 0;
+    border: 2px solid #505666;
+    border-top: 1px dashed rgba(255, 184, 51, 0.4);
+    border-bottom: 4px solid #0d0f12;
+    border-radius: 0 0 14px 14px;
+    background: #14161a;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.85);
+    overflow: hidden;
   }
 
   .tracklist-toggle-btn {
-    padding: 10px 14px;
-    font-size: 0.82rem;
-    background: rgba(30, 20, 38, 0.95);
+    width: 100%;
+    padding: 9px 12px;
+    font-size: 0.8rem;
+    background: linear-gradient(180deg, #1f222a 0%, #161820 100%);
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    color: #e0d5c1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+
+  .tracklist-meta-info {
+    background: #0b1a14;
+    border: 1px solid #1a3329;
+    color: #00e676;
+    font-family: var(--font-retro);
+    font-size: 0.72rem;
+    padding: 2px 7px;
+    border-radius: 4px;
   }
 
   /* En móvil la lista inicia oculta ("pestaña oculta") */
   .album-tracklist-section .tracklist-content {
     display: none;
+    background: #0e1014;
   }
 
   /* Se muestra sólo cuando el usuario abre la pestaña */
@@ -2296,6 +2329,7 @@ body {
   .track-row-item {
     padding: 8px 10px;
     font-size: 0.8rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   }
 
   .physical-case-wrapper {
@@ -2320,12 +2354,6 @@ body {
 
   .artist-name-text {
     font-size: 1.05rem;
-  }
-
-  /* Walkman & Discman on Mobile */
-  .vintage-device-station {
-    padding: 0.8rem;
-    border-radius: 12px;
   }
 
   .device-brand-bar {
