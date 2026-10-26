@@ -3841,11 +3841,13 @@ class RecordStoreApp {
       this.pickRandomFromCrate();
     });
 
-    // Category Tabs (12 Expanded Genres)
+    // Category Tabs (15 Curated Genres with auto-scroll and drag swipe)
+    const tabsContainer = document.querySelector('.category-tabs');
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
+        btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
         this.currentSearchTerm = '';
         searchInput.value = '';
         const cat = btn.dataset.category;
@@ -3853,6 +3855,31 @@ class RecordStoreApp {
         this.loadCrateCategory(cat);
       });
     });
+
+    // Touch and Drag-to-Scroll support for category chips on mobile & tablet
+    if (tabsContainer) {
+      let isTabsDragging = false;
+      let startTabsX = 0;
+      let scrollTabsStart = 0;
+
+      tabsContainer.addEventListener('mousedown', (e) => {
+        isTabsDragging = true;
+        startTabsX = e.pageX - tabsContainer.offsetLeft;
+        scrollTabsStart = tabsContainer.scrollLeft;
+      });
+
+      window.addEventListener('mouseup', () => {
+        isTabsDragging = false;
+      });
+
+      tabsContainer.addEventListener('mousemove', (e) => {
+        if (!isTabsDragging) return;
+        e.preventDefault();
+        const x = e.pageX - tabsContainer.offsetLeft;
+        const walk = (x - startTabsX) * 1.6;
+        tabsContainer.scrollLeft = scrollTabsStart - walk;
+      });
+    }
 
     // Crate horizontal scroll arrows
     document.getElementById('crate-left-arrow').addEventListener('click', () => {
