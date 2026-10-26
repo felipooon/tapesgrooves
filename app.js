@@ -3679,6 +3679,92 @@ function fetchDeezerJSONP(query, limit = 40) {
   });
 }
 
+// Generic Deezer JSONP caller for any endpoint (search, album, tracks)
+function fetchDeezerEndpointJSONP(endpoint) {
+  return new Promise((resolve) => {
+    const cbName = 'dz_ep_' + Math.random().toString(36).substring(2, 9);
+    const script = document.createElement('script');
+    const timer = setTimeout(() => {
+      cleanup();
+      resolve(null);
+    }, 6000);
+
+    function cleanup() {
+      clearTimeout(timer);
+      try { delete window[cbName]; } catch (e) {}
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+
+    window[cbName] = function(resp) {
+      cleanup();
+      resolve(resp);
+    };
+
+    const separator = endpoint.includes('?') ? '&' : '?';
+    script.src = `${endpoint}${separator}output=jsonp&callback=${cbName}`;
+    script.onerror = () => {
+      cleanup();
+      resolve(null);
+    };
+    document.head.appendChild(script);
+  });
+}
+
+// Fetch complete album tracklist with song titles and audio previews
+async function fetchAlbumTracklist(artist, albumTitle) {
+  const query = `${artist} ${albumTitle}`;
+
+  // 1. Primary: Deezer Worldwide Catalog (100M+ tracks, instant tracklist)
+  try {
+    const searchUrl = `https://api.deezer.com/search/album?q=${encodeURIComponent(query)}&limit=1`;
+    const searchResp = await fetchDeezerEndpointJSONP(searchUrl);
+    if (searchResp && searchResp.data && searchResp.data.length > 0) {
+      const albumId = searchResp.data[0].id;
+      const tracksUrl = `https://api.deezer.com/album/${albumId}/tracks`;
+      const tracksResp = await fetchDeezerEndpointJSONP(tracksUrl);
+      if (tracksResp && tracksResp.data && tracksResp.data.length > 0) {
+        return tracksResp.data.map((t, idx) => ({
+          position: t.track_position || (idx + 1),
+          title: t.title_short || t.title,
+          durationSec: t.duration || 180,
+          previewUrl: t.preview
+        }));
+      }
+    }
+  } catch (e) {
+    console.warn("Deezer tracklist fetch error", e);
+  }
+
+  // 2. Secondary fallback: iTunes API lookup
+  try {
+    const itunesUrl = `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=album&limit=1`;
+    const res = await fetch(itunesUrl);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.results && data.results.length > 0) {
+        const cid = data.results[0].collectionId;
+        const lookupRes = await fetch(`https://itunes.apple.com/lookup?id=${cid}&entity=song`);
+        if (lookupRes.ok) {
+          const lookupData = await lookupRes.json();
+          const songs = lookupData.results.filter(r => r.wrapperType === 'track');
+          if (songs.length > 0) {
+            return songs.map((s, idx) => ({
+              position: s.trackNumber || (idx + 1),
+              title: s.trackName,
+              durationSec: s.trackTimeMillis ? Math.round(s.trackTimeMillis / 1000) : 180,
+              previewUrl: s.previewUrl
+            }));
+          }
+        }
+      }
+    }
+  } catch (e) {
+    console.warn("iTunes tracklist fallback error", e);
+  }
+
+  return [];
+}
+
 async function fetchArtistTracks(artistSeed, limit = 8) {
   // 1. Try Deezer first (fast, open, 0 rate-limiting, 100% global catalog)
   try {
@@ -3750,6 +3836,14 @@ class RecordStoreApp {
     this.btnForward = document.getElementById('btn-forward');
     this.btnStop = document.getElementById('btn-stop');
     this.vuFills = document.querySelectorAll('.vu-fill');
+
+    // Album Tracklist Elements
+    this.tracklistSection = document.getElementById('album-tracklist-section');
+    this.tracklistToggleBtn = document.getElementById('tracklist-toggle-btn');
+    this.tracklistCountBadge = document.getElementById('tracklist-count-badge');
+    this.tracklistItemsList = document.getElementById('tracklist-items-list');
+    this.currentTracklist = [];
+    this.activeTrackIndex = -1;
 
     this.initEventListeners();
     this.loadCrateCategory('all');
@@ -3934,6 +4028,15 @@ class RecordStoreApp {
       sounds.playMechanicalClick();
       this.stopAudioPreview();
     });
+
+    // Album Tracklist Collapsible Toggle (Hidden tab on mobile, open by default on desktop)
+    if (this.tracklistToggleBtn && this.tracklistSection) {
+      this.tracklistToggleBtn.addEventListener('click', () => {
+        sounds.playMechanicalClick();
+        const isOpen = this.tracklistSection.classList.toggle('is-open');
+        this.tracklistToggleBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+    }
 
     // Progress Bar Click Seek
     document.getElementById('player-progress-container').addEventListener('click', (e) => {
@@ -4525,6 +4628,20 @@ class RecordStoreApp {
       this.playPauseBtn.style.opacity = '0.4';
     }
 
+    // Setup tracklist UI mode (Desktop: open below cover; Mobile: hidden collapsible tab)
+    if (this.tracklistSection) {
+      const isMobile = window.innerWidth <= 768;
+      if (isMobile) {
+        this.tracklistSection.classList.remove('is-open');
+        if (this.tracklistToggleBtn) this.tracklistToggleBtn.setAttribute('aria-expanded', 'false');
+      } else {
+        this.tracklistSection.classList.add('is-open');
+        if (this.tracklistToggleBtn) this.tracklistToggleBtn.setAttribute('aria-expanded', 'true');
+      }
+    }
+
+    this.loadAlbumTracklist(album);
+
     this.switchScene('inspect');
   }
 
@@ -4635,6 +4752,106 @@ class RecordStoreApp {
     this.stopAudioPreview();
     sounds.playSwoosh();
     this.switchScene('crate');
+  }
+
+  // Load and render album tracklist
+  async loadAlbumTracklist(album) {
+    if (!this.tracklistItemsList) return;
+    this.activeTrackIndex = -1;
+    if (this.tracklistCountBadge) this.tracklistCountBadge.textContent = 'Buscando pistas...';
+    this.tracklistItemsList.innerHTML = '<div class="tracklist-loading-msg">🔍 Desplegando el cancionero del disco...</div>';
+
+    const tracks = await fetchAlbumTracklist(album.artist, album.title);
+
+    if (tracks && tracks.length > 0) {
+      this.currentTracklist = tracks;
+      if (this.tracklistCountBadge) this.tracklistCountBadge.textContent = `${tracks.length} temas`;
+      this.renderTracklistUI(tracks, album);
+    } else {
+      const fallbackTracks = [{
+        position: 1,
+        title: album.sampleTrack || album.title,
+        durationSec: 210,
+        previewUrl: album.previewUrl
+      }];
+      this.currentTracklist = fallbackTracks;
+      if (this.tracklistCountBadge) this.tracklistCountBadge.textContent = '1 tema (Edición única)';
+      this.renderTracklistUI(fallbackTracks, album);
+    }
+  }
+
+  renderTracklistUI(tracks, album) {
+    if (!this.tracklistItemsList) return;
+    this.tracklistItemsList.innerHTML = '';
+
+    tracks.forEach((t, idx) => {
+      const mins = Math.floor(t.durationSec / 60);
+      const secs = (t.durationSec % 60).toString().padStart(2, '0');
+      const pos = (t.position || (idx + 1)).toString().padStart(2, '0');
+
+      const isCurrent = (t.previewUrl && album.previewUrl && t.previewUrl === album.previewUrl) || idx === 0;
+      if (isCurrent && this.activeTrackIndex === -1) {
+        this.activeTrackIndex = idx;
+      }
+
+      const row = document.createElement('div');
+      row.className = `track-row-item ${idx === this.activeTrackIndex ? 'is-playing' : ''}`;
+      row.dataset.index = idx;
+      row.title = t.previewUrl ? `Reproducir "${t.title}" (30s)` : t.title;
+
+      row.innerHTML = `
+        <span class="track-row-num">${pos}</span>
+        <span class="track-row-title">${t.title}</span>
+        <span class="track-row-duration">${mins}:${secs}</span>
+      `;
+
+      row.addEventListener('click', () => {
+        sounds.playMechanicalClick();
+        this.playTrackFromList(t, idx);
+      });
+
+      this.tracklistItemsList.appendChild(row);
+    });
+  }
+
+  playTrackFromList(track, idx) {
+    this.activeTrackIndex = idx;
+
+    // Update active highlight in UI
+    const rows = this.tracklistItemsList.querySelectorAll('.track-row-item');
+    rows.forEach((r, i) => {
+      r.classList.toggle('is-playing', i === idx);
+    });
+
+    // Update Walkman / Discman LCD Screen
+    document.getElementById('track-sample-title').textContent = `🎵 ${track.title}`;
+    const trackMins = (idx + 1).toString().padStart(2, '0');
+    if (this.selectedAlbum && this.selectedAlbum.format === 'cassette') {
+      this.lcdModeText.textContent = `TAPE ${trackMins}`;
+    } else {
+      this.lcdModeText.textContent = `CD-DA ${trackMins}`;
+    }
+
+    if (track.previewUrl) {
+      this.audioElement.src = track.previewUrl;
+      this.playPauseBtn.disabled = false;
+      this.playPauseBtn.style.opacity = '1';
+      document.getElementById('preview-status-text').textContent = `Reproduciendo "${track.title}" (30s)...`;
+      
+      this.audioElement.play().then(() => {
+        this.isPlayingAudio = true;
+        this.playPauseBtn.querySelector('.deck-key').textContent = '⏸';
+        this.playPauseBtn.querySelector('.deck-label').textContent = 'PAUSE';
+        this.lcdModeText.textContent = 'PLAY';
+        this.statusLedDot.classList.add('playing');
+        this.setReelsSpinning(true);
+        this.startVuMeterAnimation();
+      }).catch(err => {
+        console.warn('Playback error or user gesture required', err);
+      });
+    } else {
+      document.getElementById('preview-status-text').textContent = `Pista elegida: "${track.title}" (Escúchala completa en Spotify/Apple)`;
+    }
   }
 
   showLoading(show, message = "Cargando...") {

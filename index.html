@@ -14,7 +14,7 @@
   <!-- Favicon: Mini Vinilo Vectorial -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
-  <link rel="stylesheet" href="style.css?v=16">
+  <link rel="stylesheet" href="style.css?v=17">
 </head>
 <body>
 
@@ -268,6 +268,22 @@
             <span class="format-pill pill-cd" id="inspect-format-pill">💿 COMPACT DISC</span>
             <span class="format-pill pill-year" id="inspect-year">1991</span>
           </div>
+
+          <!-- Album Tracklist (Desktop: below cover; Mobile: collapsible hidden tab) -->
+          <div class="album-tracklist-section is-open" id="album-tracklist-section">
+            <button class="tracklist-toggle-btn" id="tracklist-toggle-btn" type="button" aria-expanded="true" aria-controls="tracklist-content">
+              <span class="tracklist-title">
+                <span class="tracklist-icon">📜</span> LISTA DE CANCIONES
+              </span>
+              <span class="tracklist-meta-info" id="tracklist-count-badge">Cargando pistas...</span>
+              <span class="tracklist-toggle-arrow" id="tracklist-toggle-arrow">▾</span>
+            </button>
+            <div class="tracklist-content" id="tracklist-content">
+              <div class="tracklist-scroll-area" id="tracklist-items-list" tabindex="0" role="region" aria-label="Lista de canciones del disco">
+                <!-- Dynamically populated tracklist rows -->
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Right Column: Album Details & Player -->
@@ -394,6 +410,6 @@
     <span id="loading-text">Buscando joyas en la disquería...</span>
   </div>
 
-  <script src="app.js?v=16"></script>
+  <script src="app.js?v=17"></script>
 </body>
 </html>
