@@ -3728,6 +3728,106 @@ const MOOD_PRESETS = {
 };
 
 // ==========================================================================
+// 2.5 ARTIST TO GENRE RESOLUTION ENGINE (Automated & Curated)
+// Maps 1,300+ catalog artists to their genuine musical genre (Bossa Nova, Jazz, Urbano, etc.)
+// ==========================================================================
+const GENRE_LABELS_MAP = {
+  rock: 'Rock & Alt-Rock',
+  indie: 'Indie & Bedroom Pop',
+  latino: 'Rock & Pop Latino',
+  urbano: 'Urbano & Trap Latino',
+  synth: 'Synthpop & New Wave',
+  rnb: 'Neo-Soul & Modern R&B',
+  jazz: 'Jazz, Soul & Blues',
+  electronic: 'Electrónica & Club',
+  hiphop: 'Hip-Hop & Rap',
+  funk: 'Funk, Groove & Disco',
+  metal: 'Metal & Punk',
+  reggae: 'Reggae, Dub & Ska',
+  citypop: 'City Pop & Neo-Psicodelia',
+  bossa: 'Bossa Nova, MPB & Folk'
+};
+
+function normalizeArtistString(name) {
+  if (!name || typeof name !== 'string') return '';
+  return name
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/^(the|los|las|el|la)\s+/i, '')
+    .replace(/[^a-z0-9]/g, '')
+    .trim();
+}
+
+// Inverted map for instant O(1) genre lookup from artist name
+const ARTIST_TO_GENRE_MAP = new Map();
+
+(function initArtistGenreMap() {
+  const standardGenres = [
+    'bossa', 'jazz', 'urbano', 'synth', 'metal', 'reggae', 
+    'electronic', 'hiphop', 'funk', 'rnb', 'citypop', 'indie', 'latino', 'rock'
+  ];
+  for (const gKey of standardGenres) {
+    const list = GENRE_SEEDS[gKey];
+    if (Array.isArray(list)) {
+      const label = GENRE_LABELS_MAP[gKey];
+      for (const artist of list) {
+        if (typeof artist === 'string') {
+          const norm = normalizeArtistString(artist);
+          if (norm && !ARTIST_TO_GENRE_MAP.has(norm)) {
+            ARTIST_TO_GENRE_MAP.set(norm, label);
+          }
+        }
+      }
+    }
+  }
+})();
+
+function resolveAccurateGenre(artistName, currentCategory = null, rawApiGenre = null) {
+  if (artistName && typeof artistName === 'string') {
+    const norm = normalizeArtistString(artistName);
+    
+    // 1. Direct match in curated artist map (e.g. "Hermeto Pascoal" -> "Bossa Nova, MPB & Folk")
+    if (ARTIST_TO_GENRE_MAP.has(norm)) {
+      return ARTIST_TO_GENRE_MAP.get(norm);
+    }
+
+    // 2. Partial/substring match in curated artist map (e.g. "Hermeto Pascoal e Grupo")
+    for (const [knownNorm, genreLabel] of ARTIST_TO_GENRE_MAP.entries()) {
+      if (knownNorm.length >= 5 && (norm.includes(knownNorm) || knownNorm.includes(norm))) {
+        return genreLabel;
+      }
+    }
+  }
+
+  // 3. Current active crate category (if not 'all' and not a mood)
+  if (currentCategory && GENRE_LABELS_MAP[currentCategory]) {
+    return GENRE_LABELS_MAP[currentCategory];
+  }
+
+  // 4. Clean up raw API genre if provided and not generic
+  if (rawApiGenre && typeof rawApiGenre === 'string' && rawApiGenre.trim() !== '') {
+    const g = rawApiGenre.toLowerCase();
+    if (g !== 'rock & pop' && g !== 'universal' && g !== 'music' && g !== 'musica') {
+      if (g.includes('jazz')) return 'Jazz, Soul & Blues';
+      if (g.includes('bossa') || g.includes('mpb') || g.includes('brazilian') || g.includes('samba')) return 'Bossa Nova, MPB & Folk';
+      if (g.includes('reggae') || g.includes('dub') || g.includes('ska')) return 'Reggae, Dub & Ska';
+      if (g.includes('metal') || g.includes('punk') || g.includes('hardcore')) return 'Metal & Punk';
+      if (g.includes('electronic') || g.includes('dance') || g.includes('house') || g.includes('techno') || g.includes('electro') || g.includes('ambient')) return 'Electrónica & Club';
+      if (g.includes('hip-hop') || g.includes('hip hop') || g.includes('rap')) return 'Hip-Hop & Rap';
+      if (g.includes('r&b') || g.includes('soul') || g.includes('funk')) return 'Funk & Neo-Soul';
+      if (g.includes('latin') || g.includes('urbano') || g.includes('trap')) return 'Urbano & Pop Latino';
+      if (g.includes('indie') || g.includes('alternative') || g.includes('alternativo')) return 'Indie & Alt-Rock';
+      if (g.includes('rock')) return 'Rock & Alt-Rock';
+      if (g.includes('pop')) return 'Pop & Melodías';
+      return rawApiGenre;
+    }
+  }
+
+  return 'Música & Tesoros Seleccionados';
+}
+
+// ==========================================================================
 // 3. CURATED MASTERPIECE FALLBACK CATALOG (Offline Safety)
 // ==========================================================================
 const CURATED_FALLBACK = [
@@ -3826,51 +3926,121 @@ function generateEditorialBlurb(artist, title, genre, year) {
   const isNineties = cleanYear >= 1990 && cleanYear < 2000;
   const isModern = cleanYear >= 2000;
 
-  // 32 Rich, melomaniac perspectives categorized by sound, era and store curator wisdom
+  // Resolve true genre to ensure 100% melomaniac accuracy
+  const effectiveGenre = resolveAccurateGenre(artist, null, genre);
+  const g = (effectiveGenre || genre || '').toLowerCase();
+
+  // 1. Specialized Melomaniac Perspectives by Musical Genre
+  let genrePraises = [];
+  if (g.includes('bossa') || g.includes('mpb') || g.includes('folk') || g.includes('brazil') || g.includes('samba')) {
+    genrePraises = [
+      `Una joya imprescindible del cancionero brasileño y la música de raíz. Las complejas armonías, la sensibilidad acústica y el virtuosismo orgánico de ${artist} convierten a este álbum en una experiencia auditiva exquisita y profundamente conmovedora.`,
+      `Un viaje sonoro irrepetible guiado por la genialidad de ${artist}. Entre ritmos tradicionales, sutilezas de percusión y un groove hipnótico, este registro es venerado por coleccionistas de vinilo en todo el mundo.`,
+      `Puro lirismo y calidez tropical. ${artist} construyó en esta grabación un diálogo perfecto entre la improvisación jazzística y el alma poética de las raíces latinoamericanas.`
+    ];
+  } else if (g.includes('jazz') || g.includes('blues') || g.includes('soul')) {
+    genrePraises = [
+      `Una cumbre de improvisación, elegancia y virtuosismo instrumental. Las sesiones de ${artist} en este disco despliegan una química de estudio inolvidable, con bronces cálidos y una sección rítmica con swing imbatible.`,
+      `Puro magnetismo jazzístico y atmósfera nocturna. ${artist} plasma un dominio armónico deslumbrante, ideal para sumergirse con auriculares en la calidez de su sonido análogo.`,
+      `Grabado con una dinámica acústica prístina. Cada solo y arreglo de ${artist} respira con naturalidad, convirtiendo este álbum en una referencia obligada del género.`
+    ];
+  } else if (g.includes('urbano') || g.includes('trap') || g.includes('reggaeton')) {
+    genrePraises = [
+      `Un auténtico peso pesado del movimiento urbano contemporáneo. Los bajos profundos 808, el flow afilado y la producción vanguardista posicionaron a ${artist} en la cúspide de la escena global.`,
+      `Un disco que redefinió los estándares de producción de la música urbana. ${artist} combina barras directas y ganchos melódicos demoledores que dominaron pistas y listas internacionales.`,
+      `Pura energía y pulsación callejera contemporánea. Este trabajo de ${artist} captura el pulso de toda una generación con un sonido fresco e influyente.`
+    ];
+  } else if (g.includes('synth') || g.includes('wave') || g.includes('electro') || g.includes('80s')) {
+    genrePraises = [
+      `Un festín de sintetizadores analógicos, cajas de ritmo y atmósferas nocturnas. ${artist} encapsula la estética dorada de los 80 con ganchos melódicos irresistibles y una producción estéreo de ensueño.`,
+      `Nostalgia pura teñida de luces de neón. Los arpegios envolventes y las melodías vocales de ${artist} convierten este trabajo en una obra de culto del movimiento synthwave.`,
+      `Un clásico donde la tecnología de secuenciadores y la emotividad pop se funden a la perfección. ${artist} logró un sonido atemporal que sigue inspirando producciones hoy en día.`
+    ];
+  } else if (g.includes('metal') || g.includes('punk') || g.includes('heavy') || g.includes('core')) {
+    genrePraises = [
+      `Una descarga demoledora de decibeles, riffs abrasivos y potencia rítmica. ${artist} firma aquí uno de los trabajos más contundentes de su carrera, imprescindible para amantes del sonido pesado.`,
+      `Furia, precisión técnica y una muralla de guitarras distorsionadas. ${artist} entrega un disco visceral que no da tregua desde el primer acorde hasta el fade-out final.`,
+      `Un monumento al poder del rock más duro. La producción cruda y la intensidad interpretativa de ${artist} consagran a este lanzamiento como una pieza angular del género.`
+    ];
+  } else if (g.includes('reggae') || g.includes('dub') || g.includes('ska')) {
+    genrePraises = [
+      `Vibraciones positivas y frecuencias graves monumentales. ${artist} teje un tapiz de ritmo y espiritualidad con líneas de bajo profundas y ese toque percusivo sincopado inconfundible.`,
+      `Ecos de cinta magnética, cámaras de reverberación y un groove hipnótico. ${artist} demuestra un dominio maestro del sonido dub y roots que te atrapa al instante.`,
+      `Un bálsamo sonoro cargado de mensaje y cadencia relajada. La producción de este disco de ${artist} es un manual de cómo lograr calidez y pegada en los graves.`
+    ];
+  } else if (g.includes('electronic') || g.includes('club') || g.includes('house') || g.includes('techno')) {
+    genrePraises = [
+      `Una travesía hipnótica pensada tanto para las pistas de baile como para la escucha atenta. ${artist} combina beats infecciosos, texturas modulares y una progresión sonora envolvente.`,
+      `Vanguardia electrónica en su máxima expresión. Las capas de sonido y el diseño acústico de ${artist} sumergen al oyente en un trance de grooves adictivos.`,
+      `Un disco fundamental para entender la evolución de la música de club. ${artist} equilibra la euforia bailable con una sofisticación sónica digna de museo.`
+    ];
+  } else if (g.includes('hip-hop') || g.includes('rap')) {
+    genrePraises = [
+      `Un manifiesto lírico con beats memorables construidos a base de samples exquisitos. ${artist} destila maestría en el fraseo, el ritmo y el relato urbano con una identidad inconfundible.`,
+      `El sonido del vinilo crackeando y baterías gruesas de MPC. ${artist} entrega una clase magistral de narrativa y groove que representa la esencia más pura del género.`,
+      `Barras afiladas, producción milimétrica y una presencia imponente en el micrófono. Este disco de ${artist} figura entre las obras más respetadas de su era.`
+    ];
+  } else if (g.includes('funk') || g.includes('disco') || g.includes('groove')) {
+    genrePraises = [
+      `Imposible quedarse quieto. El bajo con slap, los vientos afilados y el ritmo contagioso de ${artist} convierten a este álbum en una fiesta sonora de principio a fin.`,
+      `Puro sudor, síncopa y virtuosismo instrumental. ${artist} firma una obra donde cada compás destila elegancia, sensualidad y una pista de baile imparable.`,
+      `El pináculo del groove analógico. Las guitarras rítmicas y la brillantez vocal de ${artist} hacen de este disco un clásico festivo que jamás pierde brillo.`
+    ];
+  } else if (g.includes('latino') || g.includes('español')) {
+    genrePraises = [
+      `Un hito indiscutible de la música en nuestro idioma. Con composiciones que marcaron a generaciones, ${artist} exhibe una lírica brillante y una fuerza emotiva que no envejece jamás.`,
+      `Una joya de la discografía latinoamericana. ${artist} combina arreglos impecables con poesías y melodías que forman parte indeleble de la memoria colectiva del continente.`,
+      `El cenit artístico de ${artist}. Grabado en un momento de inspiración suprema, este álbum condensa la pasión, la poesía y la potencia de nuestra música.`
+    ];
+  } else if (g.includes('indie') || g.includes('pop')) {
+    genrePraises = [
+      `Sensibilidad melódica, poesía introspectiva y texturas sonoras delicadas. ${artist} demuestra por qué es un referente del circuito alternativo con un disco honesto y vibrante.`,
+      `Guitarras brillantes, melodías de ensueño y una atmósfera nostálgica irresistible. ${artist} construye un universo íntimo que recompensa cada nueva escucha.`,
+      `Un soplo de aire fresco en la escena indie. ${artist} logra aquí canciones memorables con arreglos artesanales y un carisma compositivo arrollador.`
+    ];
+  }
+
+  // 2. Era & Store Curator Wisdom Perspectives
   const generalPraises = [
     `Una de las grabaciones más inspiradas en la discografía de ${artist}. Publicado en ${year}, captura la calidez física y analógica de los grandes estudios de la época, convirtiéndose en un tesoro codiciado por coleccionistas.`,
-    `Un manifiesto sonoro indiscutible de ${genre}. Las composiciones de ${artist} en este álbum envejecieron con una vigencia asombrosa, destacando por su producción minuciosa y arreglos memorables.`,
+    `Un manifiesto sonoro indiscutible de ${effectiveGenre}. Las composiciones de ${artist} en este álbum envejecieron con una vigencia asombrosa, destacando por su producción minuciosa y arreglos memorables.`,
     `El tipo de disco que solía agotarse el mismo día de reposición en las bateas. ${artist} logró aquí un equilibrio magistral entre melodías adictivas y una experimentación que definió escuela.`,
     `Una obra concebida para ser experimentada de punta a punta, sin saltarse una sola pista. Las capas instrumentales y la lírica de ${artist} te transportan a un viaje atmosférico irrepetible.`,
     `Si buscas una recomendación con personalidad propia, este trabajo de ${artist} (${year}) ofrece una masterización exquisita que brilla con especial magia a través de auriculares.`,
-    `Pocas producciones logran envejecer con tanta elegancia. ${artist} construyó en este lanzamiento un puente perfecto entre la emoción cruda y la sofisticación técnica de ${genre}.`,
-    `Un clásico de culto rescatado del cajón de joyas. La química de grabación y los matices armónicos de ${artist} representan una época dorada de creatividad sin ataduras comerciales.`,
-    `Considerado por críticos y audiófilos como un punto de inflexión. En ${year}, este álbum abrió nuevas avenidas estéticas para todo el movimiento de ${genre}.`
+    `Pocas producciones logran envejecer con tanta elegancia. ${artist} construyó en este lanzamiento un puente perfecto entre la emoción cruda y la sofisticación técnica de ${effectiveGenre}.`,
+    `Un clásico de culto rescatado del cajón de joyas. La química de grabación y los matices armónicos de ${artist} representan una época dorada de creatividad sin ataduras comerciales.`
   ];
 
   const vintagePraises = [
-    `Grabado en cinta magnética de 2 pulgadas en pleno apogeo de ${year}. Las texturas de sintetizadores y guitarras analógicas de ${artist} guardan ese grano cálido imposible de replicar en la era digital.`,
-    `Un testamento definitivo de la era dorada de las consolas analógicas. ${artist} destiló en este LP (${year}) un sonido exuberante que definió la identidad de ${genre} en todo el mundo.`,
-    `Una joya de la era de los cassettes y vinilos pesados. La producción de este disco de ${artist} destaca por su dinamismo sin compresión excesiva, dejando respirar cada instrumento.`,
-    `En ${year}, este lanzamiento consagró a ${artist} como pionero sonoro. La atmósfera envolvente y el groove rítmico lo convierten en una escucha obligatoria de las bateas clásicas.`
+    `Grabado en cinta magnética de 2 pulgadas en pleno apogeo de ${year}. Las texturas instrumentales y consolas analógicas de ${artist} guardan ese grano cálido imposible de replicar en la era digital.`,
+    `Un testamento definitivo de la era dorada de las consolas analógicas. ${artist} destiló en este LP (${year}) un sonido exuberante que definió la identidad de ${effectiveGenre} en todo el mundo.`,
+    `Una joya de la era de los cassettes y vinilos pesados. La producción de este disco de ${artist} destaca por su dinamismo sin compresión excesiva, dejando respirar cada instrumento.`
   ];
 
   const ninetiesPraises = [
     `El esplendor de la era del Compact Disc noventero. Lanzado en ${year}, este álbum de ${artist} rompió moldes con su energía visceral, convirtiéndose en la banda sonora de toda una generación.`,
-    `Una obra cumbre de los años 90. Con ${year} como escenario, ${artist} fusionó la introspección lírica con paredes de sonido y una producción que redefinió ${genre}.`,
-    `Un disco que dominó las rotaciones de radio y las estanterías de las disquerías en ${year}. ${artist} alcanzó aquí una madurez compositiva que no ha perdido un ápice de fuerza.`,
+    `Una obra cumbre de los años 90. Con ${year} como escenario, ${artist} fusionó la introspección lírica con paredes de sonido y una producción que redefinió ${effectiveGenre}.`,
     `Diseñado para lucir en los reproductores Discman portátiles de la época. La claridad estéreo y la profundidad de bajos hacen que este trabajo de ${artist} siga sonando fresco hoy.`
   ];
 
   const modernPraises = [
-    `Un clásico moderno del nuevo milenio. Lanzado en ${year}, ${artist} sintetiza la herencia clásica de ${genre} con una vanguardia electrónica y acústica de primer nivel.`,
+    `Un clásico moderno del nuevo milenio. Lanzado en ${year}, ${artist} sintetiza la herencia clásica de ${effectiveGenre} con una vanguardia electrónica y acústica de primer nivel.`,
     `Una de las declaraciones artísticas más aclamadas de los últimos tiempos. ${artist} demostró que los álbumes conceptuales siguen siendo el formato rey para contar historias profundas.`,
-    `Producción cristalina, arreglos milimétricos y una interpretación vocal cautivadora. Este álbum de ${artist} (${year}) es una clase magistral de cómo reinventar ${genre}.`,
-    `Un fenómeno sonoro contemporáneo. Desde su lanzamiento en ${year}, este disco ha acumulado elogios por su audacia y su capacidad de generar himnos que resuenan en todo el planeta.`
+    `Producción cristalina, arreglos milimétricos y una interpretación vocal cautivadora. Este álbum de ${artist} (${year}) es una clase magistral de cómo reinventar ${effectiveGenre}.`
   ];
 
-  let pool = generalPraises;
+  let pool = [...genrePraises, ...generalPraises];
   if (isVintage) {
-    pool = [...generalPraises, ...vintagePraises];
+    pool = [...genrePraises, ...generalPraises, ...vintagePraises];
   } else if (isNineties) {
-    pool = [...generalPraises, ...ninetiesPraises];
+    pool = [...genrePraises, ...generalPraises, ...ninetiesPraises];
   } else if (isModern) {
-    pool = [...generalPraises, ...modernPraises];
+    pool = [...genrePraises, ...generalPraises, ...modernPraises];
   }
 
   // Deterministic seed based on string hash
   let hash = 0;
-  const str = `${artist}:${title}:${genre}`;
+  const str = `${artist}:${title}:${effectiveGenre}`;
   for (let i = 0; i < str.length; i++) {
     hash = (hash << 5) - hash + str.charCodeAt(i);
     hash |= 0;
@@ -3879,21 +4049,64 @@ function generateEditorialBlurb(artist, title, genre, year) {
   return pool[idx];
 }
 
-// Fetch real background story & historical context from Wikipedia API (ES & EN fallback)
+// Fetch real background story & historical context from Wikipedia API with strict match validation
 async function fetchWikipediaAlbumStory(artist, title) {
-  // Strip remaster, deluxe and edition suffixes for accurate search
+  if (!artist || !title) return null;
+
+  // Clean title from common metadata noise
   const cleanTitle = title
-    .replace(/\s*[\(\[](remaster(ed)?|deluxe|anniversary|special|expanded|edition|bonus|version|live|explicit|single).*?[\)\]]/gi, '')
+    .replace(/\s*[\(\[](remaster(ed)?|deluxe|anniversary|special|expanded|edition|bonus|version|live|explicit|single|original).*?[\)\]]/gi, '')
     .trim();
 
-  const searchCandidates = [
-    `${artist} ${cleanTitle}`,
-    `${cleanTitle} álbum`,
-    `${cleanTitle} album`,
-    `${cleanTitle} ${artist}`
-  ];
+  // If title is a generic compilation name, do NOT search generic titles alone (prevents Nelson Ned / collision bugs)
+  const isGenericCompilation = /^(dose dupla|grandes éxitos|greatest hits|antología|antologia|lo mejor de|the best of|colección|coleccion|box set|discografía|discografia|en vivo|ao vivo|live|unplugged|acústico|acustico|vol\s*\.?\s*\d+|volumen\s*\.?\s*\d+|remixes|singles|éxitos|exitos|selftitled|self-titled)$/i.test(cleanTitle.toLowerCase());
 
-  // 1. Primary: Spanish Wikipedia REST API (CORS open with origin=*)
+  // Formulate high-precision candidate queries that ALWAYS include artist name
+  const searchCandidates = isGenericCompilation
+    ? [`${cleanTitle} ${artist}`, `${artist} álbum`]
+    : [`${artist} ${cleanTitle}`, `${cleanTitle} (${artist})`, `${cleanTitle} álbum`, `${cleanTitle} album`];
+
+  const artistWords = artist
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s]/g, "")
+    .split(/\s+/)
+    .filter(w => w.length >= 3 && !['los', 'las', 'del', 'the', 'and'].includes(w));
+
+  const cleanTitleLower = cleanTitle
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s]/g, "")
+    .trim();
+
+  function isValidArticle(pageTitle, extract) {
+    if (!extract || extract.length < 75) return false;
+    const pt = (pageTitle || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const ex = extract.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    // Must be musically relevant (reject films, TV programs, geography, etc.)
+    const isMusical = /(álbum|album|disco|canción|canciones|banda|músico|cantante|compositor|discográfica|grabado|estudio|lanzamiento|single|guitarra|batería|pista|productor|ep|lp|song|record|recording|recorded|singer|musician|band|release|billboard|track)/i.test(ex);
+    if (!isMusical) return false;
+
+    // Reject disambiguations or generic overview sentences
+    if (ex.startsWith('puede referirse a:') || ex.startsWith('hace referencia a:') || ex.startsWith('may refer to:')) return false;
+
+    // Must strictly mention the artist (in page title or extract)
+    const mentionsArtist = artistWords.some(w => pt.includes(w) || ex.includes(w));
+    if (!mentionsArtist) return false;
+
+    // If not a generic compilation, must also match the album title
+    if (!isGenericCompilation && cleanTitleLower.length >= 4) {
+      const mentionsTitle = pt.includes(cleanTitleLower) || ex.includes(cleanTitleLower);
+      if (!mentionsTitle) return false;
+    }
+
+    return true;
+  }
+
+  // 1. Primary: Spanish Wikipedia
   for (const query of searchCandidates) {
     try {
       const searchUrl = `https://es.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&utf8=&format=json&origin=*`;
@@ -3902,56 +4115,55 @@ async function fetchWikipediaAlbumStory(artist, title) {
         const data = await res.json();
         const items = data.query?.search;
         if (items && items.length > 0) {
-          // Prioritize results containing album or matching title
-          const match = items.find(i => {
-            const t = i.title.toLowerCase();
-            return t.includes('álbum') || t.includes('album') || t.includes(cleanTitle.toLowerCase());
-          }) || items[0];
-
-          const summaryUrl = `https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(match.title)}`;
-          const sRes = await fetch(summaryUrl);
-          if (sRes.ok) {
-            const sData = await sRes.json();
-            if (sData.extract && sData.extract.length > 75 && sData.type !== 'disambiguation') {
-              return {
-                extract: sData.extract,
-                source: 'Wikipedia (Historia & Datos de Grabación)',
-                sourceUrl: sData.content_urls?.desktop?.page || null
-              };
+          // Check top 3 items for a strictly verified match
+          for (const item of items.slice(0, 3)) {
+            const summaryUrl = `https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(item.title)}`;
+            const sRes = await fetch(summaryUrl);
+            if (sRes.ok) {
+              const sData = await sRes.json();
+              if (sData.type !== 'disambiguation' && isValidArticle(sData.title || item.title, sData.extract)) {
+                return {
+                  extract: sData.extract,
+                  source: 'Wikipedia (Historia & Datos de Grabación)',
+                  sourceUrl: sData.content_urls?.desktop?.page || null
+                };
+              }
             }
           }
         }
       }
-    } catch (e) {
-      // Continue to next candidate
-    }
+    } catch (e) {}
   }
 
-  // 2. Secondary fallback: English Wikipedia
-  try {
-    const enQuery = `${artist} ${cleanTitle} album`;
-    const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(enQuery)}&utf8=&format=json&origin=*`;
-    const res = await fetch(searchUrl);
-    if (res.ok) {
-      const data = await res.json();
-      const items = data.query?.search;
-      if (items && items.length > 0) {
-        const best = items[0];
-        const sRes = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(best.title)}`);
-        if (sRes.ok) {
-          const sData = await sRes.json();
-          if (sData.extract && sData.extract.length > 75 && sData.type !== 'disambiguation') {
-            return {
-              extract: sData.extract,
-              source: 'Wikipedia Encyclopedia (Archive)',
-              sourceUrl: sData.content_urls?.desktop?.page || null
-            };
+  // 2. Secondary fallback: English Wikipedia (only if not generic compilation)
+  if (!isGenericCompilation) {
+    try {
+      const enQuery = `${artist} ${cleanTitle} album`;
+      const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(enQuery)}&utf8=&format=json&origin=*`;
+      const res = await fetch(searchUrl);
+      if (res.ok) {
+        const data = await res.json();
+        const items = data.query?.search;
+        if (items && items.length > 0) {
+          for (const item of items.slice(0, 3)) {
+            const sRes = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(item.title)}`);
+            if (sRes.ok) {
+              const sData = await sRes.json();
+              if (sData.type !== 'disambiguation' && isValidArticle(sData.title || item.title, sData.extract)) {
+                return {
+                  extract: sData.extract,
+                  source: 'Wikipedia Encyclopedia (Archive)',
+                  sourceUrl: sData.content_urls?.desktop?.page || null
+                };
+              }
+            }
           }
         }
       }
-    }
-  } catch (e) {}
+    } catch (e) {}
+  }
 
+  // If match was inaccurate or not strictly verified, return null to preserve rich editorial store review
   return null;
 }
 
@@ -4101,17 +4313,20 @@ async function fetchArtistTracks(artistSeed, limit = 8) {
   try {
     const dzResults = await fetchDeezerJSONP(artistSeed, limit);
     if (dzResults && dzResults.length > 0) {
-      return dzResults.map(t => ({
-        collectionName: t.album ? t.album.title : t.title,
-        artistName: t.artist ? t.artist.name : artistSeed,
-        releaseDate: getYearFromTrack(t),
-        primaryGenreName: 'Rock & Pop',
-        artworkUrl100: (t.album && (t.album.cover_xl || t.album.cover_big || t.album.cover_medium)) 
-          ? (t.album.cover_xl || t.album.cover_big || t.album.cover_medium) 
-          : 'assets/crate_close_up.jpg',
-        previewUrl: t.preview,
-        trackName: t.title || 'Pista Destacada'
-      }));
+      return dzResults.map(t => {
+        const resolvedArtist = t.artist ? t.artist.name : artistSeed;
+        return {
+          collectionName: t.album ? t.album.title : t.title,
+          artistName: resolvedArtist,
+          releaseDate: getYearFromTrack(t),
+          primaryGenreName: resolveAccurateGenre(resolvedArtist),
+          artworkUrl100: (t.album && (t.album.cover_xl || t.album.cover_big || t.album.cover_medium)) 
+            ? (t.album.cover_xl || t.album.cover_big || t.album.cover_medium) 
+            : 'assets/crate_close_up.jpg',
+          previewUrl: t.preview,
+          trackName: t.title || 'Pista Destacada'
+        };
+      });
     }
   } catch (e) {}
 
@@ -4122,7 +4337,10 @@ async function fetchArtistTracks(artistSeed, limit = 8) {
     if (res.ok) {
       const data = await res.json();
       if (data.results && data.results.length > 0) {
-        return data.results;
+        return data.results.map(t => ({
+          ...t,
+          primaryGenreName: resolveAccurateGenre(t.artistName || artistSeed, null, t.primaryGenreName)
+        }));
       }
     }
   } catch (e) {}
@@ -4494,17 +4712,18 @@ class RecordStoreApp {
               : '199X';
 
             const format = (collectedAlbums.length + seedIdx) % 2 === 0 ? 'cd' : 'cassette';
+            const accurateGenre = resolveAccurateGenre(chosenTrack.artistName, null, chosenTrack.primaryGenreName);
 
             const albumObj = {
               title: chosenAlbumTitle,
               artist: chosenTrack.artistName,
               year: releaseYear,
-              genre: chosenTrack.primaryGenreName || 'Rock & Pop',
+              genre: accurateGenre,
               format: format,
               artwork: highResArt,
               previewUrl: chosenTrack.previewUrl,
               sampleTrack: chosenTrack.trackName || 'Pista Destacada',
-              review: generateEditorialBlurb(chosenTrack.artistName, chosenAlbumTitle, chosenTrack.primaryGenreName || 'este género', releaseYear),
+              review: generateEditorialBlurb(chosenTrack.artistName, chosenAlbumTitle, accurateGenre, releaseYear),
               spotifyQuery: `${chosenTrack.artistName} ${chosenAlbumTitle}`,
               spineColor: getSpineColorForTitle(chosenTrack.artistName + chosenAlbumTitle)
             };
@@ -4523,16 +4742,17 @@ class RecordStoreApp {
               if (otherTitle !== chosenAlbumTitle && !seenTitles.has(otherTitle.toLowerCase())) {
                 const otherTracks = albumGroups.get(otherTitle);
                 const otherTrack = otherTracks[0];
+                const otherAccurateGenre = resolveAccurateGenre(otherTrack.artistName, null, otherTrack.primaryGenreName);
                 secondaryAlbums.push({
                   title: otherTitle,
                   artist: otherTrack.artistName,
                   year: otherTrack.releaseDate ? new Date(otherTrack.releaseDate).getFullYear().toString() : '199X',
-                  genre: otherTrack.primaryGenreName || 'Rock & Pop',
+                  genre: otherAccurateGenre,
                   format: (secondaryAlbums.length % 2 === 0) ? 'cd' : 'cassette',
                   artwork: otherTrack.artworkUrl100 ? otherTrack.artworkUrl100.replace('100x100bb.jpg', '1000x1000bb.jpg') : 'assets/crate_close_up.jpg',
                   previewUrl: otherTrack.previewUrl,
                   sampleTrack: otherTrack.trackName || 'Pista Destacada',
-                  review: generateEditorialBlurb(otherTrack.artistName, otherTitle, otherTrack.primaryGenreName || 'este género', '199X'),
+                  review: generateEditorialBlurb(otherTrack.artistName, otherTitle, otherAccurateGenre, '199X'),
                   spotifyQuery: `${otherTrack.artistName} ${otherTitle}`,
                   spineColor: getSpineColorForTitle(otherTrack.artistName + otherTitle)
                 });
@@ -4626,17 +4846,18 @@ class RecordStoreApp {
               : '199X';
 
             const format = (collectedAlbums.length + seedIdx) % 2 === 0 ? 'cd' : 'cassette';
+            const accurateGenre = resolveAccurateGenre(chosenTrack.artistName, cat, chosenTrack.primaryGenreName);
 
             const albumObj = {
               title: chosenAlbumTitle,
               artist: chosenTrack.artistName,
               year: releaseYear,
-              genre: chosenTrack.primaryGenreName || 'Rock & Pop',
+              genre: accurateGenre,
               format: format,
               artwork: highResArt,
               previewUrl: chosenTrack.previewUrl,
               sampleTrack: chosenTrack.trackName || 'Pista Destacada',
-              review: generateEditorialBlurb(chosenTrack.artistName, chosenAlbumTitle, chosenTrack.primaryGenreName || 'este género', releaseYear),
+              review: generateEditorialBlurb(chosenTrack.artistName, chosenAlbumTitle, accurateGenre, releaseYear),
               spotifyQuery: `${chosenTrack.artistName} ${chosenAlbumTitle}`,
               spineColor: getSpineColorForTitle(chosenTrack.artistName + chosenAlbumTitle)
             };
@@ -4655,16 +4876,17 @@ class RecordStoreApp {
               if (otherTitle !== chosenAlbumTitle && !seenTitles.has(otherTitle.toLowerCase())) {
                 const otherTracks = albumGroups.get(otherTitle);
                 const otherTrack = otherTracks[0];
+                const otherAccurateGenre = resolveAccurateGenre(otherTrack.artistName, cat, otherTrack.primaryGenreName);
                 secondaryAlbums.push({
                   title: otherTitle,
                   artist: otherTrack.artistName,
                   year: otherTrack.releaseDate ? new Date(otherTrack.releaseDate).getFullYear().toString() : '199X',
-                  genre: otherTrack.primaryGenreName || 'Rock & Pop',
+                  genre: otherAccurateGenre,
                   format: (secondaryAlbums.length % 2 === 0) ? 'cd' : 'cassette',
                   artwork: otherTrack.artworkUrl100 ? otherTrack.artworkUrl100.replace('100x100bb.jpg', '1000x1000bb.jpg') : 'assets/crate_close_up.jpg',
                   previewUrl: otherTrack.previewUrl,
                   sampleTrack: otherTrack.trackName || 'Pista Destacada',
-                  review: generateEditorialBlurb(otherTrack.artistName, otherTitle, otherTrack.primaryGenreName || 'este género', '199X'),
+                  review: generateEditorialBlurb(otherTrack.artistName, otherTitle, otherAccurateGenre, '199X'),
                   spotifyQuery: `${otherTrack.artistName} ${otherTitle}`,
                   spineColor: getSpineColorForTitle(otherTrack.artistName + otherTitle)
                 });
@@ -4738,7 +4960,7 @@ class RecordStoreApp {
           albumTitle: t.album ? t.album.title : t.title,
           artistName: t.artist ? t.artist.name : query,
           releaseYear: getYearFromTrack(t),
-          genre: 'Universal',
+          genre: resolveAccurateGenre(t.artist ? t.artist.name : query),
           artwork: (t.album && (t.album.cover_xl || t.album.cover_big || t.album.cover_medium)) 
             ? (t.album.cover_xl || t.album.cover_big || t.album.cover_medium) 
             : 'assets/crate_close_up.jpg',
@@ -4762,7 +4984,7 @@ class RecordStoreApp {
               albumTitle: s.collectionName,
               artistName: s.artistName,
               releaseYear: s.releaseDate ? new Date(s.releaseDate).getFullYear().toString() : '199X',
-              genre: s.primaryGenreName || 'Universal',
+              genre: resolveAccurateGenre(s.artistName || query, null, s.primaryGenreName),
               artwork: s.artworkUrl100 ? s.artworkUrl100.replace('100x100bb.jpg', '1000x1000bb.jpg') : 'assets/crate_close_up.jpg',
               previewUrl: s.previewUrl,
               trackName: s.trackName || 'Pista Principal'
@@ -4796,17 +5018,18 @@ class RecordStoreApp {
         const currentCount = artistCounts.get(normArtist) || 0;
 
         const format = idx % 2 === 0 ? 'cd' : 'cassette';
+        const accurateSongGenre = resolveAccurateGenre(song.artistName, null, song.genre);
 
         const albumObj = {
           title: albumTitle,
           artist: song.artistName,
           year: song.releaseYear,
-          genre: song.genre,
+          genre: accurateSongGenre,
           format: format,
           artwork: song.artwork,
           previewUrl: song.previewUrl,
           sampleTrack: song.trackName,
-          review: generateEditorialBlurb(song.artistName, albumTitle, song.genre, song.releaseYear),
+          review: generateEditorialBlurb(song.artistName, albumTitle, accurateSongGenre, song.releaseYear),
           spotifyQuery: `${song.artistName} ${albumTitle}`,
           spineColor: getSpineColorForTitle(song.artistName + albumTitle)
         };
@@ -4912,14 +5135,18 @@ class RecordStoreApp {
   async inspectAlbum(album) {
     this.selectedAlbum = album;
 
+    // Dynamically guarantee 100% accurate genre resolution even for cached or quick-picked items
+    const accurateGenre = resolveAccurateGenre(album.artist, this.currentCategory, album.genre);
+    album.genre = accurateGenre;
+
     // Populate Modal UI
     document.getElementById('inspect-album-title').textContent = album.title;
     document.getElementById('inspect-artist-name').textContent = album.artist;
-    document.getElementById('inspect-genre').textContent = album.genre;
+    document.getElementById('inspect-genre').textContent = accurateGenre;
     document.getElementById('inspect-year').textContent = album.year;
     
-    // Initial rich editorial review
-    const initialBlurb = album.review || generateEditorialBlurb(album.artist, album.title, album.genre, album.year);
+    // Initial rich editorial review tailored to this artist, genre and era
+    const initialBlurb = album.review || generateEditorialBlurb(album.artist, album.title, accurateGenre, album.year);
     const reviewTextEl = document.getElementById('inspect-review-text');
     
     reviewTextEl.textContent = initialBlurb;

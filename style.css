@@ -2238,12 +2238,13 @@ body {
   }
 
   .inspect-card {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     max-width: 480px;
     max-height: none;
-    padding: 3.2rem 1.2rem 2rem;
-    gap: 1.4rem;
+    padding: 3.2rem 1.1rem 2rem;
+    gap: 1.1rem;
     border-radius: 20px;
     margin: 0 auto;
   }
@@ -2258,31 +2259,62 @@ body {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
   }
 
-  .media-display-col {
-    margin-top: 0.4rem;
-    align-items: center;
+  /* Flatten columns into single mobile flow */
+  .media-display-col,
+  .album-details-col {
+    display: contents !important;
+  }
+
+  /* Exact Mobile Visual Flow */
+  .physical-case-wrapper {
+    order: 1;
+    margin: 0.2rem auto 0;
+  }
+
+  .media-badges {
+    order: 2;
+    margin: 0 auto 0.2rem;
+  }
+
+  .album-main-meta {
+    order: 3;
     width: 100%;
   }
 
   /* Walkman & Discman on Mobile (Continuous hardware chassis with tracklist attached below) */
   .vintage-device-station {
+    order: 4;
+    width: 100%;
     padding: 0.9rem;
-    border-radius: 14px 14px 0 0;
-    border-bottom: none;
-    margin-bottom: 0;
+    border-radius: 14px 14px 0 0 !important;
+    border-bottom: none !important;
+    margin-bottom: 0 !important;
   }
 
   /* Tracklist attached directly below Walkman/Discman as part of the unit in Mobile */
   .album-tracklist-section {
-    max-width: 100%;
-    margin-top: 0;
-    border: 2px solid #505666;
-    border-top: 1px dashed rgba(255, 184, 51, 0.4);
-    border-bottom: 4px solid #0d0f12;
-    border-radius: 0 0 14px 14px;
-    background: #14161a;
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.85);
-    overflow: hidden;
+    order: 5; /* SE UBICA EXACTAMENTE ABAJO DEL REPRODUCTOR */
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-top: 0 !important;
+    margin-bottom: 0.4rem !important;
+    border: 2px solid #505666 !important;
+    border-top: 1px dashed rgba(255, 184, 51, 0.45) !important;
+    border-bottom: 4px solid #0d0f12 !important;
+    border-radius: 0 0 14px 14px !important;
+    background: #14161a !important;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.85) !important;
+    overflow: hidden !important;
+  }
+
+  .streaming-links-box {
+    order: 6;
+    width: 100%;
+  }
+
+  .inspect-actions-row {
+    order: 7;
+    width: 100%;
   }
 
   .tracklist-toggle-btn {
