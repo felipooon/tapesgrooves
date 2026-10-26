@@ -1258,6 +1258,12 @@ body {
   width: 270px;
   height: 270px;
   perspective: 1000px;
+  transition: width 0.35s ease, height 0.35s ease;
+}
+
+.physical-case-wrapper.format-cassette {
+  width: 205px;
+  height: 300px;
 }
 
 /* Jewel Case & Cassette Artwork Card */
@@ -1274,11 +1280,24 @@ body {
   background: #111;
 }
 
+.case-art-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
 .case-art-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+.physical-case.format-cd {
+  width: 270px;
+  height: 270px;
+  border-radius: 6px;
 }
 
 /* Jewel Case Plastic Gleam Overlay */
@@ -1303,10 +1322,12 @@ body {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .format-cassette .cassette-jcard-overlay {
-  display: block;
+  display: flex;
 }
 
 .format-cassette .jewel-case-sheen {
@@ -1314,12 +1335,30 @@ body {
 }
 
 .physical-case.format-cassette {
+  width: 205px;
+  height: 300px;
   border: 2px solid rgba(255, 255, 255, 0.45);
-  border-left: 5px solid rgba(255, 255, 255, 0.65);
-  border-radius: 6px;
+  border-left: 6px solid rgba(255, 255, 255, 0.65);
+  border-radius: 8px;
   box-shadow: 
     0 18px 45px rgba(0, 0, 0, 0.95),
-    inset 0 0 12px rgba(255, 255, 255, 0.18);
+    inset 0 0 14px rgba(255, 255, 255, 0.15);
+  background: #0d0c10;
+  display: flex;
+  flex-direction: column;
+}
+
+.format-cassette .case-art-container {
+  width: 100%;
+  height: 205px;
+  flex: 0 0 205px;
+  overflow: hidden;
+}
+
+.format-cassette .case-art-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .norelco-hinge {
@@ -1327,41 +1366,120 @@ body {
   top: 0;
   left: 0;
   bottom: 0;
-  width: 14px;
+  width: 12px;
   background: linear-gradient(90deg, 
-    rgba(255, 255, 255, 0.45) 0%, 
-    rgba(255, 255, 255, 0.1) 40%, 
-    rgba(0, 0, 0, 0.35) 100%);
+    rgba(255, 255, 255, 0.5) 0%, 
+    rgba(255, 255, 255, 0.15) 40%, 
+    rgba(0, 0, 0, 0.4) 100%);
   border-right: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 2px 0 6px rgba(0, 0, 0, 0.4);
+  z-index: 5;
 }
 
-/* Authentic Vintage Cassette Tape Cartridge (Cartucho Físico que sale del estuche) */
+/* J-Card Bottom Banner (Authentic Tape Insert Flap) */
+.jcard-bottom-banner {
+  height: 95px;
+  background: linear-gradient(180deg, #18151c 0%, #0d0b0f 100%);
+  border-top: 2px solid rgba(255, 255, 255, 0.25);
+  padding: 8px 10px 8px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 2;
+}
+
+.jcard-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+}
+
+.jcard-album-name {
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 0.74rem;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.2px;
+}
+
+.jcard-dolby-logo {
+  font-family: var(--font-retro);
+  font-size: 0.60rem;
+  color: #ffaa00;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.jcard-sub-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+}
+
+.jcard-artist-name {
+  font-family: var(--font-body);
+  font-size: 0.66rem;
+  color: #aaa;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.jcard-spec-code {
+  font-family: var(--font-retro);
+  font-size: 0.56rem;
+  color: #00e5ff;
+  letter-spacing: 0.5px;
+}
+
+/* Norelco Pocket Wall */
+.norelco-pocket-wall {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 95px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 20%, transparent 100%);
+  pointer-events: none;
+  border-top: 2px solid rgba(255, 255, 255, 0.35);
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  z-index: 4;
+}
+
+/* Authentic Vintage Cassette Tape Cartridge (Formato Vertical que sale hacia la derecha) */
 .cassette-cartridge {
   position: absolute;
-  top: 15px;
-  right: -30px;
-  width: 250px;
-  height: 165px;
-  border-radius: 10px;
-  background: 
-    linear-gradient(180deg, #232128 0%, #16141a 50%, #0d0c10 100%);
-  border: 2px solid #3c3945;
-  border-bottom: 4px solid #08070a;
+  top: 10px;
+  right: -25px;
+  width: 175px;
+  height: 280px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #24222a 0%, #17151c 50%, #0d0c11 100%);
+  border: 2px solid #3d3a46;
+  border-right: 4px solid #08070b;
   box-shadow: 
     0 14px 35px rgba(0, 0, 0, 0.95),
     inset 0 1px 2px rgba(255, 255, 255, 0.2);
   z-index: -1;
   transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.2);
   display: none;
-  padding: 8px 10px;
+  padding: 8px 8px;
   box-sizing: border-box;
   overflow: hidden;
   user-select: none;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .physical-case-wrapper:hover .cassette-cartridge {
-  transform: translateX(45px);
+  transform: translateX(65px);
 }
 
 /* 4 Corner Metal Screws */
@@ -1437,38 +1555,45 @@ body {
   text-overflow: ellipsis;
 }
 
-/* Clear Tape Window Assembly */
+/* Clear Tape Window Assembly (Vertical layout) */
 .cassette-window-assembly {
-  background: rgba(10, 8, 14, 0.9);
+  background: rgba(10, 8, 14, 0.92);
   border: 2px solid #4a4552;
   border-radius: 6px;
-  padding: 3px 8px;
+  padding: 6px 8px;
   position: relative;
   box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.95);
+  margin: 4px 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .cassette-tape-gauge {
   display: flex;
   justify-content: space-between;
   font-family: var(--font-retro);
-  font-size: 0.55rem;
-  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.54rem;
+  color: rgba(255, 255, 255, 0.4);
   margin-bottom: 2px;
-  padding: 0 12px;
+  padding: 0 8px;
 }
 
 .cassette-reels-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
   position: relative;
-  height: 38px;
+  flex: 1;
+  gap: 4px;
 }
 
 .spool-housing {
   position: relative;
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1482,14 +1607,14 @@ body {
   border: 1px solid #140b06;
 }
 
-.tape-pack-left {
-  width: 36px;
-  height: 36px;
+.tape-pack-top {
+  width: 34px;
+  height: 34px;
 }
 
-.tape-pack-right {
-  width: 22px;
-  height: 22px;
+.tape-pack-bottom {
+  width: 24px;
+  height: 24px;
 }
 
 /* White 6-Toothed Cogwheel Hub */
@@ -1528,10 +1653,10 @@ body {
 
 /* Magnetic Tape Ribbon connecting the spools */
 .tape-ribbon-bridge {
+  width: 5px;
   flex: 1;
-  height: 5px;
-  background: linear-gradient(180deg, #4d2b17 0%, #2e1b10 100%);
-  margin: 0 3px;
+  min-height: 18px;
+  background: linear-gradient(90deg, #4d2b17 0%, #2e1b10 100%);
   border-radius: 1px;
 }
 
@@ -1542,6 +1667,12 @@ body {
   justify-content: center;
   gap: 15px;
   margin-top: 4px;
+  height: 18px;
+  background: #141318;
+  border: 1px solid #333;
+  border-radius: 2px 2px 4px 4px;
+  padding: 0 10px;
+  position: relative;
 }
 
 .tape-guide-roller {
@@ -2799,15 +2930,34 @@ body {
     transform: translateX(30px);
   }
 
+  .physical-case-wrapper.format-cassette {
+    width: 170px;
+    height: 250px;
+  }
+
+  .format-cassette .case-art-container {
+    height: 170px;
+    flex: 0 0 170px;
+  }
+
+  .jcard-bottom-banner {
+    height: 80px;
+    padding: 6px 8px 6px 14px;
+  }
+
+  .norelco-pocket-wall {
+    height: 80px;
+  }
+
   .cassette-cartridge {
-    width: 210px;
-    height: 140px;
-    right: -20px;
-    top: 10px;
+    width: 145px;
+    height: 235px;
+    right: -15px;
+    top: 6px;
   }
 
   .physical-case-wrapper:hover .cassette-cartridge {
-    transform: translateX(30px);
+    transform: translateX(40px);
   }
 
   .album-title-text {
