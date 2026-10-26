@@ -14,7 +14,7 @@
   <!-- Favicon: Mini Vinilo Vectorial -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
-  <link rel="stylesheet" href="style.css?v=22">
+  <link rel="stylesheet" href="style.css?v=23">
 </head>
 <body>
 
@@ -298,17 +298,66 @@
               <!-- CD Jewel Case Glossy Sheen -->
               <div class="jewel-case-sheen" aria-hidden="true"></div>
 
-              <!-- Cassette Details Overlay (Spools & Tape window) -->
-              <div class="cassette-overlay" aria-hidden="true">
-                <div class="cassette-window">
-                  <div class="cassette-spool"></div>
-                  <div class="cassette-spool"></div>
-                </div>
+              <!-- Cassette J-Card Box Hinge & Depth Overlay -->
+              <div class="cassette-jcard-overlay" aria-hidden="true">
+                <div class="norelco-hinge"></div>
               </div>
             </div>
 
-            <!-- Compact Disc Disc sliding out -->
+            <!-- Compact Disc sliding out (for CD format) -->
             <div class="compact-disc" id="inspect-compact-disc" aria-hidden="true"></div>
+
+            <!-- Authentic Vintage Cassette Tape Cartridge (for Cassette format) -->
+            <div class="cassette-cartridge" id="inspect-cassette-cartridge" aria-hidden="true">
+              <!-- Screws in 4 corners -->
+              <span class="cassette-screw screw-tl">✖</span>
+              <span class="cassette-screw screw-tr">✖</span>
+              <span class="cassette-screw screw-bl">✖</span>
+              <span class="cassette-screw screw-br">✖</span>
+              
+              <!-- Paper Label / Sticker -->
+              <div class="cassette-label">
+                <div class="cassette-label-header">
+                  <span class="cassette-side-badge">SIDE A</span>
+                  <span class="cassette-tech-spec">TYPE I • NORMAL BIAS • 120µs EQ</span>
+                  <span class="cassette-brand-spec">DOLBY B</span>
+                </div>
+                <div class="cassette-title-line" id="cassette-label-title">Título del Álbum</div>
+                <div class="cassette-artist-line" id="cassette-label-artist">Nombre del Artista</div>
+              </div>
+
+              <!-- Clear Tape Window with Spools & Ribbon -->
+              <div class="cassette-window-assembly">
+                <div class="cassette-tape-gauge">
+                  <span>100</span><span>50</span><span>0</span>
+                </div>
+                <div class="cassette-reels-container">
+                  <!-- Left Spool & Tape Pack -->
+                  <div class="spool-housing">
+                    <div class="magnetic-tape-pack tape-pack-left"></div>
+                    <div class="cassette-toothed-hub" id="hub-left">
+                      <div class="hub-center-hole"></div>
+                    </div>
+                  </div>
+                  <!-- Center Tape Bridge -->
+                  <div class="tape-ribbon-bridge"></div>
+                  <!-- Right Spool & Tape Pack -->
+                  <div class="spool-housing">
+                    <div class="magnetic-tape-pack tape-pack-right"></div>
+                    <div class="cassette-toothed-hub" id="hub-right">
+                      <div class="hub-center-hole"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Lower Trapezoid Tape Head Area -->
+              <div class="cassette-head-trapezoid">
+                <div class="tape-guide-roller roller-left"></div>
+                <div class="tape-pressure-pad"></div>
+                <div class="tape-guide-roller roller-right"></div>
+              </div>
+            </div>
           </div>
 
           <!-- Format and Year Badges -->
@@ -409,6 +458,18 @@
               </button>
             </div>
 
+            <!-- Analog Volume Thumbwheel / Slider -->
+            <div class="device-volume-control" id="device-volume-control">
+              <button class="vol-mute-btn" id="vol-mute-btn" type="button" title="Silenciar / Activar sonido" aria-label="Silenciar">
+                <span class="vol-icon" id="vol-icon">🔊</span>
+              </button>
+              <div class="vol-slider-track">
+                <span class="vol-legend">VOL</span>
+                <input type="range" class="retro-vol-slider" id="deck-volume-slider" min="0" max="100" value="80" step="1" title="Control de volumen analógico">
+                <span class="vol-val-badge" id="vol-val-badge">80%</span>
+              </div>
+            </div>
+
             <div class="device-status-caption">
               <span class="status-led-dot" id="status-led-dot"></span>
               <span class="preview-status-text" id="preview-status-text">
@@ -458,6 +519,6 @@
     <span id="loading-text">Buscando joyas en la disquería...</span>
   </div>
 
-  <script src="app.js?v=22"></script>
+  <script src="app.js?v=23"></script>
 </body>
 </html>

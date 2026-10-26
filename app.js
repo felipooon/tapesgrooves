@@ -4386,6 +4386,18 @@ class RecordStoreApp {
     this.btnStop = document.getElementById('btn-stop');
     this.vuFills = document.querySelectorAll('.vu-fill');
 
+    // Analog Volume Control Elements
+    this.deckVolSlider = document.getElementById('deck-volume-slider');
+    this.volValBadge = document.getElementById('vol-val-badge');
+    this.volMuteBtn = document.getElementById('vol-mute-btn');
+    this.volIcon = document.getElementById('vol-icon');
+
+    // Load persisted volume (default 80%)
+    let savedVol = null;
+    try { savedVol = localStorage.getItem('tapes_grooves_vol'); } catch (e) {}
+    this.currentVolume = savedVol !== null ? parseFloat(savedVol) : 0.8;
+    this.previousVolume = this.currentVolume > 0 ? this.currentVolume : 0.8;
+
     // Album Tracklist Elements
     this.tracklistSection = document.getElementById('album-tracklist-section');
     this.tracklistToggleBtn = document.getElementById('tracklist-toggle-btn');
@@ -4395,8 +4407,38 @@ class RecordStoreApp {
     this.activeTrackIndex = -1;
 
     this.initEventListeners();
+    this.applyVolume(this.currentVolume);
     this.updateTracklistPlacement();
     this.loadCrateCategory('all');
+  }
+
+  // Set and persist analog volume
+  applyVolume(vol) {
+    this.currentVolume = Math.max(0, Math.min(1, vol));
+    if (this.audioElement) {
+      this.audioElement.volume = this.currentVolume;
+    }
+    const pct = Math.round(this.currentVolume * 100);
+    if (this.deckVolSlider) this.deckVolSlider.value = pct;
+    if (this.volValBadge) this.volValBadge.textContent = `${pct}%`;
+    if (this.volIcon) {
+      if (pct === 0) this.volIcon.textContent = '🔇';
+      else if (pct < 50) this.volIcon.textContent = '🔉';
+      else this.volIcon.textContent = '🔊';
+    }
+    try {
+      localStorage.setItem('tapes_grooves_vol', this.currentVolume.toString());
+    } catch (e) {}
+  }
+
+  // Toggle mute on speaker click
+  toggleMute() {
+    if (this.currentVolume > 0) {
+      this.previousVolume = this.currentVolume;
+      this.applyVolume(0);
+    } else {
+      this.applyVolume(this.previousVolume > 0 ? this.previousVolume : 0.8);
+    }
   }
 
   // Bind UI Events
@@ -4605,6 +4647,20 @@ class RecordStoreApp {
     this.audioElement.addEventListener('ended', () => {
       this.onAudioEnded();
     });
+
+    // Analog Volume Slider & Mute Toggle Events
+    if (this.deckVolSlider) {
+      this.deckVolSlider.addEventListener('input', (e) => {
+        const val = parseInt(e.target.value, 10);
+        this.applyVolume(val / 100);
+      });
+    }
+
+    if (this.volMuteBtn) {
+      this.volMuteBtn.addEventListener('click', () => {
+        this.toggleMute();
+      });
+    }
 
     // Keyboard Shortcuts
     window.addEventListener('keydown', (e) => {
@@ -5172,6 +5228,7 @@ class RecordStoreApp {
     const physicalCase = document.getElementById('inspect-physical-case');
     const formatPill = document.getElementById('inspect-format-pill');
     const discEl = document.getElementById('inspect-compact-disc');
+    const cassetteCartridgeEl = document.getElementById('inspect-cassette-cartridge');
 
     // Adapt Walkman vs Discman Branding & Mode
     if (album.format === 'cassette') {
@@ -5180,6 +5237,14 @@ class RecordStoreApp {
       formatPill.textContent = '📼 CASSETTE VINTAGE';
       discEl.style.display = 'none';
 
+      if (cassetteCartridgeEl) {
+        cassetteCartridgeEl.style.display = 'block';
+        const lblTitle = document.getElementById('cassette-label-title');
+        const lblArtist = document.getElementById('cassette-label-artist');
+        if (lblTitle) lblTitle.textContent = album.title;
+        if (lblArtist) lblArtist.textContent = album.artist;
+      }
+
       this.deviceModelBadge.textContent = 'WALKMAN WM-EX1 • AUTO REVERSE';
       this.lcdModeText.textContent = 'TAPE 1';
     } else {
@@ -5187,6 +5252,10 @@ class RecordStoreApp {
       formatPill.className = 'format-pill pill-cd';
       formatPill.textContent = '💿 COMPACT DISC';
       discEl.style.display = 'block';
+
+      if (cassetteCartridgeEl) {
+        cassetteCartridgeEl.style.display = 'none';
+      }
 
       this.deviceModelBadge.textContent = 'DISCMAN D-E305 • ESP DIGITAL AUDIO';
       this.lcdModeText.textContent = 'CD-DA 01';
@@ -5340,13 +5409,13 @@ class RecordStoreApp {
 
   setReelsSpinning(isSpinning) {
     const disc = document.getElementById('inspect-compact-disc');
-    const spools = document.querySelectorAll('.cassette-spool');
+    const spools = document.querySelectorAll('.cassette-spool, .cassette-toothed-hub');
 
     if (isSpinning) {
-      disc.classList.add('spinning');
+      if (disc) disc.classList.add('spinning');
       spools.forEach(s => s.classList.add('spinning'));
     } else {
-      disc.classList.remove('spinning');
+      if (disc) disc.classList.remove('spinning');
       spools.forEach(s => s.classList.remove('spinning'));
     }
   }

@@ -1131,63 +1131,254 @@ body {
   box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.15);
 }
 
-/* Cassette Format Overlay (Spools & Tape window) */
-.cassette-overlay {
+/* Norelco J-Card Box Hinge & Overlay for Cassette Format */
+.cassette-jcard-overlay {
   display: none;
   position: absolute;
   inset: 0;
-  background: rgba(20, 15, 10, 0.3);
   pointer-events: none;
 }
 
-.format-cassette .cassette-overlay {
+.format-cassette .cassette-jcard-overlay {
   display: block;
 }
 
-.cassette-window {
+.norelco-hinge {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 180px;
-  height: 60px;
-  background: rgba(10, 10, 15, 0.85);
-  border: 2px solid #a6734d;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 14px;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.45) 0%, 
+    rgba(255, 255, 255, 0.1) 40%, 
+    rgba(0, 0, 0, 0.35) 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Authentic Vintage Cassette Tape Cartridge (Cartucho Físico que sale del estuche) */
+.cassette-cartridge {
+  position: absolute;
+  top: 15px;
+  right: -30px;
+  width: 250px;
+  height: 165px;
+  border-radius: 10px;
+  background: 
+    linear-gradient(180deg, #232128 0%, #16141a 50%, #0d0c10 100%);
+  border: 2px solid #3c3945;
+  border-bottom: 4px solid #08070a;
+  box-shadow: 
+    0 14px 35px rgba(0, 0, 0, 0.95),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  z-index: -1;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+  display: none;
+  padding: 8px 10px;
+  box-sizing: border-box;
+  overflow: hidden;
+  user-select: none;
+}
+
+.physical-case-wrapper:hover .cassette-cartridge {
+  transform: translateX(45px);
+}
+
+/* 4 Corner Metal Screws */
+.cassette-screw {
+  position: absolute;
+  font-size: 8px;
+  color: #7d798a;
+  line-height: 1;
+  font-weight: bold;
+}
+.screw-tl { top: 6px; left: 8px; }
+.screw-tr { top: 6px; right: 8px; }
+.screw-bl { bottom: 6px; left: 8px; }
+.screw-br { bottom: 6px; right: 8px; }
+
+/* Paper Label Sticker */
+.cassette-label {
+  background: linear-gradient(180deg, #fffaf0 0%, #f4ede1 100%);
+  border: 1px solid #c7bba8;
+  border-radius: 4px;
+  padding: 5px 8px;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.15);
+  margin-bottom: 5px;
+}
+
+.cassette-label-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-retro);
+  font-size: 0.62rem;
+  color: #8b0000;
+  border-bottom: 1px solid #d5c7b3;
+  padding-bottom: 2px;
+  margin-bottom: 3px;
+}
+
+.cassette-side-badge {
+  font-weight: bold;
+  background: #8b0000;
+  color: #fff;
+  padding: 0 4px;
+  border-radius: 2px;
+  letter-spacing: 1px;
+}
+
+.cassette-tech-spec {
+  font-size: 0.58rem;
+  color: #555;
+  letter-spacing: 0.5px;
+}
+
+.cassette-brand-spec {
+  font-weight: bold;
+  color: #111;
+}
+
+.cassette-title-line {
+  font-size: 0.78rem;
+  font-weight: bold;
+  color: #1a1510;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.2px;
+}
+
+.cassette-artist-line {
+  font-size: 0.68rem;
+  color: #635645;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Clear Tape Window Assembly */
+.cassette-window-assembly {
+  background: rgba(10, 8, 14, 0.9);
+  border: 2px solid #4a4552;
   border-radius: 6px;
+  padding: 3px 8px;
+  position: relative;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.95);
+}
+
+.cassette-tape-gauge {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-retro);
+  font-size: 0.55rem;
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 2px;
+  padding: 0 12px;
+}
+
+.cassette-reels-container {
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  padding: 0 20px;
+  justify-content: space-between;
+  position: relative;
+  height: 38px;
 }
 
-.cassette-spool {
+.spool-housing {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Dark Brown Magnetic Tape Pack coiled around spool */
+.magnetic-tape-pack {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, #3d2314 55%, #180d07 100%);
+  border: 1px solid #140b06;
+}
+
+.tape-pack-left {
   width: 36px;
   height: 36px;
-  border-radius: 50%;
-  background: #f0e6df;
-  border: 4px solid #333;
-  position: relative;
 }
 
-.cassette-spool::after {
-  content: '';
+.tape-pack-right {
+  width: 22px;
+  height: 22px;
+}
+
+/* White 6-Toothed Cogwheel Hub */
+.cassette-toothed-hub {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #f7f7f7;
+  border: 2px solid #222;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+}
+
+.cassette-toothed-hub .hub-center-hole {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 12px;
-  height: 12px;
-  background: #111;
+  width: 7px;
+  height: 7px;
+  background: #0d0c10;
   border-radius: 50%;
+  box-shadow: inset 0 0 2px rgba(0,0,0,0.9);
 }
 
-.cassette-spool.spinning {
-  animation: spinSpool 2s linear infinite;
+/* Spinning Hub Animation when playing */
+.cassette-toothed-hub.spinning {
+  animation: spinSpool 2.2s linear infinite;
 }
 
 @keyframes spinSpool {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+/* Magnetic Tape Ribbon connecting the spools */
+.tape-ribbon-bridge {
+  flex: 1;
+  height: 5px;
+  background: linear-gradient(180deg, #4d2b17 0%, #2e1b10 100%);
+  margin: 0 3px;
+  border-radius: 1px;
+}
+
+/* Lower Trapezoid Area */
+.cassette-head-trapezoid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 4px;
+}
+
+.tape-guide-roller {
+  width: 6px;
+  height: 6px;
+  background: #d1d5db;
+  border-radius: 50%;
+  border: 1px solid #374151;
+}
+
+.tape-pressure-pad {
+  width: 26px;
+  height: 4px;
+  background: #b45309;
+  border-radius: 1px;
+  border: 1px solid #78350f;
 }
 
 /* Vinyl / CD disc popping out on hover */
@@ -1706,6 +1897,95 @@ body {
   font-size: 0.85rem;
   color: #e5e7eb;
   letter-spacing: 1px;
+}
+
+/* Tactile Analog Volume Slider Control */
+.device-volume-control {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: #0d0f14;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 0.45rem 0.8rem;
+  margin-bottom: 0.8rem;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+.vol-mute-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  transition: transform 0.15s ease;
+}
+
+.vol-mute-btn:hover {
+  transform: scale(1.15);
+}
+
+.vol-slider-track {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.vol-legend {
+  font-family: var(--font-retro);
+  font-size: 0.75rem;
+  color: #ffaa00;
+  letter-spacing: 1px;
+}
+
+.retro-vol-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: linear-gradient(90deg, #1f2229 0%, #2f3542 100%);
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  outline: none;
+  cursor: pointer;
+}
+
+.retro-vol-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 20px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #d1d5db 0%, #9ca3af 45%, #4b5563 100%);
+  border: 1px solid #e5e7eb;
+  border-bottom: 2px solid #1f2937;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+  cursor: pointer;
+}
+
+.retro-vol-slider::-moz-range-thumb {
+  width: 16px;
+  height: 20px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #d1d5db 0%, #9ca3af 45%, #4b5563 100%);
+  border: 1px solid #e5e7eb;
+  border-bottom: 2px solid #1f2937;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+  cursor: pointer;
+}
+
+.vol-val-badge {
+  font-family: var(--font-retro);
+  font-size: 0.8rem;
+  color: #00e676;
+  min-width: 38px;
+  text-align: right;
+  letter-spacing: 1px;
+  text-shadow: 0 0 6px rgba(0, 230, 118, 0.4);
 }
 
 /* Status Caption & LED */
@@ -2311,6 +2591,17 @@ body {
   }
 
   .physical-case-wrapper:hover .compact-disc {
+    transform: translateX(30px);
+  }
+
+  .cassette-cartridge {
+    width: 210px;
+    height: 140px;
+    right: -20px;
+    top: 10px;
+  }
+
+  .physical-case-wrapper:hover .cassette-cartridge {
     transform: translateX(30px);
   }
 
