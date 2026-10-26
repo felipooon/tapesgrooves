@@ -2238,13 +2238,12 @@ body {
   }
 
   .inspect-card {
-    display: flex;
-    flex-direction: column;
+    grid-template-columns: 1fr;
     width: 100%;
     max-width: 480px;
     max-height: none;
-    padding: 3.2rem 1.1rem 2rem;
-    gap: 1.1rem;
+    padding: 3.2rem 1.2rem 2rem;
+    gap: 1.4rem;
     border-radius: 20px;
     margin: 0 auto;
   }
@@ -2259,92 +2258,28 @@ body {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
   }
 
-  /* Flatten columns into single mobile flow */
-  .media-display-col,
-  .album-details-col {
-    display: contents !important;
-  }
-
-  /* Exact Mobile Visual Flow */
-  .physical-case-wrapper {
-    order: 1;
-    margin: 0.2rem auto 0;
-  }
-
-  .media-badges {
-    order: 2;
-    margin: 0 auto 0.2rem;
-  }
-
-  .album-main-meta {
-    order: 3;
+  .media-display-col {
+    margin-top: 0.4rem;
+    align-items: center;
     width: 100%;
   }
 
-  /* Walkman & Discman on Mobile (Continuous hardware chassis with tracklist attached below) */
-  .vintage-device-station {
-    order: 4;
-    width: 100%;
-    padding: 0.9rem;
-    border-radius: 14px 14px 0 0 !important;
-    border-bottom: none !important;
-    margin-bottom: 0 !important;
-  }
-
-  /* Tracklist attached directly below Walkman/Discman as part of the unit in Mobile */
+  /* Tracklist en Móvil: pestaña oculta por defecto */
   .album-tracklist-section {
-    order: 5; /* SE UBICA EXACTAMENTE ABAJO DEL REPRODUCTOR */
-    width: 100% !important;
-    max-width: 100% !important;
-    margin-top: 0 !important;
-    margin-bottom: 0.4rem !important;
-    border: 2px solid #505666 !important;
-    border-top: 1px dashed rgba(255, 184, 51, 0.45) !important;
-    border-bottom: 4px solid #0d0f12 !important;
-    border-radius: 0 0 14px 14px !important;
-    background: #14161a !important;
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.85) !important;
-    overflow: hidden !important;
-  }
-
-  .streaming-links-box {
-    order: 6;
-    width: 100%;
-  }
-
-  .inspect-actions-row {
-    order: 7;
-    width: 100%;
+    max-width: 100%;
+    margin-top: 0.8rem;
+    border-color: rgba(255, 184, 51, 0.35);
   }
 
   .tracklist-toggle-btn {
-    width: 100%;
-    padding: 9px 12px;
-    font-size: 0.8rem;
-    background: linear-gradient(180deg, #1f222a 0%, #161820 100%);
-    border: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    color: #e0d5c1;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-  }
-
-  .tracklist-meta-info {
-    background: #0b1a14;
-    border: 1px solid #1a3329;
-    color: #00e676;
-    font-family: var(--font-retro);
-    font-size: 0.72rem;
-    padding: 2px 7px;
-    border-radius: 4px;
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    background: rgba(30, 20, 38, 0.95);
   }
 
   /* En móvil la lista inicia oculta ("pestaña oculta") */
   .album-tracklist-section .tracklist-content {
     display: none;
-    background: #0e1014;
   }
 
   /* Se muestra sólo cuando el usuario abre la pestaña */
@@ -2361,7 +2296,6 @@ body {
   .track-row-item {
     padding: 8px 10px;
     font-size: 0.8rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   }
 
   .physical-case-wrapper {
@@ -2386,6 +2320,12 @@ body {
 
   .artist-name-text {
     font-size: 1.05rem;
+  }
+
+  /* Walkman & Discman on Mobile */
+  .vintage-device-station {
+    padding: 0.8rem;
+    border-radius: 12px;
   }
 
   .device-brand-bar {
