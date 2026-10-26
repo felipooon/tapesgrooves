@@ -5143,16 +5143,28 @@ class RecordStoreApp {
       itemEl.className = `crate-item format-${album.format}`;
       itemEl.dataset.index = idx;
 
-      const formatLabel = album.format === 'cd' ? 'COMPACT DISC' : 'CASSETTE TAPE';
+      const isCassette = album.format === 'cassette';
+      const formatBadge = isCassette
+        ? `<span class="item-badge-top tape-badge"><span class="badge-ico">📼</span> TAPE</span>`
+        : `<span class="item-badge-top cd-badge"><span class="badge-ico">💿</span> CD-DA</span>`;
+
       const spineStyle = album.spineColor
-        ? `style="background: linear-gradient(90deg, #101015 0%, ${album.spineColor} 50%, #151520 100%);"`
+        ? (isCassette
+            ? `style="background: linear-gradient(90deg, #1c100b 0%, ${album.spineColor} 50%, #20130d 100%);"`
+            : `style="background: linear-gradient(90deg, #101015 0%, ${album.spineColor} 50%, #151520 100%);"`)
         : '';
 
       itemEl.innerHTML = `
+        <div class="spine-cap ${isCassette ? 'cassette-cap' : 'cd-cap'}">
+          ${isCassette 
+            ? '<span class="norelco-hinge left"></span><span class="norelco-hinge right"></span>' 
+            : '<span class="jewel-shine"></span>'}
+        </div>
         <div class="item-spine" ${spineStyle}>
-          <span class="item-badge-top">${formatLabel}</span>
-          <span class="item-spine-title">${album.artist} • ${album.title}</span>
-          <span class="item-badge-bottom">${album.year}</span>
+          ${isCassette ? '<div class="jcard-fold-line"></div>' : '<div class="cd-tray-ribs"></div>'}
+          ${formatBadge}
+          <span class="item-spine-title ${isCassette ? 'tape-title' : 'cd-title'}">${album.artist} • ${album.title}</span>
+          <span class="item-badge-bottom ${isCassette ? 'tape-year' : 'cd-year'}">${album.year}</span>
         </div>
       `;
 

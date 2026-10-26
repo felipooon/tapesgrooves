@@ -775,14 +775,14 @@ body {
 /* The Rack of Discs & Tapes inside the crate */
 .crate-rack {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 14px;
   width: 100%;
   height: 100%;
   overflow-x: auto;
   overflow-y: hidden;
   scroll-behavior: smooth;
-  padding: 30px 40px;
+  padding: 30px 40px 24px 40px;
   cursor: grab;
 }
 
@@ -808,8 +808,6 @@ body {
 .crate-item {
   position: relative;
   flex: 0 0 auto;
-  height: 290px;
-  width: 72px;
   cursor: pointer;
   transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.35s ease, filter 0.35s ease;
   transform-origin: bottom center;
@@ -817,43 +815,154 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  align-self: flex-end;
+}
+
+/* CD Jewel Case Specific Dimensions: 295px height x 72px width */
+.crate-item.format-cd {
+  height: 295px;
+  width: 72px;
+}
+
+/* Cassette Specific Dimensions: Slimmer & Shorter, authentic Norelco cassette box proportions */
+.crate-item.format-cassette {
+  height: 248px;
+  width: 54px;
+  margin-left: 2px;
+  margin-right: 2px;
 }
 
 /* Hover tilt effect like real crate flipping */
 .crate-item:hover {
-  transform: translateY(-28px) scale(1.12) rotateX(-5deg);
+  transform: translateY(-26px) scale(1.08) rotateX(-4deg);
   z-index: 15;
   filter: brightness(1.2);
 }
 
 .crate-item.active-choice {
-  transform: translateY(-60px) scale(1.2) rotateY(15deg);
+  transform: translateY(-56px) scale(1.18) rotateY(12deg);
   z-index: 30;
+}
+
+/* Top Spine Caps (Acrylic Jewel Lid vs Cassette Norelco Hinge Lid) */
+.spine-cap {
+  width: 100%;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 4;
+}
+
+.spine-cap.cd-cap {
+  height: 8px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.75) 0%, rgba(200, 225, 255, 0.3) 50%, rgba(40, 50, 70, 0.8) 100%);
+  border-radius: 2px 2px 0 0;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-bottom: none;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8);
+  overflow: hidden;
+}
+
+.spine-cap.cd-cap .jewel-shine {
+  position: absolute;
+  top: 0;
+  left: 25%;
+  width: 35%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent);
+  transform: skewX(-25deg);
+}
+
+.spine-cap.cassette-cap {
+  height: 10px;
+  background: linear-gradient(180deg, rgba(255, 240, 210, 0.55) 0%, rgba(180, 140, 100, 0.25) 50%, rgba(50, 30, 20, 0.8) 100%);
+  border-radius: 7px 7px 0 0;
+  border: 1px solid rgba(255, 215, 140, 0.45);
+  border-bottom: none;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px;
+}
+
+.norelco-hinge {
+  width: 5px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 1px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.7);
 }
 
 /* Spine Container for CD & Cassette */
 .item-spine {
   width: 100%;
-  height: 100%;
-  border-radius: 4px;
+  flex: 1 1 auto;
   box-shadow: 
     -4px 0 10px rgba(0, 0, 0, 0.6),
-    4px 0 10px rgba(0, 0, 0, 0.6),
-    inset 0 0 8px rgba(255, 255, 255, 0.2);
+    4px 0 10px rgba(0, 0, 0, 0.6);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 6px;
+  padding: 10px 4px;
   position: relative;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 /* CD Jewel Case Specific Spine */
 .crate-item.format-cd .item-spine {
-  background: linear-gradient(90deg, #181920 0%, #2f3442 45%, #626c85 50%, #222633 60%, #151820 100%);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-left: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 0 0 2px 2px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-top: none;
+  box-shadow: 
+    -4px 0 10px rgba(0, 0, 0, 0.65),
+    4px 0 10px rgba(0, 0, 0, 0.65),
+    inset 2px 0 4px rgba(255, 255, 255, 0.25),
+    inset -2px 0 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Plastic ribbed tray teeth along CD left spine edge */
+.cd-tray-ribs {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: repeating-linear-gradient(180deg, 
+    rgba(255, 255, 255, 0.15) 0px, 
+    rgba(255, 255, 255, 0.15) 2px, 
+    rgba(0, 0, 0, 0.75) 2px, 
+    rgba(0, 0, 0, 0.75) 5px
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Cassette Specific Spine */
+.crate-item.format-cassette .item-spine {
+  border-radius: 0 0 4px 4px;
+  border: 1px solid rgba(255, 200, 130, 0.35);
+  border-top: none;
+  box-shadow: 
+    -4px 0 8px rgba(0, 0, 0, 0.75),
+    4px 0 8px rgba(0, 0, 0, 0.75),
+    inset 0 0 12px rgba(0, 0, 0, 0.5),
+    inset 1px 0 3px rgba(255, 230, 180, 0.2);
+}
+
+/* J-Card fold seam */
+.jcard-fold-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: inset 2px 0 3px rgba(0, 0, 0, 0.45), inset -2px 0 3px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.7;
 }
 
 /* Plastic reflection sheen across spine */
@@ -864,52 +973,109 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.35) 0%, transparent 40%, rgba(255, 255, 255, 0.1) 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, transparent 45%, rgba(255, 255, 255, 0.08) 100%);
   pointer-events: none;
+  z-index: 1;
 }
 
-/* Cassette Specific Spine */
-.crate-item.format-cassette .item-spine {
-  background: linear-gradient(90deg, #3d2314 0%, #633e24 45%, #a6734d 50%, #4a2d19 60%, #291509 100%);
-  border: 1px solid rgba(255, 215, 140, 0.3);
+/* Top Badge for CD: Compact, modern digital audio styling */
+.item-badge-top.cd-badge {
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 0.66rem;
+  letter-spacing: 0.5px;
+  padding: 3px 5px;
   border-radius: 3px;
-}
-
-.item-badge-top {
-  font-family: var(--font-retro);
-  font-size: 0.8rem;
-  letter-spacing: 1px;
-  padding: 2px 4px;
-  border-radius: 2px;
-  background: rgba(0, 0, 0, 0.6);
-  color: var(--neon-cyan);
+  background: rgba(10, 20, 30, 0.9);
+  color: #00e5ff;
+  border: 1px solid rgba(0, 229, 255, 0.5);
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  z-index: 3;
 }
 
-.crate-item.format-cassette .item-badge-top {
-  color: var(--neon-pink);
+.item-badge-top.cd-badge .badge-ico {
+  font-size: 0.72rem;
 }
 
+/* Top Badge for Cassette: Embossed Dymo/retro label maker tape styling */
+.item-badge-top.tape-badge {
+  font-family: var(--font-retro);
+  font-weight: 700;
+  font-size: 0.74rem;
+  letter-spacing: 1px;
+  padding: 2px 5px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #aa0055 0%, #770038 100%);
+  color: #ffffff;
+  border: 1px solid #ff3399;
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.45),
+    0 2px 6px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  z-index: 3;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+}
+
+.item-badge-top.tape-badge .badge-ico {
+  font-size: 0.76rem;
+}
+
+/* Spine Titles */
 .item-spine-title {
   writing-mode: vertical-rl;
   transform: rotate(180deg);
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: 0.85rem;
-  letter-spacing: 1.5px;
-  color: #fff;
   text-transform: uppercase;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-height: 180px;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+  z-index: 3;
 }
 
+.item-spine-title.cd-title {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 1.2px;
+  color: #ffffff;
+  max-height: 180px;
+}
+
+.item-spine-title.tape-title {
+  font-family: 'Syne', var(--font-body);
+  font-weight: 800;
+  font-size: 0.78rem;
+  letter-spacing: 0.8px;
+  color: #fff4e0;
+  max-height: 140px;
+}
+
+/* Bottom Year Badge */
 .item-badge-bottom {
   font-family: var(--font-retro);
-  font-size: 0.75rem;
-  color: var(--neon-gold);
+  font-size: 0.76rem;
+  padding: 1px 4px;
+  border-radius: 2px;
+  z-index: 3;
+}
+
+.item-badge-bottom.cd-year {
+  color: #00e5ff;
+  background: rgba(0, 15, 25, 0.7);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+}
+
+.item-badge-bottom.tape-year {
+  color: #ffaa00;
+  background: rgba(30, 15, 5, 0.75);
+  border: 1px solid rgba(255, 170, 0, 0.35);
 }
 
 /* Crate Controls & Quick Pick */
@@ -2448,24 +2614,50 @@ body {
   }
 
   .crate-rack {
-    padding: 12px 14px;
+    padding: 12px 14px 14px 14px;
     gap: 10px;
     -webkit-overflow-scrolling: touch;
+    align-items: flex-end;
   }
 
-  .crate-item {
+  .crate-item.format-cd {
     height: 205px;
     width: 48px;
   }
 
-  .item-spine-title {
-    font-size: 0.72rem;
-    max-height: 120px;
+  .crate-item.format-cassette {
+    height: 172px;
+    width: 38px;
+    margin-left: 1px;
+    margin-right: 1px;
   }
 
-  .item-badge-top {
-    font-size: 0.65rem;
-    padding: 1px 2px;
+  .spine-cap.cd-cap {
+    height: 6px;
+  }
+
+  .spine-cap.cassette-cap {
+    height: 7px;
+  }
+
+  .item-spine-title.cd-title {
+    font-size: 0.68rem;
+    max-height: 115px;
+  }
+
+  .item-spine-title.tape-title {
+    font-size: 0.64rem;
+    max-height: 90px;
+  }
+
+  .item-badge-top.cd-badge {
+    font-size: 0.58rem;
+    padding: 1px 3px;
+  }
+
+  .item-badge-top.tape-badge {
+    font-size: 0.60rem;
+    padding: 1px 3px;
   }
 
   .item-badge-bottom {
