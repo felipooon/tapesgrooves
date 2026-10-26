@@ -14,7 +14,7 @@
   <!-- Favicon: Mini Vinilo Vectorial -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
-  <link rel="stylesheet" href="style.css?v=28">
+  <link rel="stylesheet" href="style.css?v=29">
 </head>
 <body>
 
@@ -291,16 +291,29 @@
 
         <!-- Left Column: Physical Media 3D Representation -->
         <div class="media-display-col">
-          <div class="physical-case-wrapper">
+          <div class="physical-case-wrapper format-cd">
             <div class="physical-case format-cd" id="inspect-physical-case">
-              <img src="" alt="Portada del álbum elegido" class="case-art-image" id="inspect-case-art">
+              <div class="case-art-container">
+                <img src="" alt="Portada del álbum elegido" class="case-art-image" id="inspect-case-art">
+              </div>
               
               <!-- Plastic Crystal Glossy Sheen Overlay -->
               <div class="jewel-case-sheen" aria-hidden="true"></div>
 
-              <!-- Cassette Transparent Acrylic Edge & Hinge -->
+              <!-- Cassette J-Card Box Hinge & Depth Overlay -->
               <div class="cassette-jcard-overlay" aria-hidden="true">
                 <div class="norelco-hinge"></div>
+                <div class="norelco-pocket-wall"></div>
+                <div class="jcard-bottom-banner">
+                  <div class="jcard-title-row">
+                    <span class="jcard-album-name" id="jcard-album-name">Álbum</span>
+                    <span class="jcard-dolby-logo">DO [DOLBY B-C NR]</span>
+                  </div>
+                  <div class="jcard-sub-row">
+                    <span class="jcard-artist-name" id="jcard-artist-name">Artista</span>
+                    <span class="jcard-spec-code">TYPE II • CHROME</span>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -519,6 +532,6 @@
     <span id="loading-text">Buscando joyas en la disquería...</span>
   </div>
 
-  <script src="app.js?v=28"></script>
+  <script src="app.js?v=29"></script>
 </body>
 </html>
