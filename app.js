@@ -4635,6 +4635,15 @@ class RecordStoreApp {
       });
     }
 
+    // Physical Case Click / Tap Interaction: Eject or Insert media
+    const physicalWrapper = document.querySelector('.physical-case-wrapper');
+    if (physicalWrapper) {
+      physicalWrapper.addEventListener('click', () => {
+        sounds.playMechanicalClick();
+        physicalWrapper.classList.toggle('is-ejected');
+      });
+    }
+
     // Progress Bar Click Seek
     document.getElementById('player-progress-container').addEventListener('click', (e) => {
       const rect = e.currentTarget.getBoundingClientRect();
@@ -5444,10 +5453,12 @@ class RecordStoreApp {
   setReelsSpinning(isSpinning) {
     const disc = document.getElementById('inspect-compact-disc');
     const spools = document.querySelectorAll('.cassette-spool, .cassette-toothed-hub');
+    const caseWrapper = document.querySelector('.physical-case-wrapper');
 
     if (isSpinning) {
       if (disc) disc.classList.add('spinning');
       spools.forEach(s => s.classList.add('spinning'));
+      if (caseWrapper) caseWrapper.classList.add('is-ejected');
     } else {
       if (disc) disc.classList.remove('spinning');
       spools.forEach(s => s.classList.remove('spinning'));
