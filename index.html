@@ -14,7 +14,7 @@
   <!-- Favicon: Mini Vinilo Vectorial -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
-  <link rel="stylesheet" href="style.css?v=27">
+  <link rel="stylesheet" href="style.css?v=28">
 </head>
 <body>
 
@@ -291,36 +291,23 @@
 
         <!-- Left Column: Physical Media 3D Representation -->
         <div class="media-display-col">
-          <div class="physical-case-wrapper format-cd">
+          <div class="physical-case-wrapper">
             <div class="physical-case format-cd" id="inspect-physical-case">
-              <div class="case-art-container">
-                <img src="" alt="Portada del álbum elegido" class="case-art-image" id="inspect-case-art">
-              </div>
+              <img src="" alt="Portada del álbum elegido" class="case-art-image" id="inspect-case-art">
               
-              <!-- CD Jewel Case Glossy Sheen -->
+              <!-- Plastic Crystal Glossy Sheen Overlay -->
               <div class="jewel-case-sheen" aria-hidden="true"></div>
 
-              <!-- Cassette J-Card Box Hinge & Depth Overlay -->
+              <!-- Cassette Transparent Acrylic Edge & Hinge -->
               <div class="cassette-jcard-overlay" aria-hidden="true">
                 <div class="norelco-hinge"></div>
-                <div class="norelco-pocket-wall"></div>
-                <div class="jcard-bottom-banner">
-                  <div class="jcard-title-row">
-                    <span class="jcard-album-name" id="jcard-album-name">Álbum</span>
-                    <span class="jcard-dolby-logo">DO [DOLBY B-C NR]</span>
-                  </div>
-                  <div class="jcard-sub-row">
-                    <span class="jcard-artist-name" id="jcard-artist-name">Artista</span>
-                    <span class="jcard-spec-code">TYPE II • CHROME</span>
-                  </div>
-                </div>
               </div>
             </div>
 
             <!-- Compact Disc sliding out (for CD format) -->
             <div class="compact-disc" id="inspect-compact-disc" aria-hidden="true"></div>
 
-            <!-- Authentic Vintage Cassette Tape Cartridge (Vertical Architecture) -->
+            <!-- Authentic Vintage Cassette Tape Cartridge (Classic Horizontal Architecture) -->
             <div class="cassette-cartridge" id="inspect-cassette-cartridge" aria-hidden="true">
               <!-- Screws in 4 corners -->
               <span class="cassette-screw screw-tl">✖</span>
@@ -332,31 +319,31 @@
               <div class="cassette-label">
                 <div class="cassette-label-header">
                   <span class="cassette-side-badge">SIDE A</span>
-                  <span class="cassette-tech-spec">TYPE I • 120µs</span>
+                  <span class="cassette-tech-spec">TYPE I • 120µs EQ</span>
                   <span class="cassette-brand-spec">DOLBY B</span>
                 </div>
                 <div class="cassette-title-line" id="cassette-label-title">Título del Álbum</div>
                 <div class="cassette-artist-line" id="cassette-label-artist">Nombre del Artista</div>
               </div>
 
-              <!-- Clear Tape Window with Spools & Ribbon (Vertical Architecture) -->
+              <!-- Clear Tape Window with Spools & Ribbon (Horizontal Layout) -->
               <div class="cassette-window-assembly">
                 <div class="cassette-tape-gauge">
                   <span>100</span><span>50</span><span>0</span>
                 </div>
                 <div class="cassette-reels-container">
-                  <!-- Top Spool & Tape Pack -->
+                  <!-- Left Spool & Tape Pack -->
                   <div class="spool-housing">
-                    <div class="magnetic-tape-pack tape-pack-top"></div>
+                    <div class="magnetic-tape-pack tape-pack-left"></div>
                     <div class="cassette-toothed-hub" id="hub-left">
                       <div class="hub-center-hole"></div>
                     </div>
                   </div>
                   <!-- Center Tape Bridge -->
                   <div class="tape-ribbon-bridge"></div>
-                  <!-- Bottom Spool & Tape Pack -->
+                  <!-- Right Spool & Tape Pack -->
                   <div class="spool-housing">
-                    <div class="magnetic-tape-pack tape-pack-bottom"></div>
+                    <div class="magnetic-tape-pack tape-pack-right"></div>
                     <div class="cassette-toothed-hub" id="hub-right">
                       <div class="hub-center-hole"></div>
                     </div>
@@ -532,6 +519,6 @@
     <span id="loading-text">Buscando joyas en la disquería...</span>
   </div>
 
-  <script src="app.js?v=27"></script>
+  <script src="app.js?v=28"></script>
 </body>
 </html>

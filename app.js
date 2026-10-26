@@ -5252,24 +5252,14 @@ class RecordStoreApp {
     const cassetteCartridgeEl = document.getElementById('inspect-cassette-cartridge');
 
     // Adapt Walkman vs Discman Branding & Mode
-    const caseWrapper = physicalCase.closest('.physical-case-wrapper');
-
     if (album.format === 'cassette') {
-      if (caseWrapper) {
-        caseWrapper.className = 'physical-case-wrapper format-cassette';
-      }
       physicalCase.className = 'physical-case format-cassette';
       formatPill.className = 'format-pill pill-cassette';
       formatPill.textContent = '📼 CASSETTE VINTAGE';
       discEl.style.display = 'none';
 
-      const jcardTitle = document.getElementById('jcard-album-name');
-      const jcardArtist = document.getElementById('jcard-artist-name');
-      if (jcardTitle) jcardTitle.textContent = album.title;
-      if (jcardArtist) jcardArtist.textContent = album.artist;
-
       if (cassetteCartridgeEl) {
-        cassetteCartridgeEl.style.display = 'flex';
+        cassetteCartridgeEl.style.display = 'block';
         const lblTitle = document.getElementById('cassette-label-title');
         const lblArtist = document.getElementById('cassette-label-artist');
         if (lblTitle) lblTitle.textContent = album.title;
@@ -5279,9 +5269,6 @@ class RecordStoreApp {
       this.deviceModelBadge.textContent = 'WALKMAN WM-EX1 • AUTO REVERSE';
       this.lcdModeText.textContent = 'TAPE 1';
     } else {
-      if (caseWrapper) {
-        caseWrapper.className = 'physical-case-wrapper format-cd';
-      }
       physicalCase.className = 'physical-case format-cd';
       formatPill.className = 'format-pill pill-cd';
       formatPill.textContent = '💿 COMPACT DISC';
