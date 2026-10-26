@@ -1,0 +1,2129 @@
+/* ==========================================================================
+   TAPES & GROOVES - Master Stylesheet
+   Retro Music Store Experience & Interactive Crate Digging
+   ========================================================================== */
+
+:root {
+  --bg-dark: #090a0f;
+  --bg-store: #121016;
+  --panel-bg: rgba(18, 16, 24, 0.85);
+  --panel-border: rgba(255, 180, 80, 0.2);
+  --neon-gold: #ffb833;
+  --neon-amber: #ff8811;
+  --neon-cyan: #00e5ff;
+  --neon-pink: #ff2a7a;
+  --neon-green: #00e676;
+  --wood-dark: #2a1b12;
+  --wood-light: #523724;
+  --text-main: #f0e6df;
+  --text-muted: #a89f91;
+  --text-highlight: #ffe082;
+  --font-display: 'Cinzel Decorative', 'Syne', serif;
+  --font-body: 'Outfit', sans-serif;
+  --font-retro: 'VT323', monospace;
+  --transition-smooth: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  --shadow-neon: 0 0 15px rgba(255, 184, 51, 0.4), 0 0 35px rgba(255, 136, 17, 0.2);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  overflow-x: hidden;
+  min-height: 100vh;
+  position: relative;
+  user-select: none;
+}
+
+/* Atmosphere Overlay (CRT Scanlines & Vinyl Grain) */
+.atmosphere-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  background: 
+    radial-gradient(circle at 50% 50%, transparent 60%, rgba(5, 5, 10, 0.7) 100%),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.08) 0px, rgba(0, 0, 0, 0.08) 1px, transparent 1px, transparent 3px);
+  opacity: 0.6;
+}
+
+/* Top Navigation Bar */
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(180deg, rgba(9, 10, 15, 0.95) 0%, rgba(9, 10, 15, 0) 100%);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.brand-icon {
+  font-size: 1.6rem;
+  filter: drop-shadow(0 0 8px var(--neon-gold));
+  animation: pulseRotate 12s linear infinite;
+}
+
+@keyframes pulseRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.brand-text {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  background: linear-gradient(45deg, #ffe082, #ff8811, #ff2a7a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(255, 184, 51, 0.3);
+}
+
+.brand-badge {
+  font-family: var(--font-retro);
+  font-size: 1rem;
+  background: rgba(255, 42, 122, 0.2);
+  color: var(--neon-pink);
+  border: 1px solid var(--neon-pink);
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.audio-btn, .nav-btn {
+  background: rgba(30, 24, 40, 0.8);
+  border: 1px solid var(--panel-border);
+  color: var(--text-main);
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-family: var(--font-body);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.audio-btn:hover, .nav-btn:hover {
+  background: rgba(255, 184, 51, 0.2);
+  border-color: var(--neon-gold);
+  box-shadow: 0 0 15px rgba(255, 184, 51, 0.3);
+  transform: translateY(-2px);
+}
+
+.audio-btn.active {
+  border-color: var(--neon-green);
+  color: var(--neon-green);
+  box-shadow: 0 0 12px rgba(0, 230, 118, 0.3);
+}
+
+/* Main Viewport Container */
+.stage-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Scene General Structure */
+.scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out, visibility 0.8s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.scene.active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 10;
+}
+
+/* ==========================================================================
+   SCENE 1: FACHADA Y ENTRADA (Street Exterior)
+   ========================================================================== */
+.scene-exterior {
+  background: url('assets/store_facade.jpg') center center/cover no-repeat;
+}
+
+.scene-exterior::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10, 10, 20, 0.4) 0%, rgba(9, 10, 15, 0.85) 85%);
+}
+
+.exterior-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 800px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.neon-title-wrapper {
+  background: rgba(12, 10, 18, 0.75);
+  padding: 1.5rem 3rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 184, 51, 0.3);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 184, 51, 0.15);
+  backdrop-filter: blur(10px);
+}
+
+.neon-tagline {
+  font-family: var(--font-retro);
+  font-size: 1.4rem;
+  color: var(--neon-cyan);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  display: block;
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.7);
+}
+
+.neon-main-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: #fff8e7;
+  text-shadow: 
+    0 0 5px #fff,
+    0 0 15px var(--neon-gold),
+    0 0 35px var(--neon-amber),
+    0 0 60px rgba(255, 136, 17, 0.6);
+  letter-spacing: 3px;
+}
+
+.store-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.neon-open-sign {
+  font-family: var(--font-retro);
+  font-size: 1.3rem;
+  color: #fff;
+  background: var(--neon-pink);
+  padding: 4px 14px;
+  border-radius: 6px;
+  box-shadow: 0 0 15px var(--neon-pink);
+  animation: neonFlicker 4s infinite alternate;
+}
+
+@keyframes neonFlicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    opacity: 1;
+    filter: drop-shadow(0 0 10px var(--neon-pink));
+  }
+  20%, 24%, 55% {
+    opacity: 0.4;
+    filter: none;
+  }
+}
+
+.store-desc {
+  font-size: 1.15rem;
+  color: #d1c7bd;
+  max-width: 600px;
+  line-height: 1.6;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+}
+
+.enter-store-btn {
+  margin-top: 1rem;
+  background: linear-gradient(135deg, #ff9900, #ff5500);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 1.2rem 2.8rem;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 8px 30px rgba(255, 102, 0, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+  transition: var(--transition-smooth);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.enter-store-btn::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(60deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transform: rotate(25deg);
+  animation: lightSweep 4s infinite;
+}
+
+@keyframes lightSweep {
+  0% { transform: translateX(-100%) rotate(25deg); }
+  30%, 100% { transform: translateX(100%) rotate(25deg); }
+}
+
+.enter-store-btn:hover {
+  transform: scale(1.06) translateY(-3px);
+  box-shadow: 0 12px 40px rgba(255, 102, 0, 0.8), 0 0 25px rgba(255, 200, 0, 0.6);
+}
+
+.door-hint {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* ==========================================================================
+   SCENE 2: INTERIOR DE LA TIENDA (Record Store Inside)
+   ========================================================================== */
+.scene-interior {
+  background: url('assets/store_interior.jpg') center center/cover no-repeat;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: block;
+}
+
+.scene-interior::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 60%, rgba(18, 14, 24, 0.25) 0%, rgba(10, 8, 14, 0.88) 90%);
+}
+
+.interior-ui {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+  padding: 5.5rem 1.5rem 2.5rem;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+/* Disquero Clerk Bubble */
+.clerk-speech-bubble {
+  background: rgba(22, 18, 28, 0.92);
+  border: 1px solid rgba(255, 184, 51, 0.4);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+  border-radius: 16px;
+  padding: 0.9rem 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  width: 100%;
+  max-width: 820px;
+  backdrop-filter: blur(12px);
+  animation: floatGentle 4s ease-in-out infinite alternate;
+}
+
+@keyframes floatGentle {
+  from { transform: translateY(0px); }
+  to { transform: translateY(-4px); }
+}
+
+.clerk-avatar {
+  font-size: 2rem;
+  background: linear-gradient(135deg, #332244, #1a1424);
+  padding: 8px;
+  border-radius: 50%;
+  border: 2px solid var(--neon-gold);
+  flex-shrink: 0;
+}
+
+.clerk-text h4 {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  color: var(--neon-gold);
+  margin-bottom: 0.2rem;
+  letter-spacing: 1px;
+}
+
+.clerk-text p {
+  font-size: 0.9rem;
+  color: #dfd5cb;
+  line-height: 1.4;
+}
+
+/* Mood Selector Grid */
+.mood-selector-container {
+  background: rgba(16, 12, 22, 0.88);
+  border: 1px solid rgba(255, 184, 51, 0.3);
+  border-radius: 18px;
+  padding: 1rem 1.4rem;
+  width: 100%;
+  max-width: 880px;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+.mood-section-title {
+  font-family: var(--font-retro);
+  font-size: 1.05rem;
+  letter-spacing: 2px;
+  color: var(--neon-gold);
+  text-align: center;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+}
+
+.mood-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.65rem;
+}
+
+@media (max-width: 860px) {
+  .mood-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 580px) {
+  .mood-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mood-btn {
+  background: rgba(30, 22, 38, 0.75);
+  border: 1px solid rgba(255, 184, 51, 0.2);
+  border-radius: 10px;
+  padding: 7px 12px;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  cursor: pointer;
+  text-align: left;
+  transition: var(--transition-smooth);
+}
+
+.mood-btn:hover {
+  background: rgba(255, 184, 51, 0.15);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 18px rgba(0, 229, 255, 0.35);
+  transform: translateY(-2px);
+}
+
+.mood-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.mood-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.mood-name {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #fff;
+  letter-spacing: 0.4px;
+}
+
+.mood-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.2;
+}
+
+/* Center Prompt Over Crate */
+.crate-callout {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  text-align: center;
+  background: rgba(14, 11, 20, 0.9);
+  border: 2px solid var(--neon-gold);
+  box-shadow: 0 0 30px rgba(255, 184, 51, 0.3), 0 15px 40px rgba(0,0,0,0.9);
+  padding: 1.2rem 2.5rem;
+  border-radius: 20px;
+  backdrop-filter: blur(15px);
+  width: 100%;
+  max-width: 680px;
+}
+
+.crate-callout-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 700;
+  color: #fff9e6;
+  text-shadow: 0 0 15px rgba(255, 184, 51, 0.5);
+}
+
+.crate-callout-sub {
+  color: #c9bea9;
+  font-size: 1rem;
+  max-width: 480px;
+}
+
+.approach-crate-btn {
+  background: linear-gradient(135deg, #00e5ff, #0088ff);
+  color: #05101a;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: 1.5px;
+  padding: 1rem 2.5rem;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  box-shadow: 0 0 25px rgba(0, 229, 255, 0.5);
+  transition: var(--transition-smooth);
+}
+
+.approach-crate-btn:hover {
+  transform: scale(1.05) translateY(-3px);
+  box-shadow: 0 0 40px rgba(0, 229, 255, 0.8);
+  color: #000;
+}
+
+.interior-bottom-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.back-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ddd;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+/* ==========================================================================
+   SCENE 3: EL CAJÓN DE DISCOS Y CASSETTES (Crate Digging 3D View)
+   ========================================================================== */
+.scene-crate {
+  background: radial-gradient(circle at 50% 30%, #2b1f1a 0%, #150f0c 60%, #0a0705 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 5rem;
+  overflow: hidden;
+}
+
+.crate-top-header {
+  text-align: center;
+  margin-bottom: 0.5rem;
+  z-index: 10;
+}
+
+.crate-main-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  color: var(--neon-gold);
+  letter-spacing: 2px;
+  text-shadow: 0 0 15px rgba(255, 184, 51, 0.4);
+}
+
+.crate-instruction {
+  font-size: 0.95rem;
+  color: #c7baab;
+}
+
+/* Crate Search Bar */
+.crate-search-container {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto 0.8rem;
+  padding: 0 1rem;
+  z-index: 15;
+}
+
+.crate-search-form {
+  display: flex;
+  align-items: center;
+  background: rgba(18, 14, 22, 0.88);
+  border: 1px solid rgba(255, 184, 51, 0.4);
+  border-radius: 30px;
+  padding: 4px 6px 4px 18px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7), 0 0 15px rgba(255, 184, 51, 0.15);
+  backdrop-filter: blur(10px);
+  transition: var(--transition-smooth);
+}
+
+.crate-search-form:focus-within {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+}
+
+.crate-search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.crate-search-input::placeholder {
+  color: #a89f91;
+  font-size: 0.9rem;
+}
+
+.crate-search-submit-btn {
+  background: linear-gradient(135deg, #00e5ff, #0088ff);
+  color: #05101a;
+  border: none;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 8px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.crate-search-submit-btn:hover {
+  background: #00e5ff;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
+  transform: scale(1.03);
+}
+
+/* Category Filter Tabs */
+.category-tabs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0.8rem 1rem 1.2rem;
+  z-index: 10;
+}
+
+.tab-btn {
+  background: rgba(45, 33, 27, 0.8);
+  border: 1px solid rgba(255, 184, 51, 0.25);
+  color: #d1c4b5;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.tab-btn:hover {
+  border-color: var(--neon-gold);
+  color: #fff;
+  background: rgba(255, 184, 51, 0.15);
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, #ffaa00, #ff6600);
+  border-color: #ffaa00;
+  color: #000;
+  font-weight: 700;
+  box-shadow: 0 0 15px rgba(255, 170, 0, 0.4);
+}
+
+/* Physical Crate Container in 3D */
+.crate-stage {
+  perspective: 1200px;
+  width: 100%;
+  max-width: 1100px;
+  height: 480px;
+  position: relative;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wooden-crate {
+  position: relative;
+  width: 90%;
+  max-width: 950px;
+  height: 380px;
+  background: 
+    linear-gradient(180deg, rgba(30, 20, 14, 0.4) 0%, rgba(15, 10, 7, 0.9) 100%),
+    repeating-linear-gradient(90deg, #442a19 0px, #442a19 60px, #361f11 61px, #361f11 120px);
+  border: 12px solid #5a371e;
+  border-bottom: 24px solid #3b2210;
+  border-radius: 12px;
+  box-shadow: 
+    inset 0 15px 30px rgba(0, 0, 0, 0.9),
+    0 30px 60px rgba(0, 0, 0, 0.9),
+    0 0 20px rgba(255, 140, 0, 0.1);
+  transform: rotateX(15deg);
+  transform-style: preserve-3d;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: 0 20px;
+}
+
+/* Crate Brass Corners & Wood Texture details */
+.crate-label-tag {
+  position: absolute;
+  bottom: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ecdcc3;
+  color: #2b1807;
+  font-family: var(--font-retro);
+  font-size: 1.25rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  padding: 4px 20px;
+  border-radius: 4px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+  border: 1px dashed #8b6038;
+  z-index: 20;
+}
+
+/* The Rack of Discs & Tapes inside the crate */
+.crate-rack {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  padding: 30px 40px;
+  cursor: grab;
+}
+
+.crate-rack:active {
+  cursor: grabbing;
+}
+
+.crate-rack::-webkit-scrollbar {
+  height: 8px;
+}
+
+.crate-rack::-webkit-scrollbar-track {
+  background: rgba(20, 15, 10, 0.6);
+  border-radius: 4px;
+}
+
+.crate-rack::-webkit-scrollbar-thumb {
+  background: #7a4f2d;
+  border-radius: 4px;
+}
+
+/* Physical Item inside Crate (CD Jewel Case or Cassette) */
+.crate-item {
+  position: relative;
+  flex: 0 0 auto;
+  height: 290px;
+  width: 72px;
+  cursor: pointer;
+  transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.35s ease, filter 0.35s ease;
+  transform-origin: bottom center;
+  perspective: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+/* Hover tilt effect like real crate flipping */
+.crate-item:hover {
+  transform: translateY(-28px) scale(1.12) rotateX(-5deg);
+  z-index: 15;
+  filter: brightness(1.2);
+}
+
+.crate-item.active-choice {
+  transform: translateY(-60px) scale(1.2) rotateY(15deg);
+  z-index: 30;
+}
+
+/* Spine Container for CD & Cassette */
+.item-spine {
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  box-shadow: 
+    -4px 0 10px rgba(0, 0, 0, 0.6),
+    4px 0 10px rgba(0, 0, 0, 0.6),
+    inset 0 0 8px rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* CD Jewel Case Specific Spine */
+.crate-item.format-cd .item-spine {
+  background: linear-gradient(90deg, #181920 0%, #2f3442 45%, #626c85 50%, #222633 60%, #151820 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-left: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Plastic reflection sheen across spine */
+.item-spine::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.35) 0%, transparent 40%, rgba(255, 255, 255, 0.1) 100%);
+  pointer-events: none;
+}
+
+/* Cassette Specific Spine */
+.crate-item.format-cassette .item-spine {
+  background: linear-gradient(90deg, #3d2314 0%, #633e24 45%, #a6734d 50%, #4a2d19 60%, #291509 100%);
+  border: 1px solid rgba(255, 215, 140, 0.3);
+  border-radius: 3px;
+}
+
+.item-badge-top {
+  font-family: var(--font-retro);
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  padding: 2px 4px;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--neon-cyan);
+  white-space: nowrap;
+}
+
+.crate-item.format-cassette .item-badge-top {
+  color: var(--neon-pink);
+}
+
+.item-spine-title {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 1.5px;
+  color: #fff;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 180px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+.item-badge-bottom {
+  font-family: var(--font-retro);
+  font-size: 0.75rem;
+  color: var(--neon-gold);
+}
+
+/* Crate Controls & Quick Pick */
+.crate-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1.2rem;
+  z-index: 10;
+}
+
+.dig-btn {
+  background: linear-gradient(135deg, #ff2a7a, #9900ff);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 0.9rem 2.2rem;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 0 25px rgba(255, 42, 122, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  transition: var(--transition-smooth);
+}
+
+.dig-btn:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 0 35px rgba(255, 42, 122, 0.8);
+}
+
+.shuffle-btn {
+  background: rgba(45, 30, 20, 0.85);
+  border: 1px solid var(--neon-gold);
+  color: #ffe082;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 0.9rem 1.6rem;
+  border-radius: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: var(--transition-smooth);
+}
+
+.shuffle-btn:hover {
+  background: rgba(255, 184, 51, 0.25);
+  color: #fff;
+  box-shadow: 0 0 20px rgba(255, 184, 51, 0.5);
+  transform: scale(1.03) translateY(-2px);
+}
+
+.crate-nav-arrow {
+  background: rgba(30, 20, 15, 0.8);
+  border: 1px solid rgba(255, 184, 51, 0.3);
+  color: #ffe082;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.crate-nav-arrow:hover {
+  background: var(--neon-gold);
+  color: #000;
+  box-shadow: 0 0 15px var(--neon-gold);
+}
+
+/* ==========================================================================
+   SCENE 4: EL ÁLBUM ELEGIDO (The Album Reveal Modal / Showcase)
+   ========================================================================== */
+.scene-inspect {
+  background: radial-gradient(circle at 50% 40%, rgba(30, 20, 45, 0.96) 0%, rgba(9, 7, 14, 0.98) 80%);
+  backdrop-filter: blur(20px);
+  z-index: 50;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inspect-card {
+  position: relative;
+  width: 95%;
+  max-width: 960px;
+  background: rgba(20, 16, 28, 0.95);
+  border: 1px solid rgba(255, 184, 51, 0.35);
+  border-radius: 20px;
+  box-shadow: 
+    0 25px 80px rgba(0, 0, 0, 0.95),
+    0 0 40px rgba(255, 184, 51, 0.15);
+  display: grid;
+  grid-template-columns: 310px 1fr;
+  gap: 1.8rem;
+  padding: 1.8rem;
+  max-height: 88vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  animation: cardPopup 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.2) forwards;
+}
+
+.inspect-card::-webkit-scrollbar {
+  width: 6px;
+}
+
+.inspect-card::-webkit-scrollbar-track {
+  background: rgba(15, 10, 20, 0.6);
+}
+
+.inspect-card::-webkit-scrollbar-thumb {
+  background: var(--neon-gold);
+  border-radius: 3px;
+}
+
+@keyframes cardPopup {
+  0% {
+    opacity: 0;
+    transform: scale(0.88) translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Close & Return Button */
+.close-inspect-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1.2rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ddd;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  z-index: 20;
+}
+
+.close-inspect-btn:hover {
+  background: var(--neon-pink);
+  color: #fff;
+  border-color: var(--neon-pink);
+  transform: rotate(90deg);
+}
+
+/* Left Column: Physical Media 3D Representation */
+.media-display-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  overflow: visible;
+}
+
+.physical-case-wrapper {
+  position: relative;
+  width: 270px;
+  height: 270px;
+  perspective: 1000px;
+}
+
+/* Jewel Case & Cassette Artwork Card */
+.physical-case {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  border-radius: 8px;
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.8),
+    0 0 25px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  transition: transform 0.6s ease;
+  background: #111;
+}
+
+.case-art-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Jewel Case Plastic Gleam Overlay */
+.jewel-case-sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(125deg, 
+    rgba(255, 255, 255, 0.45) 0%, 
+    rgba(255, 255, 255, 0.1) 25%, 
+    transparent 50%, 
+    rgba(255, 255, 255, 0.15) 85%, 
+    transparent 100%);
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.15);
+}
+
+/* Cassette Format Overlay (Spools & Tape window) */
+.cassette-overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 15, 10, 0.3);
+  pointer-events: none;
+}
+
+.format-cassette .cassette-overlay {
+  display: block;
+}
+
+.cassette-window {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 180px;
+  height: 60px;
+  background: rgba(10, 10, 15, 0.85);
+  border: 2px solid #a6734d;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 20px;
+}
+
+.cassette-spool {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f0e6df;
+  border: 4px solid #333;
+  position: relative;
+}
+
+.cassette-spool::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  background: #111;
+  border-radius: 50%;
+}
+
+.cassette-spool.spinning {
+  animation: spinSpool 2s linear infinite;
+}
+
+@keyframes spinSpool {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Vinyl / CD disc popping out on hover */
+.compact-disc {
+  position: absolute;
+  top: 10px;
+  right: -30px;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background: 
+    radial-gradient(circle, #080808 0%, #080808 18%, transparent 18%),
+    radial-gradient(circle, #e6e6e6 19%, #b5b5b5 24%, #e0e0e0 26%, #777 30%),
+    conic-gradient(from 0deg, #ff0077, #ffaa00, #00e5ff, #9900ff, #ff0077);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+  z-index: -1;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+}
+
+.compact-disc.spinning {
+  animation: spinCD 3s linear infinite;
+}
+
+@keyframes spinCD {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.physical-case-wrapper:hover .compact-disc {
+  transform: translateX(45px);
+}
+
+/* Format Tag Badge below image */
+.media-badges {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.format-pill {
+  font-family: var(--font-retro);
+  font-size: 0.9rem;
+  padding: 3px 10px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+}
+
+.pill-cd {
+  background: rgba(0, 229, 255, 0.15);
+  border: 1px solid var(--neon-cyan);
+  color: var(--neon-cyan);
+}
+
+.pill-cassette {
+  background: rgba(255, 42, 122, 0.15);
+  border: 1px solid var(--neon-pink);
+  color: var(--neon-pink);
+}
+
+.pill-year {
+  background: rgba(255, 184, 51, 0.15);
+  border: 1px solid var(--neon-gold);
+  color: var(--neon-gold);
+}
+
+/* Right Column: Music Info & Player */
+.album-details-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.8rem;
+  min-width: 0;
+}
+
+.curator-note-tag {
+  font-family: var(--font-retro);
+  font-size: 0.9rem;
+  color: var(--neon-gold);
+  letter-spacing: 1.5px;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.album-title-text {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2.2vw, 1.7rem);
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+  margin-top: 0.15rem;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+  word-break: break-word;
+}
+
+.artist-name-text {
+  font-size: 1.15rem;
+  color: var(--neon-cyan);
+  font-weight: 600;
+  margin-top: 0.1rem;
+  letter-spacing: 0.5px;
+}
+
+.genre-tag-label {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px 8px;
+  border-radius: 14px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+.album-review-box {
+  background: rgba(10, 8, 15, 0.6);
+  border-left: 3px solid var(--neon-amber);
+  padding: 0.6rem 0.9rem;
+  border-radius: 0 8px 8px 0;
+  margin: 0.2rem 0;
+}
+
+.review-headline {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--neon-gold);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.4rem;
+}
+
+.review-text {
+  font-size: 0.95rem;
+  color: #d1c7bc;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* ==========================================================================
+   PORTABLE RETRO WALKMAN & DISCMAN AUDIO STATION
+   ========================================================================== */
+.vintage-device-station {
+  background: 
+    linear-gradient(180deg, #2c2f38 0%, #1e2026 30%, #14161a 100%);
+  border: 2px solid #505666;
+  border-bottom: 4px solid #0d0f12;
+  border-radius: 16px;
+  padding: 1.2rem;
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.8),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.8);
+  position: relative;
+  overflow: hidden;
+}
+
+.vintage-device-station::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #ff8811, #ff2a7a, #00e5ff);
+}
+
+.device-brand-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.device-model-badge {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #d8dee9;
+  text-transform: uppercase;
+}
+
+.device-dolby-badge {
+  font-family: var(--font-retro);
+  font-size: 0.85rem;
+  color: #ffaa33;
+  letter-spacing: 1px;
+}
+
+/* Backlit LCD Screen */
+.device-lcd-screen {
+  background: #0b1a14;
+  border: 2px solid #1a3329;
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.9rem;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.9), 0 0 10px rgba(0, 230, 118, 0.1);
+  position: relative;
+}
+
+.lcd-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.lcd-mode-text {
+  font-family: var(--font-retro);
+  font-size: 1.1rem;
+  color: #00e676;
+  letter-spacing: 2px;
+}
+
+.lcd-battery-indicator {
+  font-family: var(--font-retro);
+  font-size: 0.9rem;
+  color: #81c784;
+}
+
+.lcd-timer-display {
+  font-family: var(--font-retro);
+  font-size: 1.3rem;
+  color: #00e676;
+  letter-spacing: 2px;
+  text-shadow: 0 0 8px rgba(0, 230, 118, 0.6);
+}
+
+.lcd-track-title {
+  font-family: var(--font-retro);
+  font-size: 1.15rem;
+  color: #c8e6c9;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.5rem;
+}
+
+/* Dynamic Equalizer Spectrum VU Meter */
+.lcd-vu-meter {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 24px;
+}
+
+.vu-bar {
+  flex: 1;
+  height: 100%;
+  background: rgba(0, 40, 20, 0.6);
+  border-radius: 2px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.vu-fill {
+  width: 100%;
+  height: 20%;
+  background: linear-gradient(0deg, #00e676 0%, #ffeb3b 70%, #ff1744 100%);
+  border-radius: 2px;
+  transition: height 0.15s ease;
+}
+
+.vu-bar:nth-child(1) .vu-fill { height: 35%; }
+.vu-bar:nth-child(2) .vu-fill { height: 60%; }
+.vu-bar:nth-child(3) .vu-fill { height: 80%; }
+.vu-bar:nth-child(4) .vu-fill { height: 95%; }
+.vu-bar:nth-child(5) .vu-fill { height: 75%; }
+.vu-bar:nth-child(6) .vu-fill { height: 85%; }
+.vu-bar:nth-child(7) .vu-fill { height: 50%; }
+.vu-bar:nth-child(8) .vu-fill { height: 30%; }
+
+/* Tape Progress Track */
+.player-progress-container {
+  width: 100%;
+  height: 8px;
+  background: #090a0d;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.player-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #00e5ff, #00e676);
+  box-shadow: 0 0 10px #00e5ff;
+  transition: width 0.1s linear;
+}
+
+/* Mechanical Button Deck */
+.device-mechanical-deck {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.deck-btn {
+  background: 
+    linear-gradient(180deg, #4f5564 0%, #30343f 40%, #1e2027 100%);
+  border: 1px solid #6b7280;
+  border-bottom: 3px solid #111317;
+  border-radius: 8px;
+  padding: 10px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  cursor: pointer;
+  box-shadow: 
+    0 4px 10px rgba(0, 0, 0, 0.6),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.2s;
+}
+
+.deck-btn:active {
+  transform: translateY(2px);
+  border-bottom-width: 1px;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+.deck-btn.main-play {
+  background: linear-gradient(180deg, #ffaa00 0%, #d46600 50%, #993d00 100%);
+  border-color: #ffcc66;
+  border-bottom-color: #552000;
+}
+
+.deck-btn.main-play .deck-key {
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
+
+.deck-key {
+  font-size: 1.1rem;
+  color: #d1d5db;
+}
+
+.deck-label {
+  font-family: var(--font-retro);
+  font-size: 0.85rem;
+  color: #e5e7eb;
+  letter-spacing: 1px;
+}
+
+/* Status Caption & LED */
+.device-status-caption {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.status-led-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ffaa00;
+  box-shadow: 0 0 8px #ffaa00;
+  flex-shrink: 0;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+.status-led-dot.playing {
+  background: #00e676;
+  box-shadow: 0 0 12px #00e676;
+}
+
+.preview-status-text {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+/* External Listening Links */
+.external-links-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.stream-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 8px 16px;
+  border-radius: 25px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--transition-smooth);
+  border: 1px solid transparent;
+}
+
+.stream-spotify {
+  background: rgba(29, 185, 84, 0.15);
+  color: #1ed760;
+  border-color: rgba(29, 185, 84, 0.4);
+}
+
+.stream-spotify:hover {
+  background: #1ed760;
+  color: #000;
+  box-shadow: 0 0 15px rgba(30, 215, 96, 0.4);
+}
+
+.stream-apple {
+  background: rgba(252, 60, 68, 0.15);
+  color: #fc3c44;
+  border-color: rgba(252, 60, 68, 0.4);
+}
+
+.stream-apple:hover {
+  background: #fc3c44;
+  color: #fff;
+  box-shadow: 0 0 15px rgba(252, 60, 68, 0.4);
+}
+
+.stream-youtube {
+  background: rgba(255, 0, 0, 0.15);
+  color: #ff3333;
+  border-color: rgba(255, 0, 0, 0.4);
+}
+
+.stream-youtube:hover {
+  background: #ff0000;
+  color: #fff;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+}
+
+/* Inspect Action Buttons */
+.inspect-actions-row {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.inspect-btn {
+  flex: 1;
+  padding: 12px 20px;
+  border-radius: 30px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  transition: var(--transition-smooth);
+}
+
+.btn-pick-another {
+  background: linear-gradient(135deg, #ffaa00, #ff5500);
+  border: none;
+  color: #fff;
+  box-shadow: 0 0 20px rgba(255, 85, 0, 0.4);
+}
+
+.btn-pick-another:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(255, 85, 0, 0.7);
+}
+
+.btn-return-crate {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ddd;
+}
+
+.btn-return-crate:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+/* Loading & Toast Notifications */
+.loading-indicator {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: rgba(15, 12, 22, 0.95);
+  border: 1px solid var(--neon-gold);
+  border-radius: 12px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: var(--transition-smooth);
+}
+
+.loading-indicator.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 184, 51, 0.3);
+  border-top-color: var(--neon-gold);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   COMPREHENSIVE MOBILE & TABLET OPTIMIZATIONS
+   ========================================================================== */
+
+/* Tablet & Medium Screens (< 920px) */
+@media (max-width: 920px) {
+  .top-nav {
+    padding: 0 1.2rem;
+  }
+
+  .inspect-card {
+    grid-template-columns: 1fr;
+    max-height: 90vh;
+    padding: 1.6rem 1.4rem;
+    gap: 1.4rem;
+  }
+
+  .media-display-col {
+    margin-bottom: 0.5rem;
+  }
+
+  .physical-case-wrapper {
+    width: 250px;
+    height: 250px;
+  }
+
+  .compact-disc {
+    width: 230px;
+    height: 230px;
+    right: -25px;
+  }
+}
+
+/* Mobile Screens (< 768px) */
+@media (max-width: 768px) {
+  /* Navigation Bar */
+  .top-nav {
+    height: 54px;
+    padding: 0 0.8rem;
+  }
+
+  .brand-text {
+    font-size: 1rem;
+    letter-spacing: 1px;
+  }
+
+  .brand-badge {
+    display: none;
+  }
+
+  .audio-btn {
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    gap: 0.3rem;
+  }
+
+  /* Scene 1: Exterior */
+  .exterior-content {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .neon-title-wrapper {
+    padding: 1rem 1.2rem;
+    width: 100%;
+  }
+
+  .neon-tagline {
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+  }
+
+  .neon-main-title {
+    font-size: 2rem;
+    letter-spacing: 1.5px;
+  }
+
+  .store-desc {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .enter-store-btn {
+    padding: 1rem 1.6rem;
+    font-size: 1.05rem;
+    width: 100%;
+    max-width: 320px;
+    justify-content: center;
+  }
+
+  /* Scene 2: Interior */
+  .scene-interior {
+    display: block;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .interior-ui {
+    padding: 4.2rem 0.8rem 2rem;
+    gap: 0.8rem;
+  }
+
+  .clerk-speech-bubble {
+    padding: 0.8rem 1rem;
+    gap: 0.7rem;
+    border-radius: 12px;
+  }
+
+  .clerk-avatar {
+    font-size: 1.6rem;
+    padding: 5px;
+  }
+
+  .clerk-text h4 {
+    font-size: 0.85rem;
+  }
+
+  .clerk-text p {
+    font-size: 0.8rem;
+  }
+
+  .mood-selector-container {
+    padding: 0.8rem 0.9rem;
+    border-radius: 14px;
+  }
+
+  .mood-section-title {
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .mood-grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .mood-btn {
+    padding: 8px 10px;
+    gap: 0.6rem;
+  }
+
+  .mood-icon {
+    font-size: 1.3rem;
+  }
+
+  .mood-name {
+    font-size: 0.82rem;
+  }
+
+  .mood-sub {
+    font-size: 0.7rem;
+  }
+
+  .crate-callout {
+    padding: 1.2rem 1rem;
+    border-radius: 16px;
+    gap: 0.6rem;
+  }
+
+  .crate-callout-title {
+    font-size: 1.35rem;
+  }
+
+  .crate-callout-sub {
+    font-size: 0.82rem;
+  }
+
+  .approach-crate-btn {
+    padding: 0.85rem 1.6rem;
+    font-size: 0.95rem;
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Scene 3: Crate Digging 3D View */
+  .scene-crate {
+    padding-top: 3.8rem;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    justify-content: flex-start;
+  }
+
+  .crate-top-header {
+    padding: 0 0.6rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .crate-main-title {
+    font-size: 1.35rem;
+  }
+
+  .crate-instruction {
+    font-size: 0.78rem;
+  }
+
+  .crate-search-container {
+    padding: 0 0.6rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .crate-search-form {
+    padding: 2px 4px 2px 12px;
+  }
+
+  .crate-search-input {
+    font-size: 0.82rem;
+  }
+
+  .crate-search-submit-btn {
+    padding: 6px 12px;
+    font-size: 0.78rem;
+  }
+
+  /* Horizontal Scrollable Category Chips */
+  .category-tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    justify-content: flex-start;
+    padding: 0.3rem 0.6rem 0.6rem;
+    margin: 0.2rem 0 0.6rem;
+    gap: 0.45rem;
+    scrollbar-width: none;
+  }
+
+  .category-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-size: 0.78rem;
+    padding: 5px 11px;
+  }
+
+  /* Compact 3D Crate */
+  .crate-stage {
+    height: 310px;
+    perspective: 700px;
+    width: 100%;
+  }
+
+  .wooden-crate {
+    width: 95%;
+    height: 270px;
+    border-width: 8px;
+    border-bottom-width: 14px;
+    padding: 0 6px;
+    transform: rotateX(6deg);
+  }
+
+  .crate-rack {
+    padding: 12px 14px;
+    gap: 10px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .crate-item {
+    height: 205px;
+    width: 48px;
+  }
+
+  .item-spine-title {
+    font-size: 0.72rem;
+    max-height: 120px;
+  }
+
+  .item-badge-top {
+    font-size: 0.65rem;
+    padding: 1px 2px;
+  }
+
+  .item-badge-bottom {
+    font-size: 0.62rem;
+  }
+
+  .crate-label-tag {
+    font-size: 0.85rem;
+    padding: 2px 12px;
+    bottom: -12px;
+    white-space: nowrap;
+  }
+
+  /* Crate Controls for Touch */
+  .crate-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-top: 0.8rem;
+    padding: 0 0.8rem;
+  }
+
+  .dig-btn {
+    padding: 0.8rem 1.4rem;
+    font-size: 0.95rem;
+    order: 1;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .shuffle-btn {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.85rem;
+    order: 2;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .crate-nav-arrow {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+    order: 3;
+  }
+
+  /* Scene 4: Inspect Modal */
+  .scene-inspect {
+    padding: 0.6rem;
+    align-items: flex-start;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .inspect-card {
+    grid-template-columns: 1fr;
+    width: 100%;
+    max-height: 94vh;
+    padding: 1.2rem 1rem 1.6rem;
+    gap: 1rem;
+    border-radius: 16px;
+    margin: auto 0;
+  }
+
+  .physical-case-wrapper {
+    width: 220px;
+    height: 220px;
+  }
+
+  .compact-disc {
+    width: 200px;
+    height: 200px;
+    top: 8px;
+    right: -20px;
+  }
+
+  .physical-case-wrapper:hover .compact-disc {
+    transform: translateX(30px);
+  }
+
+  .album-title-text {
+    font-size: 1.35rem;
+  }
+
+  .artist-name-text {
+    font-size: 1.05rem;
+  }
+
+  /* Walkman & Discman on Mobile */
+  .vintage-device-station {
+    padding: 0.8rem;
+    border-radius: 12px;
+  }
+
+  .device-brand-bar {
+    margin-bottom: 0.5rem;
+  }
+
+  .device-model-badge {
+    font-size: 0.72rem;
+  }
+
+  .device-dolby-badge {
+    font-size: 0.75rem;
+  }
+
+  .device-lcd-screen {
+    padding: 0.6rem 0.8rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .lcd-track-title {
+    font-size: 0.95rem;
+  }
+
+  .device-mechanical-deck {
+    gap: 0.4rem;
+  }
+
+  .deck-btn {
+    padding: 8px 2px;
+  }
+
+  .deck-key {
+    font-size: 0.95rem;
+  }
+
+  .deck-label {
+    font-size: 0.68rem;
+  }
+
+  /* External Streaming Links 3x Grid on Mobile */
+  .external-links-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.4rem;
+  }
+
+  .stream-link {
+    padding: 8px 4px;
+    font-size: 0.72rem;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* Inspect Action Buttons */
+  .inspect-actions-row {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .inspect-btn {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Small Foldable / Compact Phones (< 380px) */
+@media (max-width: 380px) {
+  .neon-main-title {
+    font-size: 1.7rem;
+  }
+
+  .physical-case-wrapper {
+    width: 180px;
+    height: 180px;
+  }
+
+  .compact-disc {
+    width: 165px;
+    height: 165px;
+  }
+
+  .album-title-text {
+    font-size: 1.2rem;
+  }
+}
+

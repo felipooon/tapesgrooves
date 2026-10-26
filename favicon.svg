@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <!-- Vinyl Reflection Gradient -->
+    <linearGradient id="sheen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25"/>
+      <stop offset="40%" stop-color="#ffffff" stop-opacity="0.03"/>
+      <stop offset="60%" stop-color="#ffffff" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.25"/>
+    </linearGradient>
+
+    <!-- Center Label Gradient -->
+    <radialGradient id="centerLabel" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffe082"/>
+      <stop offset="65%" stop-color="#ff8811"/>
+      <stop offset="100%" stop-color="#d45500"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Outer Vinyl Edge -->
+  <circle cx="32" cy="32" r="30" fill="#121217" stroke="#2a2a35" stroke-width="1.5"/>
+
+  <!-- Concentric Sound Grooves -->
+  <circle cx="32" cy="32" r="26" fill="none" stroke="#22222b" stroke-width="1"/>
+  <circle cx="32" cy="32" r="22" fill="none" stroke="#282833" stroke-width="0.8"/>
+  <circle cx="32" cy="32" r="18" fill="none" stroke="#22222b" stroke-width="0.8"/>
+  <circle cx="32" cy="32" r="15" fill="none" stroke="#2a2a35" stroke-width="0.7"/>
+
+  <!-- Light Reflection Cones (Realistic Vinyl Sheen) -->
+  <path d="M 32 32 L 8 12 A 30 30 0 0 1 20 4 Z" fill="url(#sheen)"/>
+  <path d="M 32 32 L 56 52 A 30 30 0 0 1 44 60 Z" fill="url(#sheen)"/>
+
+  <!-- Center Paper Label -->
+  <circle cx="32" cy="32" r="11" fill="url(#centerLabel)" stroke="#ffffff" stroke-width="0.5"/>
+  <circle cx="32" cy="32" r="8" fill="none" stroke="#aa3300" stroke-width="0.6" stroke-dasharray="1.5 1"/>
+
+  <!-- Center Spindle Hole -->
+  <circle cx="32" cy="32" r="3.2" fill="#090a0f" stroke="#ffffff" stroke-width="0.5"/>
+</svg>

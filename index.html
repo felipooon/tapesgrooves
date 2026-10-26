@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tapes & Grooves | Disquería Retro & Recomendación Musical</title>
+  <meta name="description" content="Simulador interactivo en primera persona de una disquería retro de CDs y cassettes. Explora cajones y descubre recomendaciones musicales del momento.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Outfit:wght@300;400;600;700;800&family=VT323&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+  <!-- Favicon: Mini Vinilo Vectorial -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <link rel="stylesheet" href="style.css?v=6">
+</head>
+<body>
+
+  <!-- Atmosphere Overlay (CRT Scanlines & Vinyl Grain) -->
+  <div class="atmosphere-overlay" aria-hidden="true"></div>
+
+  <!-- Top Navigation Header -->
+  <header class="top-nav">
+    <div class="brand" id="brand-home-btn" title="Tapes & Grooves - Disquería Retro">
+      <span class="brand-icon">📼</span>
+      <span class="brand-text">TAPES & GROOVES</span>
+      <span class="brand-badge">EST. 1991</span>
+    </div>
+
+    <div class="nav-actions">
+      <button class="audio-btn" id="ambient-btn" title="Activar/Desactivar sonido ambiental de vinilo">
+        <span>📻</span>
+        <span>Sonido Ambiente</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Viewport Container -->
+  <main class="stage-container" id="stage-container">
+
+    <!-- ====================================================================
+         SCENE 1: LA FACHADA Y LA ENTRADA (Street Exterior)
+         ==================================================================== -->
+    <section class="scene scene-exterior active" id="scene-exterior" aria-label="Entrada de la disquería">
+      <div class="exterior-content">
+        <div class="neon-title-wrapper">
+          <span class="neon-tagline">UNDERGROUND MUSIC SHOP • DISCOS & CASSETTES</span>
+          <h1 class="neon-main-title">TAPES & GROOVES</h1>
+          <div class="store-status-bar">
+            <span class="neon-open-sign">ABIERTO / OPEN</span>
+          </div>
+        </div>
+
+        <p class="store-desc">
+          Afuera cae la noche y la lluvia humedece el asfalto. Las luces de neón iluminan vitrinas repletas de joyas musicales en CD y cassette. Empuja la puerta y déjate guiar por el destino sonoro.
+        </p>
+
+        <button class="enter-store-btn" id="enter-store-btn">
+          <span>ENTRAR A LA DISQUERÍA</span>
+          <span>🚪 ➔</span>
+        </button>
+
+        <span class="door-hint">🔔 Se escuchará la clásica campanilla al ingresar</span>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SCENE 2: INTERIOR DE LA TIENDA (Inside the Record Shop)
+         ==================================================================== -->
+    <section class="scene scene-interior" id="scene-interior" aria-label="Interior de la disquería">
+      <div class="interior-ui">
+        
+        <!-- Disquero Greeting -->
+        <div class="clerk-speech-bubble">
+          <div class="clerk-avatar">👨‍🎤</div>
+          <div class="clerk-text">
+            <h4 id="clerk-title">El Disquero de Turno</h4>
+            <p id="clerk-msg">¡Buenas noches! Dime qué estado de ánimo traes hoy y te preparo una batea personalizada, o simplemente acércate al cajón central a revolver libremente.</p>
+          </div>
+        </div>
+
+        <!-- Mood Selector (Selector de Estados de Ánimo) -->
+        <div class="mood-selector-container">
+          <h3 class="mood-section-title">¿QUÉ VIBRA O ESTADO DE ÁNIMO BUSCAS HOY?</h3>
+          <div class="mood-grid">
+            <button class="mood-btn" data-mood="heartbreak">
+              <span class="mood-icon">💔</span>
+              <div class="mood-info">
+                <span class="mood-name">Corazón Roto & Melancolía</span>
+                <span class="mood-sub">Grunge acústico, shoegaze y baladas oscuras</span>
+              </div>
+            </button>
+
+            <button class="mood-btn" data-mood="adrenaline">
+              <span class="mood-icon">⚡</span>
+              <div class="mood-info">
+                <span class="mood-name">Adrenalina & Rebeldía</span>
+                <span class="mood-sub">Hard rock furioso, punk y guitarras distorsionadas</span>
+              </div>
+            </button>
+
+            <button class="mood-btn" data-mood="party">
+              <span class="mood-icon">🪩</span>
+              <div class="mood-info">
+                <span class="mood-name">Fiesta & Baile Retro</span>
+                <span class="mood-sub">Synthpop 80s, disco setentero y groove</span>
+              </div>
+            </button>
+
+            <button class="mood-btn" data-mood="chill">
+              <span class="mood-icon">🌧️</span>
+              <div class="mood-info">
+                <span class="mood-name">Lluvia, Café & Relajo</span>
+                <span class="mood-sub">Modal jazz, neo-soul, lofi y bossa nova</span>
+              </div>
+            </button>
+
+            <button class="mood-btn" data-mood="trippy">
+              <span class="mood-icon">🧠</span>
+              <div class="mood-info">
+                <span class="mood-name">Viaje Mental & Psicodelia</span>
+                <span class="mood-sub">Prog rock, trip-hop hipnótico y sintetizadores</span>
+              </div>
+            </button>
+
+            <button class="mood-btn" data-mood="latin_bohemia">
+              <span class="mood-icon">📻</span>
+              <div class="mood-info">
+                <span class="mood-name">Bohemia & Rock Latino</span>
+                <span class="mood-sub">Clásicos inmortales en español, trova y poesía</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Center Highlight Prompt to Crate -->
+        <div class="crate-callout">
+          <h2 class="crate-callout-title">EL CAJÓN DE SELECCIÓN</h2>
+          <p class="crate-callout-sub">
+            Cientos de cajas de CDs y cassettes vintage clasificados a mano. Acércate para revolver entre las tapas y elegir tu recomendación del momento.
+          </p>
+          <button class="approach-crate-btn" id="approach-crate-btn">
+            <span>🔍 ACERCARSE AL CAJÓN</span>
+          </button>
+        </div>
+
+        <!-- Bottom Return Link -->
+        <div class="interior-bottom-bar">
+          <button class="back-btn" id="back-to-street-btn">
+            ← Salir a la calle
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SCENE 3: REVOLVER EL CAJÓN (Crate Digging 3D View)
+         ==================================================================== -->
+    <section class="scene scene-crate" id="scene-crate" aria-label="Cajón de discos y cassettes">
+      <div class="crate-top-header">
+        <h2 class="crate-main-title">CAJÓN DE DESCUBRIMIENTOS</h2>
+        <p class="crate-instruction">Pasa el cursor por las espinas de los CDs y cassettes para revisarlos. Haz clic en cualquiera para sacarlo del cajón.</p>
+      </div>
+
+      <!-- Crate Top Search Bar & Info -->
+      <div class="crate-search-container">
+        <form class="crate-search-form" id="crate-search-form" role="search">
+          <input 
+            type="text" 
+            id="crate-search-input" 
+            class="crate-search-input" 
+            placeholder="🔍 Escribe cualquier artista, banda o género (ej: Pink Floyd, Cerati, Daft Punk, Bowie...)"
+            autocomplete="off"
+          />
+          <button type="submit" class="crate-search-submit-btn">
+            Llenar Cajón
+          </button>
+        </form>
+      </div>
+
+      <!-- Category Filter Tabs (12 Expanded Genres) -->
+      <nav class="category-tabs" aria-label="Categorías del cajón">
+        <button class="tab-btn active" data-category="all">🎲 Mezcla Universal</button>
+        <button class="tab-btn" data-category="rock">🎸 Rock Clásico & Grunge</button>
+        <button class="tab-btn" data-category="latino">📻 Rock & Pop en Español</button>
+        <button class="tab-btn" data-category="synth">📼 80s Pop & Synthwave</button>
+        <button class="tab-btn" data-category="jazz">🎷 Jazz, Soul & Blues</button>
+        <button class="tab-btn" data-category="electronic">⚡ Electrónica & Trip-Hop</button>
+        <button class="tab-btn" data-category="hiphop">🎤 Hip-Hop & Rap 90s</button>
+        <button class="tab-btn" data-category="funk">🪩 Funk, Disco & Soul</button>
+        <button class="tab-btn" data-category="metal">🤘 Metal & Punk Rock</button>
+        <button class="tab-btn" data-category="reggae">🌴 Reggae, Dub & Ska</button>
+        <button class="tab-btn" data-category="citypop">🌆 City Pop & Neo-Psicodelia</button>
+        <button class="tab-btn" data-category="bossa">☕ Bossa Nova & Acústico</button>
+      </nav>
+
+      <!-- 3D Crate Display -->
+      <div class="crate-stage">
+        <div class="wooden-crate" id="wooden-crate">
+          <div class="crate-label-tag" id="crate-label-tag">TESOROS SELECCIONADOS</div>
+          <div class="crate-rack" id="crate-rack" tabindex="0" role="region" aria-label="Estante de discos">
+            <!-- Dynamically populated with physical jewel cases & cassettes -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Crate Navigation & Quick Pick Controls -->
+      <div class="crate-controls">
+        <button class="crate-nav-arrow" id="crate-left-arrow" title="Desplazar a la izquierda">◀</button>
+
+        <button class="dig-btn" id="dig-random-btn">
+          <span>🎲 SACAR UNO AL AZAR</span>
+        </button>
+
+        <button class="shuffle-btn" id="crate-shuffle-btn" title="Reemplazar el cajón con otro lote nuevo de 20 discos">
+          <span>🔄 TRAER OTRO LOTE</span>
+        </button>
+
+        <button class="crate-nav-arrow" id="crate-right-arrow" title="Desplazar a la derecha">▶</button>
+      </div>
+
+      <!-- Navigation back to interior -->
+      <div style="margin-top: 1rem;">
+        <button class="back-btn" id="back-to-interior-btn">
+          ← Retroceder al pasillo
+        </button>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SCENE 4: EL ÁLBUM ELEGIDO - RECOMENDACIÓN (Album Reveal Modal)
+         ==================================================================== -->
+    <section class="scene scene-inspect" id="scene-inspect" aria-modal="true" role="dialog" aria-label="Recomendación musical">
+      <div class="inspect-card" id="inspect-card">
+        
+        <button class="close-inspect-btn" id="close-inspect-btn" title="Cerrar y volver al cajón">✕</button>
+
+        <!-- Left Column: Physical Media 3D Representation -->
+        <div class="media-display-col">
+          <div class="physical-case-wrapper">
+            <div class="physical-case format-cd" id="inspect-physical-case">
+              <img src="" alt="Portada del álbum elegido" class="case-art-image" id="inspect-case-art">
+              
+              <!-- CD Jewel Case Glossy Sheen -->
+              <div class="jewel-case-sheen" aria-hidden="true"></div>
+
+              <!-- Cassette Details Overlay (Spools & Tape window) -->
+              <div class="cassette-overlay" aria-hidden="true">
+                <div class="cassette-window">
+                  <div class="cassette-spool"></div>
+                  <div class="cassette-spool"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Compact Disc Disc sliding out -->
+            <div class="compact-disc" id="inspect-compact-disc" aria-hidden="true"></div>
+          </div>
+
+          <!-- Format and Year Badges -->
+          <div class="media-badges">
+            <span class="format-pill pill-cd" id="inspect-format-pill">💿 COMPACT DISC</span>
+            <span class="format-pill pill-year" id="inspect-year">1991</span>
+          </div>
+        </div>
+
+        <!-- Right Column: Album Details & Player -->
+        <div class="album-details-col">
+          <div>
+            <div class="curator-note-tag">
+              <span>⭐ RECOMENDACIÓN DEL MOMENTO</span>
+            </div>
+            <h3 class="album-title-text" id="inspect-album-title">Título del Álbum</h3>
+            <p class="artist-name-text" id="inspect-artist-name">Nombre del Artista</p>
+            <span class="genre-tag-label" id="inspect-genre">Género Musical</span>
+
+            <!-- Editorial Review & Cultural Context -->
+            <div class="album-review-box">
+              <div class="review-headline">¿Por qué deberías escucharlo hoy?</div>
+              <p class="review-text" id="inspect-review-text">Reseña editorial y contexto del disco.</p>
+            </div>
+          </div>
+
+          <!-- Portable Retro Walkman / Discman Station -->
+          <div class="vintage-device-station" id="vintage-device-station">
+            <!-- Device Brand Header -->
+            <div class="device-brand-bar">
+              <span class="device-model-badge" id="device-model-badge">WALKMAN WM-EX1 • AUTO REVERSE</span>
+              <span class="device-dolby-badge">DOLBY B-C NR</span>
+            </div>
+
+            <!-- Backlit LCD Digital Dot-Matrix Screen -->
+            <div class="device-lcd-screen">
+              <div class="lcd-top-row">
+                <span class="lcd-mode-text" id="lcd-mode-text">TAPE 1</span>
+                <span class="lcd-battery-indicator">🔋 BATT ■■■</span>
+                <span class="lcd-timer-display" id="player-time-badge">00:00</span>
+              </div>
+              <div class="lcd-track-title" id="track-sample-title">🎵 Pista Seleccionada</div>
+              
+              <!-- Equalizer Spectrum VU Meter LED Bars -->
+              <div class="lcd-vu-meter" id="lcd-vu-meter" aria-hidden="true">
+                <div class="vu-bar"><div class="vu-fill"></div></div>
+                <div class="vu-bar"><div class="vu-fill"></div></div>
+                <div class="vu-bar"><div class="vu-fill"></div></div>
+                <div class="vu-bar"><div class="vu-fill"></div></div>
+                <div class="vu-bar"><div class="vu-fill"></div></div>
+                <div class="vu-bar"><div class="vu-fill"></div></div>
+                <div class="vu-bar"><div class="vu-fill"></div></div>
+                <div class="vu-bar"><div class="vu-fill"></div></div>
+              </div>
+            </div>
+
+            <!-- Tape / Disc Progress Bar Tracker -->
+            <div class="player-progress-container" id="player-progress-container" title="Haz clic para saltar en la cinta">
+              <div class="player-progress-bar" id="player-progress-bar"></div>
+            </div>
+
+            <!-- Physical Mechanical Deck Buttons -->
+            <div class="device-mechanical-deck">
+              <button class="deck-btn btn-rewind" id="btn-rewind" title="Rebobinar cinta (⏪ -5s)">
+                <span class="deck-key">⏪</span>
+                <span class="deck-label">REW</span>
+              </button>
+
+              <button class="deck-btn btn-play-pause main-play" id="play-pause-btn" title="Reproducir / Pausar">
+                <span class="deck-key">▶</span>
+                <span class="deck-label">PLAY</span>
+              </button>
+
+              <button class="deck-btn btn-stop" id="btn-stop" title="Detener y rebobinar (⏹)">
+                <span class="deck-key">⏹</span>
+                <span class="deck-label">STOP</span>
+              </button>
+
+              <button class="deck-btn btn-forward" id="btn-forward" title="Avance rápido (⏩ +5s)">
+                <span class="deck-key">⏩</span>
+                <span class="deck-label">FFWD</span>
+              </button>
+            </div>
+
+            <div class="device-status-caption">
+              <span class="status-led-dot" id="status-led-dot"></span>
+              <span class="preview-status-text" id="preview-status-text">
+                Inserta los audífonos y pulsa PLAY para escuchar muestra (30s)
+              </span>
+            </div>
+          </div>
+
+          <!-- External Streaming Links -->
+          <div>
+            <span style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 0.4rem;">
+              ESCUCHAR ÁLBUM COMPLETO EN:
+            </span>
+            <div class="external-links-row">
+              <a href="#" target="_blank" rel="noopener noreferrer" class="stream-link stream-spotify" id="link-spotify">
+                <span>🟢</span> Spotify
+              </a>
+              <a href="#" target="_blank" rel="noopener noreferrer" class="stream-link stream-apple" id="link-apple">
+                <span>🍎</span> Apple Music
+              </a>
+              <a href="#" target="_blank" rel="noopener noreferrer" class="stream-link stream-youtube" id="link-youtube">
+                <span>▶️</span> YouTube
+              </a>
+            </div>
+          </div>
+
+          <!-- Inspection Action Buttons -->
+          <div class="inspect-actions-row">
+            <button class="inspect-btn btn-return-crate" id="return-crate-btn">
+              🔙 Devolver al cajón
+            </button>
+            <button class="inspect-btn btn-pick-another" id="pick-another-btn">
+              🎲 Sacar otro al azar
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast Notification / Loading Indicator -->
+  <div class="loading-indicator" id="loading-indicator" aria-live="polite">
+    <div class="spinner"></div>
+    <span id="loading-text">Buscando joyas en la disquería...</span>
+  </div>
+
+  <script src="app.js?v=6"></script>
+</body>
+</html>
