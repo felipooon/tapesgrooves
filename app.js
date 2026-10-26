@@ -4441,6 +4441,23 @@ class RecordStoreApp {
     }
   }
 
+  // Guarantee exact requested distribution: 80% Compact Disc, 20% Vintage Cassette
+  applyMediaFormatDistribution(albums) {
+    if (!albums || albums.length === 0) return [];
+    
+    // Exactly 20% of albums in the crate become vintage cassettes (e.g. 5 of 24)
+    const targetCassettes = Math.max(1, Math.round(albums.length * 0.20));
+
+    // Pick unique random indices that will be assigned as cassettes
+    const indices = albums.map((_, i) => i).sort(() => Math.random() - 0.5);
+    const cassetteIndices = new Set(indices.slice(0, targetCassettes));
+
+    return albums.map((album, idx) => ({
+      ...album,
+      format: cassetteIndices.has(idx) ? 'cassette' : 'cd'
+    }));
+  }
+
   // Bind UI Events
   initEventListeners() {
     // Ambient sound toggle
@@ -4767,7 +4784,7 @@ class RecordStoreApp {
               ? new Date(chosenTrack.releaseDate).getFullYear().toString()
               : '199X';
 
-            const format = (collectedAlbums.length + seedIdx) % 2 === 0 ? 'cd' : 'cassette';
+            const format = Math.random() < 0.20 ? 'cassette' : 'cd';
             const accurateGenre = resolveAccurateGenre(chosenTrack.artistName, null, chosenTrack.primaryGenreName);
 
             const albumObj = {
@@ -4804,7 +4821,7 @@ class RecordStoreApp {
                   artist: otherTrack.artistName,
                   year: otherTrack.releaseDate ? new Date(otherTrack.releaseDate).getFullYear().toString() : '199X',
                   genre: otherAccurateGenre,
-                  format: (secondaryAlbums.length % 2 === 0) ? 'cd' : 'cassette',
+                  format: Math.random() < 0.20 ? 'cassette' : 'cd',
                   artwork: otherTrack.artworkUrl100 ? otherTrack.artworkUrl100.replace('100x100bb.jpg', '1000x1000bb.jpg') : 'assets/crate_close_up.jpg',
                   previewUrl: otherTrack.previewUrl,
                   sampleTrack: otherTrack.trackName || 'Pista Destacada',
@@ -4835,10 +4852,10 @@ class RecordStoreApp {
     this.showLoading(false);
 
     if (collectedAlbums.length >= 8) {
-      this.crateItems = collectedAlbums.sort(() => Math.random() - 0.5).slice(0, 24);
+      this.crateItems = this.applyMediaFormatDistribution(collectedAlbums.sort(() => Math.random() - 0.5).slice(0, 24));
     } else {
       const fallbackFiltered = CURATED_FALLBACK.filter(a => !seenArtists.has(this.normalizeArtist(a.artist)));
-      this.crateItems = [...collectedAlbums, ...fallbackFiltered].sort(() => Math.random() - 0.5).slice(0, 24);
+      this.crateItems = this.applyMediaFormatDistribution([...collectedAlbums, ...fallbackFiltered].sort(() => Math.random() - 0.5).slice(0, 24));
     }
 
     if (this.crateLabelTag) {
@@ -4901,7 +4918,7 @@ class RecordStoreApp {
               ? new Date(chosenTrack.releaseDate).getFullYear().toString()
               : '199X';
 
-            const format = (collectedAlbums.length + seedIdx) % 2 === 0 ? 'cd' : 'cassette';
+            const format = Math.random() < 0.20 ? 'cassette' : 'cd';
             const accurateGenre = resolveAccurateGenre(chosenTrack.artistName, cat, chosenTrack.primaryGenreName);
 
             const albumObj = {
@@ -4938,7 +4955,7 @@ class RecordStoreApp {
                   artist: otherTrack.artistName,
                   year: otherTrack.releaseDate ? new Date(otherTrack.releaseDate).getFullYear().toString() : '199X',
                   genre: otherAccurateGenre,
-                  format: (secondaryAlbums.length % 2 === 0) ? 'cd' : 'cassette',
+                  format: Math.random() < 0.20 ? 'cassette' : 'cd',
                   artwork: otherTrack.artworkUrl100 ? otherTrack.artworkUrl100.replace('100x100bb.jpg', '1000x1000bb.jpg') : 'assets/crate_close_up.jpg',
                   previewUrl: otherTrack.previewUrl,
                   sampleTrack: otherTrack.trackName || 'Pista Destacada',
@@ -4969,10 +4986,10 @@ class RecordStoreApp {
     this.showLoading(false);
 
     if (collectedAlbums.length >= 8) {
-      this.crateItems = collectedAlbums.sort(() => Math.random() - 0.5).slice(0, 24);
+      this.crateItems = this.applyMediaFormatDistribution(collectedAlbums.sort(() => Math.random() - 0.5).slice(0, 24));
     } else {
       const fallbackFiltered = CURATED_FALLBACK.filter(a => !seenArtists.has(this.normalizeArtist(a.artist)));
-      this.crateItems = [...collectedAlbums, ...fallbackFiltered].sort(() => Math.random() - 0.5).slice(0, 24);
+      this.crateItems = this.applyMediaFormatDistribution([...collectedAlbums, ...fallbackFiltered].sort(() => Math.random() - 0.5).slice(0, 24));
     }
 
     const catLabels = {
@@ -5073,7 +5090,7 @@ class RecordStoreApp {
         const normArtist = this.normalizeArtist(song.artistName);
         const currentCount = artistCounts.get(normArtist) || 0;
 
-        const format = idx % 2 === 0 ? 'cd' : 'cassette';
+        const format = Math.random() < 0.20 ? 'cassette' : 'cd';
         const accurateSongGenre = resolveAccurateGenre(song.artistName, null, song.genre);
 
         const albumObj = {
@@ -5114,7 +5131,7 @@ class RecordStoreApp {
     this.showLoading(false);
 
     if (foundAlbums.length > 0) {
-      this.crateItems = foundAlbums.slice(0, 24);
+      this.crateItems = this.applyMediaFormatDistribution(foundAlbums.slice(0, 24));
       if (this.crateLabelTag) {
         this.crateLabelTag.textContent = `BÚSQUEDA: "${query.toUpperCase()}" (${foundAlbums.length} DISCOS)`;
       }
