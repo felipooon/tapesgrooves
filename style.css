@@ -632,8 +632,12 @@ body {
 }
 
 .crate-search-input::placeholder {
-  color: #a89f91;
+  color: #b5aba0;
   font-size: 0.9rem;
+  font-style: italic;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .crate-search-submit-btn {
