@@ -5289,7 +5289,7 @@ class RecordStoreApp {
       }
 
       this.deviceModelBadge.textContent = 'WALKMAN WM-EX1 • AUTO REVERSE';
-      this.lcdModeText.textContent = 'TAPE 1';
+      this.lcdModeText.textContent = 'TAPE 01';
     } else {
       if (caseWrapper) {
         caseWrapper.className = 'physical-case-wrapper format-cd';
@@ -5313,11 +5313,12 @@ class RecordStoreApp {
     document.getElementById('link-apple').href = `https://music.apple.com/us/search?term=${encodedQuery}`;
     document.getElementById('link-youtube').href = `https://www.youtube.com/results?search_query=${encodedQuery}`;
 
-    // Reset Audio Player
+    // Reset Audio Player con Track 1 seleccionado por defecto
+    this.activeTrackIndex = 0;
     this.stopAudioPreview();
     if (album.previewUrl) {
       this.audioElement.src = album.previewUrl;
-      document.getElementById('preview-status-text').textContent = 'Pulsa PLAY para escuchar muestra (30s)';
+      document.getElementById('preview-status-text').textContent = 'Pista 1 seleccionada • Pulsa PLAY para escuchar (30s)';
       this.playPauseBtn.disabled = false;
       this.playPauseBtn.style.opacity = '1';
     } else {
@@ -5623,7 +5624,7 @@ class RecordStoreApp {
   // Load and render album tracklist
   async loadAlbumTracklist(album) {
     if (!this.tracklistItemsList) return;
-    this.activeTrackIndex = -1;
+    this.activeTrackIndex = 0;
     if (this.tracklistCountBadge) this.tracklistCountBadge.textContent = 'Buscando pistas...';
     this.tracklistItemsList.innerHTML = '<div class="tracklist-loading-msg">🔍 Desplegando el cancionero del disco...</div>';
 
@@ -5632,6 +5633,31 @@ class RecordStoreApp {
     if (tracks && tracks.length > 0) {
       this.currentTracklist = tracks;
       if (this.tracklistCountBadge) this.tracklistCountBadge.textContent = `${tracks.length} temas`;
+
+      // Seleccionar predeterminadamente el primer track (Track 1)
+      this.activeTrackIndex = 0;
+      const firstTrack = tracks[0];
+
+      if (firstTrack) {
+        document.getElementById('track-sample-title').textContent = `🎵 ${firstTrack.title}`;
+        const isTape = album.format === 'cassette';
+        this.lcdModeText.textContent = isTape ? 'TAPE 01' : 'CD-DA 01';
+
+        // Cargar el audio del primer track como fuente activa predeterminada
+        if (firstTrack.previewUrl) {
+          this.audioElement.src = firstTrack.previewUrl;
+          this.playPauseBtn.disabled = false;
+          this.playPauseBtn.style.opacity = '1';
+          document.getElementById('preview-status-text').textContent = `Pista 1 seleccionada: "${firstTrack.title}" • Pulsa PLAY para escuchar (30s)`;
+        } else if (album.previewUrl) {
+          firstTrack.previewUrl = album.previewUrl;
+          this.audioElement.src = album.previewUrl;
+          this.playPauseBtn.disabled = false;
+          this.playPauseBtn.style.opacity = '1';
+          document.getElementById('preview-status-text').textContent = `Pista 1 seleccionada: "${firstTrack.title}" • Pulsa PLAY para escuchar (30s)`;
+        }
+      }
+
       this.renderTracklistUI(tracks, album);
     } else {
       const fallbackTracks = [{
@@ -5641,6 +5667,7 @@ class RecordStoreApp {
         previewUrl: album.previewUrl
       }];
       this.currentTracklist = fallbackTracks;
+      this.activeTrackIndex = 0;
       if (this.tracklistCountBadge) this.tracklistCountBadge.textContent = '1 tema (Edición única)';
       this.renderTracklistUI(fallbackTracks, album);
     }
@@ -5655,13 +5682,11 @@ class RecordStoreApp {
       const secs = (t.durationSec % 60).toString().padStart(2, '0');
       const pos = (t.position || (idx + 1)).toString().padStart(2, '0');
 
-      const isCurrent = (t.previewUrl && album.previewUrl && t.previewUrl === album.previewUrl) || idx === 0;
-      if (isCurrent && this.activeTrackIndex === -1) {
-        this.activeTrackIndex = idx;
-      }
+      // El track actualmente seleccionado (por defecto idx === 0) queda marcado
+      const isSelected = idx === this.activeTrackIndex;
 
       const row = document.createElement('div');
-      row.className = `track-row-item ${idx === this.activeTrackIndex ? 'is-playing' : ''}`;
+      row.className = `track-row-item ${isSelected ? 'is-playing' : ''}`;
       row.dataset.index = idx;
       row.title = t.previewUrl ? `Reproducir "${t.title}" (30s)` : t.title;
 
