@@ -213,7 +213,15 @@ const GENRE_SEEDS = {
     'Oasis', 'Soundgarden', 'Alice in Chains', 'Fito Paez', 'Andres Calamaro', 'Los Tres',
     'The Prodigy', 'Kavinsky', 'Aphex Twin', 'Justice', 'Iron Maiden', 'Green Day',
     'Tears for Fears', 'Nina Simone', 'John Coltrane', 'Bill Evans', 'Marvin Gaye', 'Santana',
-    'Cafe Tacvba', 'Gustavo Cerati', 'Pescado Rabioso', 'La Ley', 'Virus', 'Sumo', 'Molotov'
+    'Cafe Tacvba', 'Gustavo Cerati', 'Pescado Rabioso', 'La Ley', 'Virus', 'Sumo', 'Molotov',
+    'Chet Baker', 'Erykah Badu', 'Sade', 'Khruangbin', 'Tame Impala', 'Air', 'Kraftwerk',
+    'Black Sabbath', 'Judas Priest', 'Deep Purple', 'Jimi Hendrix', 'The Police', 'Dire Straits',
+    'Peter Tosh', 'Jimmy Cliff', 'Sublime', 'Cultura Profetica', 'Stan Getz', 'Antonio Carlos Jobim',
+    'Caetano Veloso', 'Jorge Drexler', 'Mon Laferte', 'Los Bunkers', 'Illya Kuryaki', 'Seru Giran',
+    '2Pac', 'The Notorious B.I.G.', 'Wu-Tang Clan', 'Nas', 'A Tribe Called Quest', 'Outkast',
+    'Earth Wind & Fire', 'Chic', 'Kool & The Gang', 'Parliament', 'James Brown', 'Duran Duran',
+    'Pet Shop Boys', 'The Human League', 'Talking Heads', 'Blondie', 'Chemical Brothers',
+    'Fatboy Slim', 'Moby', 'Underworld', 'Boards of Canada', 'Tatsuro Yamashita', 'Mariya Takeuchi'
   ],
   rock: [
     'Nirvana', 'Radiohead', 'Pink Floyd', 'Led Zeppelin', 'The Beatles', 'Queen',
@@ -222,7 +230,10 @@ const GENRE_SEEDS = {
     'Oasis', 'Blur', 'Arctic Monkeys', 'Foo Fighters', 'Red Hot Chili Peppers', 'Deep Purple',
     'The Police', 'Dire Straits', 'U2', 'Jimi Hendrix', 'The Who', 'King Crimson',
     'Soundgarden', 'Alice in Chains', 'Pearl Jam', 'Audioslave', 'The Strokes', 'Interpol',
-    'Rush', 'Yes', 'Genesis', 'Cream', 'The Velvet Underground', 'Neil Young'
+    'Rush', 'Yes', 'Genesis', 'Cream', 'The Velvet Underground', 'Neil Young', 'The Kinks',
+    'Black Rebel Motorcycle Club', 'Queens of the Stone Age', 'White Stripes', 'Franz Ferdinand',
+    'Weezer', 'Sonic Youth', 'Jane\'s Addiction', 'Faith No More', 'Rage Against the Machine',
+    'The Black Keys', 'Muse', 'Kasabian', 'Pavement', 'The White Stripes', 'Pulp', 'Suede'
   ],
   latino: [
     'Soda Stereo', 'Gustavo Cerati', 'Charly Garcia', 'Fito Paez', 'Luis Alberto Spinetta',
@@ -231,7 +242,9 @@ const GENRE_SEEDS = {
     'Heroes del Silencio', 'Enrique Bunbury', 'Andres Calamaro', 'Los Rodriguez', 'Babasonicos',
     'Jorge Drexler', 'Mon Laferte', 'Los Bunkers', 'Illya Kuryaki', 'Seru Giran',
     'Pappo', 'Rata Blanca', 'El Cuarteto de Nos', 'Aterciopelados', 'Santana', 'Spinetta Jade',
-    'Invisible Spinetta', 'Mercedes Sosa', 'Silvio Rodriguez', 'Buena Vista Social Club'
+    'Invisible Spinetta', 'Mercedes Sosa', 'Silvio Rodriguez', 'Buena Vista Social Club',
+    'Los Jaivas', 'Lucybell', 'Javier Calamaro', 'Attaque 77', 'La Renga', 'Divididos',
+    'Bersuit Vergarabat', 'Mano Negra', 'Plastilina Mosh', 'Control Machete', 'Zoe', 'Mikel Erentxun'
   ],
   synth: [
     'Michael Jackson', 'Prince', 'Madonna', 'Depeche Mode', 'New Order', 'Tears For Fears',
@@ -239,54 +252,71 @@ const GENRE_SEEDS = {
     'Cyndi Lauper', 'Whitney Houston', 'Eurythmics', 'Talking Heads', 'Blondie', 'Daft Punk',
     'Kavinsky', 'The Weeknd', 'Giorgio Moroder', 'Bee Gees', 'ABBA', 'Donna Summer',
     'Earth Wind & Fire', 'Chic', 'Kool & The Gang', 'Rick James', 'Steely Dan', 'Hall & Oates',
-    'Kraftwerk', 'Gary Numan', 'Orchestral Manoeuvres in the Dark', 'Simple Minds'
+    'Kraftwerk', 'Gary Numan', 'Orchestral Manoeuvres in the Dark', 'Simple Minds', 'Ultravox',
+    'Spandau Ballet', 'Thompson Twins', 'Modern Talking', 'Erasure', 'Soft Cell', 'Alphaville',
+    'Bronski Beat', 'Dead or Alive', 'Boy George', 'Culture Club', 'Talk Talk', 'INXS'
   ],
   jazz: [
     'Miles Davis', 'John Coltrane', 'Bill Evans', 'Chet Baker', 'Thelonious Monk',
     'Dave Brubeck', 'Charles Mingus', 'Herbie Hancock', 'Ella Fitzgerald', 'Billie Holiday',
     'Nina Simone', 'Louis Armstrong', 'Stevie Wonder', 'Marvin Gaye', 'Aretha Franklin',
     'Otis Redding', 'Sam Cooke', 'Ray Charles', 'Amy Winehouse', 'Norah Jones',
-    'Erykah Badu', 'D Angelo', 'Lauryn Hill', 'B.B. King', 'Muddy Waters', 'Kamasi Washington',
-    'Robert Glasper', 'Stan Getz', 'Wayne Shorter', 'Lee Morgan', 'Grant Green'
+    'Erykah Badu', 'D\'Angelo', 'Lauryn Hill', 'B.B. King', 'Muddy Waters', 'Kamasi Washington',
+    'Robert Glasper', 'Stan Getz', 'Wayne Shorter', 'Lee Morgan', 'Grant Green', 'Dexter Gordon',
+    'Sonny Rollins', 'Cannonball Adderley', 'Art Blakey', 'McCoy Tyner', 'Wes Montgomery',
+    'Oscar Peterson', 'Sarah Vaughan', 'Al Green', 'Curtis Mayfield', 'Donny Hathaway'
   ],
   electronic: [
     'Massive Attack', 'Portishead', 'Tricky', 'The Prodigy', 'The Chemical Brothers',
     'Fatboy Slim', 'Underworld', 'Aphex Twin', 'Boards of Canada', 'Moby', 'Gorillaz',
     'Bjork', 'Justice', 'Kraftwerk', 'Daft Punk', 'Four Tet', 'Burial', 'Bonobo',
-    'Bicep', 'Caribou', 'Laurent Garnier', 'Squarepusher', 'Röyksopp', 'Air'
+    'Bicep', 'Caribou', 'Laurent Garnier', 'Squarepusher', 'Royksopp', 'Air', 'Morcheeba',
+    'Zero 7', 'Thievery Corporation', 'Faithless', 'Orbital', 'Leftfield', 'Groove Armada',
+    'DJ Shadow', 'Nightmares on Wax', 'Kruder & Dorfmeister', 'Tycho', 'Jon Hopkins', 'Moderat'
   ],
   hiphop: [
     '2Pac', 'The Notorious B.I.G.', 'Wu-Tang Clan', 'Nas', 'A Tribe Called Quest',
     'Outkast', 'Dr. Dre', 'Snoop Dogg', 'Eminem', 'Jay-Z', 'MF DOOM', 'Kendrick Lamar',
     'J Dilla', 'Cypress Hill', 'The Fugees', 'Beastie Boys', 'Lauryn Hill', 'Mos Def',
-    'Public Enemy', 'De La Soul', 'Common', 'Slick Rick', 'Big L', 'N.W.A.'
+    'Public Enemy', 'De La Soul', 'Common', 'Slick Rick', 'Big L', 'N.W.A.', 'Rakim',
+    'KRS-One', 'Mobb Deep', 'Gang Starr', 'Method Man', 'Ghostface Killah', 'Busta Rhymes',
+    'Ice Cube', 'The Roots', 'Digable Planets', 'Souls of Mischief', 'Talib Kweli', 'Black Star'
   ],
   funk: [
     'Earth Wind & Fire', 'Chic', 'Kool & The Gang', 'Rick James', 'Parliament',
     'Funkadelic', 'Stevie Wonder', 'James Brown', 'Sly & The Family Stone', 'The Gap Band',
-    'George Clinton', 'Curtis Mayfield', 'Tower of Power', 'The Commodores', 'Chaka Khan'
+    'George Clinton', 'Curtis Mayfield', 'Tower of Power', 'The Commodores', 'Chaka Khan',
+    'The Meters', 'Bootsy Collins', 'Average White Band', 'War', 'The Isley Brothers',
+    'Ohio Players', 'Zapp & Roger', 'Jamiroquai', 'Maceo Parker', 'The Bar-Kays', 'Rufus'
   ],
   metal: [
     'Iron Maiden', 'Judas Priest', 'Metallica', 'Megadeth', 'Slayer', 'Pantera',
     'Motorhead', 'Black Sabbath', 'Ozzy Osbourne', 'Dio', 'Rammstein', 'Slipknot',
     'Sepultura', 'Ghost', 'Mastodon', 'Gojira', 'Sex Pistols', 'The Ramones',
     'Bad Religion', 'Green Day', 'Blink-182', 'The Offspring', 'Tool', 'System of a Down',
-    'Deftones', 'Korn', 'Anthrax', 'Avenged Sevenfold', 'Soundgarden'
+    'Deftones', 'Korn', 'Anthrax', 'Avenged Sevenfold', 'Soundgarden', 'Alice in Chains',
+    'Death', 'Opeth', 'Machine Head', 'Testament', 'Kreator', 'Helloween', 'Accept', 'Saxon'
   ],
   reggae: [
     'Bob Marley', 'Peter Tosh', 'Jimmy Cliff', 'Burning Spear', 'Black Uhuru',
     'Toots and the Maytals', 'Lee Scratch Perry', 'Sublime', 'Manu Chao',
-    'Los Fabulosos Cadillacs', 'Cultura Profetica', 'Gondwana', 'Steel Pulse', 'Dennis Brown'
+    'Los Fabulosos Cadillacs', 'Cultura Profetica', 'Gondwana', 'Steel Pulse', 'Dennis Brown',
+    'Gregory Isaacs', 'Max Romeo', 'Horace Andy', 'Bitty McLean', 'Alborosie', 'Chronixx',
+    'Damian Marley', 'Third World', 'Yellowman', 'Jacob Miller', 'Israel Vibration'
   ],
   citypop: [
     'Tatsuro Yamashita', 'Mariya Takeuchi', 'Casiopea', 'Anri', 'Miki Matsubara',
     'Taeko Onuki', 'Tame Impala', 'Khruangbin', 'Men I Trust', 'Mac DeMarco',
-    'Unknown Mortal Orchestra', 'Mild High Club', 'Ginger Root', 'Cortex'
+    'Unknown Mortal Orchestra', 'Mild High Club', 'Ginger Root', 'Cortex', 'T-Square',
+    'Junko Ohashi', 'Minako Yoshida', 'Meiko Nakahara', 'Kiyotaka Sugiyama', 'Omega Tribe',
+    'Yellow Magic Orchestra', 'Haruomi Hosono', 'Ryuichi Sakamoto', 'Masayoshi Takanaka'
   ],
   bossa: [
     'Stan Getz', 'Astrud Gilberto', 'Antonio Carlos Jobim', 'Joao Gilberto',
     'Caetano Veloso', 'Gal Costa', 'Gilberto Gil', 'Vinicius de Moraes', 'Baden Powell',
-    'Elis Regina', 'Kings of Convenience', 'Nick Drake', 'Nara Leao', 'Chico Buarque'
+    'Elis Regina', 'Kings of Convenience', 'Nick Drake', 'Nara Leao', 'Chico Buarque',
+    'Jorge Ben Jor', 'Milton Nascimento', 'Marcos Valle', 'Toquinho', 'Maria Bethania',
+    'Edu Lobo', 'Sergio Mendes', 'Seu Jorge', 'Bebel Gilberto', 'Lucas Arruda'
   ]
 };
 
@@ -294,33 +324,75 @@ const GENRE_SEEDS = {
 const MOOD_PRESETS = {
   heartbreak: {
     title: "CORAZÓN ROTO & MELANCOLÍA",
-    clerkMsg: "A veces la música melancólica es el mejor abrazo. Te preparé una batea con grabaciones íntimas, acústicas y letras desgarradoras.",
-    seeds: ['Radiohead', 'Mazzy Star', 'The Cure', 'Cigarettes After Sex', 'Elliott Smith', 'Joy Division', 'Spinetta', 'Portishead', 'Nirvana', 'Phoebe Bridgers', 'Jeff Buckley']
+    clerkMsg: "A veces la música melancólica es el mejor abrazo. Te preparé una batea con grabaciones íntimas, acústicas y letras desgarradoras de múltiples artistas.",
+    seeds: [
+      'Radiohead', 'Mazzy Star', 'The Cure', 'Cigarettes After Sex', 'Elliott Smith',
+      'Joy Division', 'Spinetta', 'Portishead', 'Nirvana', 'Phoebe Bridgers',
+      'Jeff Buckley', 'Bon Iver', 'Sufjan Stevens', 'Damien Rice', 'Fiona Apple',
+      'Nick Cave', 'Cat Power', 'The National', 'Daughter', 'Slowdive',
+      'Cocteau Twins', 'Sinead O\'Connor', 'Leonard Cohen', 'Tom Waits', 'Tracy Chapman',
+      'Joni Mitchell', 'Chet Baker', 'Low', 'Nick Drake', 'Spinetta Jade'
+    ]
   },
   adrenaline: {
     title: "ADRENALINA & REBELDÍA",
     clerkMsg: "¡A romper la rutina! Te acabo de seleccionar una batea con furia pura, guitarras encendidas y decibelios al máximo.",
-    seeds: ['Rage Against the Machine', 'The Prodigy', 'Metallica', 'The Clash', 'Beastie Boys', 'Sex Pistols', 'Slipknot', 'Motorhead', 'Bad Religion', 'System of a Down', 'Audioslave']
+    seeds: [
+      'Rage Against the Machine', 'The Prodigy', 'Metallica', 'The Clash', 'Beastie Boys',
+      'Sex Pistols', 'Slipknot', 'Motorhead', 'Bad Religion', 'System of a Down',
+      'Audioslave', 'Foo Fighters', 'Queens of the Stone Age', 'Pantera', 'The Offspring',
+      'White Zombie', 'Refused', 'Fugazi', 'Dead Kennedys', 'The Hives',
+      'IDLES', 'The Stooges', 'Black Flag', 'Slayer', 'Judas Priest',
+      'Iron Maiden', 'Rammstein', 'Green Day', 'Soundgarden', 'At the Drive-In'
+    ]
   },
   party: {
     title: "FIESTA & BAILE RETRO",
-    clerkMsg: "¡A mover el cuerpo! Aquí tienes puro ritmo disco, synthpop de los 80s y bajos funk que no te dejarán quedarte sentado.",
-    seeds: ['Daft Punk', 'Michael Jackson', 'Chic', 'Donna Summer', 'New Order', 'Bee Gees', 'Earth Wind & Fire', 'Kool & The Gang', 'Madonna', 'Kavinsky', 'Prince']
+    clerkMsg: "¡A mover el cuerpo! Aquí tienes puro ritmo disco, synthpop de los 80s y bajos funk con una selección súper variada.",
+    seeds: [
+      'Daft Punk', 'Michael Jackson', 'Chic', 'Donna Summer', 'New Order',
+      'Bee Gees', 'Earth Wind & Fire', 'Kool & The Gang', 'Madonna', 'Kavinsky',
+      'Prince', 'ABBA', 'Giorgio Moroder', 'Sister Sledge', 'Rick James',
+      'KC and The Sunshine Band', 'The Chemical Brothers', 'Fatboy Slim', 'Justice', 'LCD Soundsystem',
+      'Jamiroquai', 'Boney M', 'Wham', 'Gloria Gaynor', 'The Trammps',
+      'Diana Ross', 'Kylie Minogue', 'Pet Shop Boys', 'Depeche Mode', 'Talk Talk'
+    ]
   },
   chill: {
     title: "LLUVIA, CAFÉ & RELAJO",
     clerkMsg: "Perfecto para bajar las revoluciones, tomarte un café y mirar la lluvia. Esta selección es pura calma, swing y elegancia.",
-    seeds: ['Miles Davis', 'Chet Baker', 'Bill Evans', 'Erykah Badu', 'Norah Jones', 'Tom Jobim', 'Stan Getz', 'Khruangbin', 'D\'Angelo', 'Sade', 'Nick Drake']
+    seeds: [
+      'Miles Davis', 'Chet Baker', 'Bill Evans', 'Erykah Badu', 'Norah Jones',
+      'Tom Jobim', 'Stan Getz', 'Khruangbin', 'D\'Angelo', 'Sade',
+      'Nick Drake', 'Air', 'Bonobo', 'Zero 7', 'Thievery Corporation',
+      'Morcheeba', 'Astrud Gilberto', 'Leon Bridges', 'Lianne La Havas', 'Corinne Bailey Rae',
+      'Jose Gonzalez', 'Kings of Convenience', 'Jack Johnson', 'Men I Trust', 'Mac DeMarco',
+      'Tycho', 'Billie Holiday', 'Nina Simone', 'Caetano Veloso', 'Jorge Drexler'
+    ]
   },
   trippy: {
     title: "VIAJE MENTAL & PSICODELIA",
     clerkMsg: "Prepárate para un viaje extrasensorial. Esta selección tiene texturas hipnóticas, rock progresivo y sonidos de otra dimensión.",
-    seeds: ['Pink Floyd', 'Massive Attack', 'Tame Impala', 'King Crimson', 'The Doors', 'Boards of Canada', 'Aphex Twin', 'Can', 'Porcupine Tree', 'Kraftwerk']
+    seeds: [
+      'Pink Floyd', 'Massive Attack', 'Tame Impala', 'King Crimson', 'The Doors',
+      'Boards of Canada', 'Aphex Twin', 'Can', 'Porcupine Tree', 'Kraftwerk',
+      'Tool', 'The Flaming Lips', 'Animal Collective', 'Brian Eno', 'Neu!',
+      'Hawkwind', 'Gong', 'Yes', 'Genesis', 'Jimi Hendrix',
+      'Jefferson Airplane', 'Grateful Dead', 'Spacemen 3', 'Spiritualized', 'Unknown Mortal Orchestra',
+      'Mild High Club', 'The Velvet Underground', 'Cocteau Twins', 'Slowdive', 'Caribou'
+    ]
   },
   latin_bohemia: {
     title: "BOHEMIA & ROCK LATINO",
     clerkMsg: "La sangre latina y la poesía popular. Aquí están los discos que marcaron la historia y las noches bohemias de nuestro continente.",
-    seeds: ['Charly Garcia', 'Soda Stereo', 'Silvio Rodriguez', 'Mercedes Sosa', 'Los Jaivas', 'Pescado Rabioso', 'Caifanes', 'Buena Vista Social Club', 'Fito Paez', 'Los Tres', 'Seru Giran']
+    seeds: [
+      'Charly Garcia', 'Soda Stereo', 'Silvio Rodriguez', 'Mercedes Sosa', 'Los Jaivas',
+      'Pescado Rabioso', 'Caifanes', 'Buena Vista Social Club', 'Fito Paez', 'Los Tres',
+      'Seru Giran', 'Luis Alberto Spinetta', 'Gustavo Cerati', 'Los Prisioneros', 'La Ley',
+      'Virus', 'Sumo', 'Los Fabulosos Cadillacs', 'Enanitos Verdes', 'Cafe Tacvba',
+      'Molotov', 'Heroes del Silencio', 'Andres Calamaro', 'Jorge Drexler', 'Mon Laferte',
+      'Los Bunkers', 'Aterciopelados', 'Pappo', 'Rata Blanca', 'El Cuarteto de Nos'
+    ]
   }
 };
 
@@ -680,17 +752,34 @@ class RecordStoreApp {
     }
   }
 
-  // Load crate with custom Mood preset
+  // Helper to normalize artist names for strict unique-artist crate deduplication
+  normalizeArtist(name) {
+    if (!name) return '';
+    return name
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/^(the|los|las|el|la)\s+/i, '')
+      .replace(/[^a-z0-9]/g, '')
+      .trim();
+  }
+
+  // Load crate with custom Mood preset (Strict Artist Diversity)
   async loadCustomMood(mood) {
     this.showLoading(true, `Alistando la batea para: ${mood.title}...`);
-    const pickedSeeds = [...mood.seeds].sort(() => Math.random() - 0.5).slice(0, 4);
+
+    // Pick 24 diverse seeds from the expanded mood pool
+    const pickedSeeds = [...mood.seeds].sort(() => Math.random() - 0.5).slice(0, 24);
 
     let collectedAlbums = [];
+    const secondaryAlbums = [];
     const seenTitles = new Set();
+    const seenArtists = new Set();
 
     try {
+      // Query iTunes for each seed with limit=4
       const fetchPromises = pickedSeeds.map(seed => {
-        const url = `https://itunes.apple.com/search?term=${encodeURIComponent(seed)}&entity=song&limit=15`;
+        const url = `https://itunes.apple.com/search?term=${encodeURIComponent(seed)}&entity=song&limit=4`;
         return fetch(url).then(r => r.json()).catch(() => ({ results: [] }));
       });
 
@@ -698,10 +787,13 @@ class RecordStoreApp {
 
       responses.forEach((data, seedIdx) => {
         if (data.results && data.results.length > 0) {
-          data.results.forEach(song => {
+          let chosenForThisSeed = false;
+
+          for (const song of data.results) {
             const albumTitle = song.collectionName;
-            if (!albumTitle || seenTitles.has(albumTitle.toLowerCase())) return;
-            seenTitles.add(albumTitle.toLowerCase());
+            if (!albumTitle || seenTitles.has(albumTitle.toLowerCase())) continue;
+
+            const normArtist = this.normalizeArtist(song.artistName);
 
             const highResArt = song.artworkUrl100
               ? song.artworkUrl100.replace('100x100bb.jpg', '1000x1000bb.jpg')
@@ -713,7 +805,7 @@ class RecordStoreApp {
 
             const format = (collectedAlbums.length + seedIdx) % 2 === 0 ? 'cd' : 'cassette';
 
-            collectedAlbums.push({
+            const albumObj = {
               title: albumTitle,
               artist: song.artistName,
               year: releaseYear,
@@ -725,10 +817,31 @@ class RecordStoreApp {
               review: generateEditorialBlurb(song.artistName, albumTitle, song.primaryGenreName || 'este género', releaseYear),
               spotifyQuery: `${song.artistName} ${albumTitle}`,
               spineColor: getSpineColorForTitle(song.artistName + albumTitle)
-            });
-          });
+            };
+
+            // STRICT: At most 1 album per artist to guarantee maximum variety
+            if (!seenArtists.has(normArtist) && !chosenForThisSeed) {
+              seenArtists.add(normArtist);
+              seenTitles.add(albumTitle.toLowerCase());
+              collectedAlbums.push(albumObj);
+              chosenForThisSeed = true;
+            } else if (!seenTitles.has(albumTitle.toLowerCase())) {
+              secondaryAlbums.push(albumObj);
+            }
+          }
         }
       });
+
+      // If we have under 20 due to any empty seed response, backfill with secondary unique titles
+      if (collectedAlbums.length < 20 && secondaryAlbums.length > 0) {
+        for (const extra of secondaryAlbums) {
+          if (collectedAlbums.length >= 24) break;
+          if (!seenTitles.has(extra.title.toLowerCase())) {
+            seenTitles.add(extra.title.toLowerCase());
+            collectedAlbums.push(extra);
+          }
+        }
+      }
     } catch (err) {
       console.warn("Mood fetch error", err);
     }
@@ -738,7 +851,8 @@ class RecordStoreApp {
     if (collectedAlbums.length >= 8) {
       this.crateItems = collectedAlbums.sort(() => Math.random() - 0.5).slice(0, 24);
     } else {
-      this.crateItems = [...CURATED_FALLBACK, ...collectedAlbums].sort(() => Math.random() - 0.5);
+      const fallbackFiltered = CURATED_FALLBACK.filter(a => !seenArtists.has(this.normalizeArtist(a.artist)));
+      this.crateItems = [...collectedAlbums, ...fallbackFiltered].sort(() => Math.random() - 0.5).slice(0, 24);
     }
 
     if (this.crateLabelTag) {
@@ -749,20 +863,24 @@ class RecordStoreApp {
     this.renderCrate();
   }
 
-  // Fetch a massive, random collection of albums from iTunes API using genre seed banks
+  // Fetch a massive, random collection of albums with strict artist diversity (no repetitive artists)
   async loadCrateCategory(cat, isShuffle = false) {
     this.currentCategory = cat;
     this.showLoading(true, "Abriendo cajas nuevas del almacén...");
 
     const seeds = GENRE_SEEDS[cat] || GENRE_SEEDS.all;
-    const pickedSeeds = [...seeds].sort(() => Math.random() - 0.5).slice(0, 4);
+    // Pick 24 random seeds from the large pool of artists
+    const pickedSeeds = [...seeds].sort(() => Math.random() - 0.5).slice(0, 24);
 
     let collectedAlbums = [];
+    const secondaryAlbums = [];
     const seenTitles = new Set();
+    const seenArtists = new Set();
 
     try {
+      // Query iTunes for each seed with limit=4
       const fetchPromises = pickedSeeds.map(seed => {
-        const url = `https://itunes.apple.com/search?term=${encodeURIComponent(seed)}&entity=song&limit=15`;
+        const url = `https://itunes.apple.com/search?term=${encodeURIComponent(seed)}&entity=song&limit=4`;
         return fetch(url).then(r => r.json()).catch(() => ({ results: [] }));
       });
 
@@ -770,10 +888,13 @@ class RecordStoreApp {
 
       responses.forEach((data, seedIdx) => {
         if (data.results && data.results.length > 0) {
-          data.results.forEach(song => {
+          let chosenForThisSeed = false;
+
+          for (const song of data.results) {
             const albumTitle = song.collectionName;
-            if (!albumTitle || seenTitles.has(albumTitle.toLowerCase())) return;
-            seenTitles.add(albumTitle.toLowerCase());
+            if (!albumTitle || seenTitles.has(albumTitle.toLowerCase())) continue;
+
+            const normArtist = this.normalizeArtist(song.artistName);
 
             const highResArt = song.artworkUrl100
               ? song.artworkUrl100.replace('100x100bb.jpg', '1000x1000bb.jpg')
@@ -785,7 +906,7 @@ class RecordStoreApp {
 
             const format = (collectedAlbums.length + seedIdx) % 2 === 0 ? 'cd' : 'cassette';
 
-            collectedAlbums.push({
+            const albumObj = {
               title: albumTitle,
               artist: song.artistName,
               year: releaseYear,
@@ -797,10 +918,31 @@ class RecordStoreApp {
               review: generateEditorialBlurb(song.artistName, albumTitle, song.primaryGenreName || 'este género', releaseYear),
               spotifyQuery: `${song.artistName} ${albumTitle}`,
               spineColor: getSpineColorForTitle(song.artistName + albumTitle)
-            });
-          });
+            };
+
+            // STRICT: At most 1 album per artist in primary batch to guarantee 100% unique artists
+            if (!seenArtists.has(normArtist) && !chosenForThisSeed) {
+              seenArtists.add(normArtist);
+              seenTitles.add(albumTitle.toLowerCase());
+              collectedAlbums.push(albumObj);
+              chosenForThisSeed = true;
+            } else if (!seenTitles.has(albumTitle.toLowerCase())) {
+              secondaryAlbums.push(albumObj);
+            }
+          }
         }
       });
+
+      // If we have under 20 albums due to any fetch miss, backfill with secondary albums
+      if (collectedAlbums.length < 20 && secondaryAlbums.length > 0) {
+        for (const extra of secondaryAlbums) {
+          if (collectedAlbums.length >= 24) break;
+          if (!seenTitles.has(extra.title.toLowerCase())) {
+            seenTitles.add(extra.title.toLowerCase());
+            collectedAlbums.push(extra);
+          }
+        }
+      }
     } catch (err) {
       console.warn("iTunes API live search error, using fallback catalog", err);
     }
@@ -810,7 +952,8 @@ class RecordStoreApp {
     if (collectedAlbums.length >= 8) {
       this.crateItems = collectedAlbums.sort(() => Math.random() - 0.5).slice(0, 24);
     } else {
-      this.crateItems = [...CURATED_FALLBACK, ...collectedAlbums].sort(() => Math.random() - 0.5);
+      const fallbackFiltered = CURATED_FALLBACK.filter(a => !seenArtists.has(this.normalizeArtist(a.artist)));
+      this.crateItems = [...collectedAlbums, ...fallbackFiltered].sort(() => Math.random() - 0.5).slice(0, 24);
     }
 
     const catLabels = {
@@ -835,24 +978,37 @@ class RecordStoreApp {
     this.renderCrate();
   }
 
-  // Search literally ANY artist or genre in the world on demand
+  // Search literally ANY artist or genre in the world on demand with smart artist distribution
   async searchCustomQuery(query) {
     this.currentSearchTerm = query;
     this.showLoading(true, `Revolviendo las bateas en busca de "${query}"...`);
 
     let foundAlbums = [];
+    const secondaryFound = [];
     const seenTitles = new Set();
+    const artistCounts = new Map();
+    const normQuery = this.normalizeArtist(query);
 
     try {
-      const url = `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=song&limit=40`;
+      const url = `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=song&limit=60`;
       const res = await fetch(url);
       const data = await res.json();
 
       if (data.results && data.results.length > 0) {
+        // If the user queried a specific band/artist, allow browsing multiple albums from them
+        const isSpecificArtistQuery = data.results.some(s => {
+          const a = this.normalizeArtist(s.artistName);
+          return a === normQuery || (normQuery.length >= 4 && a.includes(normQuery));
+        });
+
+        const maxPerArtist = isSpecificArtistQuery ? 8 : 1;
+
         data.results.forEach((song, idx) => {
           const albumTitle = song.collectionName;
           if (!albumTitle || seenTitles.has(albumTitle.toLowerCase())) return;
-          seenTitles.add(albumTitle.toLowerCase());
+
+          const normArtist = this.normalizeArtist(song.artistName);
+          const currentCount = artistCounts.get(normArtist) || 0;
 
           const highResArt = song.artworkUrl100
             ? song.artworkUrl100.replace('100x100bb.jpg', '1000x1000bb.jpg')
@@ -864,7 +1020,7 @@ class RecordStoreApp {
 
           const format = idx % 2 === 0 ? 'cd' : 'cassette';
 
-          foundAlbums.push({
+          const albumObj = {
             title: albumTitle,
             artist: song.artistName,
             year: releaseYear,
@@ -876,8 +1032,27 @@ class RecordStoreApp {
             review: generateEditorialBlurb(song.artistName, albumTitle, song.primaryGenreName || 'música', releaseYear),
             spotifyQuery: `${song.artistName} ${albumTitle}`,
             spineColor: getSpineColorForTitle(song.artistName + albumTitle)
-          });
+          };
+
+          if (currentCount < maxPerArtist) {
+            seenTitles.add(albumTitle.toLowerCase());
+            artistCounts.set(normArtist, currentCount + 1);
+            foundAlbums.push(albumObj);
+          } else {
+            secondaryFound.push(albumObj);
+          }
         });
+
+        // If results are few, allow filling up to 20 with secondary results
+        if (foundAlbums.length < 16 && secondaryFound.length > 0) {
+          for (const extra of secondaryFound) {
+            if (foundAlbums.length >= 24) break;
+            if (!seenTitles.has(extra.title.toLowerCase())) {
+              seenTitles.add(extra.title.toLowerCase());
+              foundAlbums.push(extra);
+            }
+          }
+        }
       }
     } catch (err) {
       console.warn("Custom search error", err);
