@@ -722,27 +722,47 @@ body {
   transform-style: preserve-3d;
   display: flex;
   align-items: center;
-  overflow: hidden;
-  padding: 0 20px;
+  overflow: visible;
+  padding: 0 10px;
 }
 
-/* Crate Brass Corners & Wood Texture details */
+/* Crate Prominent Vintage Divider Plaque */
 .crate-label-tag {
   position: absolute;
-  bottom: -18px;
+  top: -24px;
   left: 50%;
   transform: translateX(-50%);
-  background: #ecdcc3;
-  color: #2b1807;
+  background: linear-gradient(180deg, #2b180d 0%, #160c06 100%);
+  color: #ffdf78;
   font-family: var(--font-retro);
   font-size: 1.25rem;
-  font-weight: bold;
+  font-weight: 800;
   letter-spacing: 2px;
-  padding: 4px 20px;
-  border-radius: 4px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
-  border: 1px dashed #8b6038;
-  z-index: 20;
+  padding: 7px 24px;
+  border-radius: 8px 8px 0 0;
+  border: 2px solid #e5a93c;
+  border-bottom: 2px solid #b87b1c;
+  box-shadow: 
+    0 -6px 20px rgba(255, 170, 0, 0.35),
+    0 8px 22px rgba(0, 0, 0, 0.9);
+  text-shadow: 0 0 12px rgba(255, 180, 0, 0.7);
+  z-index: 40;
+  white-space: nowrap;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.crate-label-tag::before {
+  content: "🗂️";
+  font-size: 1.1rem;
+}
+
+.crate-label-tag::after {
+  content: "✦";
+  color: #ffaa00;
+  font-size: 0.85rem;
 }
 
 /* The Rack of Discs & Tapes inside the crate */
@@ -1955,10 +1975,15 @@ body {
   }
 
   .crate-label-tag {
-    font-size: 0.85rem;
-    padding: 2px 12px;
-    bottom: -12px;
+    font-size: 0.92rem;
+    padding: 5px 14px;
+    top: -18px;
+    bottom: auto;
+    max-width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
+    letter-spacing: 1px;
   }
 
   /* Crate Controls for Touch */
