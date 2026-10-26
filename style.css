@@ -990,10 +990,11 @@ body {
   background: radial-gradient(circle at 50% 40%, rgba(30, 20, 45, 0.96) 0%, rgba(9, 7, 14, 0.98) 80%);
   backdrop-filter: blur(20px);
   z-index: 50;
-  padding: 2rem;
+  padding: calc(64px + 1.5rem) 2rem 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
 }
 
 .inspect-card {
@@ -2021,20 +2022,38 @@ body {
 
   /* Scene 4: Inspect Modal */
   .scene-inspect {
-    padding: 0.6rem;
-    align-items: flex-start;
+    padding: calc(54px + 1.2rem) 0.8rem 2.5rem;
+    align-items: center;
+    justify-content: flex-start;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
   }
 
   .inspect-card {
     grid-template-columns: 1fr;
     width: 100%;
-    max-height: 94vh;
-    padding: 1.2rem 1rem 1.6rem;
-    gap: 1rem;
-    border-radius: 16px;
-    margin: auto 0;
+    max-width: 480px;
+    max-height: none;
+    padding: 3.2rem 1.2rem 2rem;
+    gap: 1.4rem;
+    border-radius: 20px;
+    margin: 0 auto;
+  }
+
+  .close-inspect-btn {
+    top: 0.85rem;
+    right: 0.85rem;
+    width: 40px;
+    height: 40px;
+    background: rgba(35, 25, 48, 0.92);
+    border: 1px solid rgba(255, 184, 51, 0.4);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+  }
+
+  .media-display-col {
+    margin-top: 0.4rem;
+    align-items: center;
   }
 
   .physical-case-wrapper {
