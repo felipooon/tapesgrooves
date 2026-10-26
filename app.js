@@ -3518,6 +3518,212 @@ const MOOD_PRESETS = {
       "Silvana Estrada",
       "Kevin Kaarl"
     ]
+  },
+  "nostalgia_80s": {
+    "title": "NOSTALGIA & SYNTHWAVE 80s",
+    "clerkMsg": "Viaje directo a las luces de neón, cajas de ritmo y sintetizadores analógicos. Te armé una batea con puro New Wave y nostalgia ochentera.",
+    "seeds": [
+      "Depeche Mode",
+      "New Order",
+      "The Smiths",
+      "Tears for Fears",
+      "Duran Duran",
+      "Pet Shop Boys",
+      "A-ha",
+      "Echo & the Bunnymen",
+      "The Cure",
+      "Orchestral Manoeuvres in the Dark",
+      "Simple Minds",
+      "Talk Talk",
+      "INXS",
+      "The Human League",
+      "Soft Cell",
+      "Eurythmics",
+      "Billy Idol",
+      "The Police",
+      "Roxy Music",
+      "Blondie",
+      "Spandau Ballet",
+      "Visage",
+      "Boy Harsher",
+      "Molchat Doma",
+      "Kavinsky",
+      "The Midnight",
+      "Gunship",
+      "Gary Numan",
+      "Ultravox",
+      "Alphaville",
+      "Modern Talking",
+      "Berlin"
+    ]
+  },
+  "focus_flow": {
+    "title": "CONCENTRACIÓN & DEEP FOCUS",
+    "clerkMsg": "Para perderte en tus pensamientos, estudiar o trabajar con calma absoluta. Paisajes instrumentales, post-rock y minimalismo sonoro.",
+    "seeds": [
+      "Sigur Ros",
+      "Godspeed You! Black Emperor",
+      "Mogwai",
+      "Explosions in the Sky",
+      "Nils Frahm",
+      "Max Richter",
+      "Olafur Arnalds",
+      "Tycho",
+      "Brian Eno",
+      "Jon Hopkins",
+      "Bonobo",
+      "Kiasmos",
+      "Marconi Union",
+      "This Will Destroy You",
+      "Mono",
+      "Balmorhea",
+      "Ludovico Einaudi",
+      "Stars of the Lid",
+      "Hammock",
+      "Boards of Canada",
+      "Four Tet",
+      "William Basinski",
+      "Steve Reich",
+      "Philip Glass",
+      "Yann Tiersen",
+      "C418",
+      "Helios",
+      "Goldmund",
+      "Aphex Twin"
+    ]
+  },
+  "roadtrip": {
+    "title": "CARRETERA & VIENTO LIBRE",
+    "clerkMsg": "Baja la ventanilla, sube el volumen y deja que el asfalto corra. Discos de rock clásico y guitarras doradas para devorar kilómetros.",
+    "seeds": [
+      "Fleetwood Mac",
+      "Tom Petty",
+      "Creedence Clearwater Revival",
+      "Bruce Springsteen",
+      "Dire Straits",
+      "The War on Drugs",
+      "Eagles",
+      "Neil Young",
+      "Queens of the Stone Age",
+      "Kyuss",
+      "Khruangbin",
+      "ZZ Top",
+      "Lynyrd Skynyrd",
+      "America",
+      "Crosby, Stills, Nash & Young",
+      "Steely Dan",
+      "The Doobie Brothers",
+      "Boston",
+      "Heart",
+      "The Allman Brothers Band",
+      "Santana",
+      "JJ Cale",
+      "The Black Keys",
+      "Kurt Vile",
+      "The Rolling Stones",
+      "Bob Seger",
+      "Steve Miller Band"
+    ]
+  },
+  "urban_flow": {
+    "title": "FLOW URBANO & BEAT NOCTURNO",
+    "clerkMsg": "Ritmos pesados, barras afiladas y groove nocturno. Desde la época dorada del hip-hop hasta el R&B moderno y el trap latino.",
+    "seeds": [
+      "Kendrick Lamar",
+      "A Tribe Called Quest",
+      "Wu-Tang Clan",
+      "Nas",
+      "Mac Miller",
+      "Tyler, The Creator",
+      "J Dilla",
+      "C. Tangana",
+      "Duki",
+      "Trueno",
+      "Ca7riel",
+      "Paco Amoroso",
+      "Bad Bunny",
+      "Frank Ocean",
+      "SZA",
+      "Lauryn Hill",
+      "Outkast",
+      "2Pac",
+      "The Notorious B.I.G.",
+      "MF DOOM",
+      "Anderson .Paak",
+      "Childish Gambino",
+      "J. Cole",
+      "Travis Scott",
+      "Drake",
+      "Rosalia",
+      "Bizarrap",
+      "Wos",
+      "Ysy A",
+      "Neo Pistea"
+    ]
+  },
+  "dark_goth": {
+    "title": "NOCHE OSCURA & DARKWAVE",
+    "clerkMsg": "Para cuando se apaga la luz y reina el misterio. Bajos profundos, guitarras con chorus frío y atmósferas góticas hipnóticas.",
+    "seeds": [
+      "Bauhaus",
+      "Siouxsie and the Banshees",
+      "The Sisters of Mercy",
+      "Lebanon Hanover",
+      "She Past Away",
+      "Christian Death",
+      "Joy Division",
+      "Killing Joke",
+      "Clan of Xymox",
+      "Molchat Doma",
+      "Twin Tribes",
+      "The Damned",
+      "Cocteau Twins",
+      "The Chameleons",
+      "Asylum Party",
+      "Drab Majesty",
+      "Cold Cave",
+      "Dead Can Dance",
+      "Peter Murphy",
+      "Fields of the Nephilim",
+      "The Mission",
+      "London After Midnight",
+      "Linea Aspera",
+      "Selofan"
+    ]
+  },
+  "sunset_breeze": {
+    "title": "ATARDECER & BUENA VIBRA",
+    "clerkMsg": "Cálido como los últimos rayos de sol sobre la playa. Melodías luminosas de city pop, neo-psicodelia costera y reggae dub para relajar.",
+    "seeds": [
+      "Tatsuro Yamashita",
+      "Mariya Takeuchi",
+      "Miki Matsubara",
+      "Anri",
+      "Taeko Onuki",
+      "Men I Trust",
+      "Mac DeMarco",
+      "Bob Marley",
+      "UB40",
+      "Manu Chao",
+      "Devendra Banhart",
+      "Caetano Veloso",
+      "Jorge Ben Jor",
+      "Gilberto Gil",
+      "Marcos Valle",
+      "Khruangbin",
+      "Toro y Moi",
+      "Mild High Club",
+      "Boy Pablo",
+      "Cuco",
+      "Yellow Days",
+      "Real Estate",
+      "Alvvays",
+      "Connan Mockasin",
+      "Homeshake",
+      "Inner Wave",
+      "Grover Washington Jr.",
+      "Cal Tjader"
+    ]
   }
 };
 
@@ -4709,16 +4915,11 @@ class RecordStoreApp {
     // Initial rich editorial review
     const initialBlurb = album.review || generateEditorialBlurb(album.artist, album.title, album.genre, album.year);
     const reviewTextEl = document.getElementById('inspect-review-text');
-    const sourceTagEl = document.getElementById('review-source-tag');
     
     reviewTextEl.textContent = initialBlurb;
     reviewTextEl.style.opacity = '1';
-    if (sourceTagEl) {
-      sourceTagEl.textContent = '📻 NOTA DE LA DISQUERÍA';
-      sourceTagEl.className = 'review-source-tag store-note';
-    }
 
-    // Fetch deep real album background story from Wikipedia in the background
+    // Fetch deep real album background story from Wikipedia in the background (clean, no labels)
     fetchWikipediaAlbumStory(album.artist, album.title).then(wikiResult => {
       // Check if user is still viewing the same album
       if (wikiResult && this.selectedAlbum && this.selectedAlbum.title === album.title) {
@@ -4726,13 +4927,6 @@ class RecordStoreApp {
         setTimeout(() => {
           reviewTextEl.textContent = wikiResult.extract;
           reviewTextEl.style.opacity = '1';
-          if (sourceTagEl) {
-            sourceTagEl.textContent = `📖 ${wikiResult.source}`;
-            sourceTagEl.className = 'review-source-tag wiki-note';
-            if (wikiResult.sourceUrl) {
-              sourceTagEl.title = 'Información enciclopédica verificada';
-            }
-          }
         }, 200);
       }
     });
