@@ -197,7 +197,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(10, 10, 20, 0.22) 0%, rgba(9, 10, 15, 0.6) 85%);
+  background: linear-gradient(180deg, rgba(8, 9, 16, 0.55) 0%, rgba(7, 8, 14, 0.72) 60%, rgba(5, 6, 12, 0.9) 100%);
   pointer-events: none;
 }
 
@@ -350,7 +350,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 50%, rgba(14, 10, 20, 0.12) 0%, rgba(10, 8, 14, 0.52) 75%, rgba(6, 5, 10, 0.72) 100%);
+  background: radial-gradient(circle at 50% 50%, rgba(14, 10, 20, 0.55) 0%, rgba(10, 8, 14, 0.78) 75%, rgba(6, 5, 10, 0.92) 100%);
   pointer-events: none;
 }
 
@@ -580,7 +580,7 @@ body {
    ========================================================================== */
 .scene-crate {
   background: 
-    radial-gradient(circle at 50% 35%, rgba(20, 14, 10, 0.32) 0%, rgba(14, 9, 7, 0.55) 65%, rgba(8, 5, 4, 0.78) 100%),
+    radial-gradient(circle at 50% 35%, rgba(16, 12, 18, 0.72) 0%, rgba(11, 8, 14, 0.84) 65%, rgba(6, 4, 8, 0.95) 100%),
     url('assets/crate_close_up.jpg') center center/cover no-repeat;
   display: flex;
   flex-direction: column;
@@ -1317,10 +1317,10 @@ body {
    ========================================================================== */
 .scene-inspect {
   background: 
-    radial-gradient(circle at 50% 40%, rgba(22, 14, 28, 0.52) 0%, rgba(10, 7, 16, 0.78) 85%),
+    radial-gradient(circle at 50% 40%, rgba(16, 11, 20, 0.78) 0%, rgba(8, 6, 12, 0.92) 85%),
     url('assets/crate_close_up.jpg') center center/cover no-repeat;
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   z-index: 50;
   padding: calc(64px + 1.5rem) 2rem 2rem;
   display: flex;
@@ -2783,7 +2783,16 @@ body {
     gap: 0.3rem;
   }
 
+  /* Atmosphere on mobile: softer grain to avoid visual clutter */
+  .atmosphere-overlay {
+    opacity: 0.12;
+  }
+
   /* Scene 1: Exterior */
+  .scene-exterior::before {
+    background: linear-gradient(180deg, rgba(6, 7, 12, 0.68) 0%, rgba(6, 7, 12, 0.82) 60%, rgba(4, 5, 10, 0.94) 100%);
+  }
+
   .exterior-content {
     padding: 1rem;
     gap: 1rem;
@@ -2822,6 +2831,10 @@ body {
     display: block;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+  }
+
+  .scene-interior::before {
+    background: radial-gradient(circle at 50% 50%, rgba(12, 8, 16, 0.78) 0%, rgba(9, 6, 13, 0.88) 70%, rgba(5, 4, 8, 0.96) 100%);
   }
 
   .interior-ui {
@@ -2903,6 +2916,9 @@ body {
 
   /* Scene 3: Crate Digging 3D View */
   .scene-crate {
+    background: 
+      radial-gradient(circle at 50% 30%, rgba(12, 9, 15, 0.84) 0%, rgba(9, 7, 12, 0.92) 60%, rgba(5, 4, 8, 0.97) 100%),
+      url('assets/crate_close_up.jpg') center center/cover no-repeat;
     padding-top: 3.8rem;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
@@ -3103,7 +3119,7 @@ body {
   /* Scene 4: Inspect Modal */
   .scene-inspect {
     background: 
-      linear-gradient(rgba(14, 10, 20, 0.62), rgba(9, 6, 14, 0.82)),
+      linear-gradient(rgba(10, 7, 16, 0.88), rgba(6, 4, 10, 0.96)),
       url('assets/crate_close_up.jpg') center center/cover no-repeat;
     padding: calc(54px + 1.2rem) 0.8rem 2.5rem;
     align-items: center;
