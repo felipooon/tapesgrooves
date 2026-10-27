@@ -14,7 +14,7 @@
   <!-- Favicon: Mini Vinilo Vectorial -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
-  <link rel="stylesheet" href="style.css?v=35">
+  <link rel="stylesheet" href="style.css?v=36">
 </head>
 <body>
 
@@ -31,7 +31,10 @@
 
     <div class="nav-actions">
       <button class="audio-btn" id="ambient-btn" title="Activar/Desactivar sonido ambiental de vinilo">
-        <span>📻</span>
+        <svg class="nav-audio-svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
+          <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>
+        </svg>
         <span>Sonido Ambiente</span>
       </button>
     </div>
@@ -383,10 +386,24 @@
           <div class="album-tracklist-section is-open" id="album-tracklist-section">
             <button class="tracklist-toggle-btn" id="tracklist-toggle-btn" type="button" aria-expanded="true" aria-controls="tracklist-content">
               <span class="tracklist-title">
-                <span class="tracklist-icon">📜</span> LISTA DE CANCIONES
+                <span class="tracklist-icon">
+                  <svg class="tracklist-svg" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                    <line x1="8" y1="6" x2="21" y2="6"/>
+                    <line x1="8" y1="12" x2="21" y2="12"/>
+                    <line x1="8" y1="18" x2="21" y2="18"/>
+                    <line x1="3" y1="6" x2="3.01" y2="6"/>
+                    <line x1="3" y1="12" x2="3.01" y2="12"/>
+                    <line x1="3" y1="18" x2="3.01" y2="18"/>
+                  </svg>
+                </span>
+                LISTA DE CANCIONES
               </span>
               <span class="tracklist-meta-info" id="tracklist-count-badge">Cargando pistas...</span>
-              <span class="tracklist-toggle-arrow" id="tracklist-toggle-arrow">▾</span>
+              <span class="tracklist-toggle-arrow" id="tracklist-toggle-arrow">
+                <svg class="tracklist-arrow-svg" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </span>
             </button>
             <div class="tracklist-content" id="tracklist-content">
               <div class="tracklist-scroll-area" id="tracklist-items-list" tabindex="0" role="region" aria-label="Lista de canciones del disco">
@@ -400,7 +417,12 @@
         <div class="album-details-col">
           <div>
             <div class="curator-note-tag">
-              <span>⭐ RECOMENDACIÓN DEL MOMENTO</span>
+              <span class="curator-star-icon">
+                <svg class="curator-star-svg" viewBox="0 0 24 24" width="13" height="13" fill="#ffb833" aria-hidden="true">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+              </span>
+              <span>RECOMENDACIÓN DEL MOMENTO</span>
             </div>
             <h3 class="album-title-text" id="inspect-album-title">Título del Álbum</h3>
             <p class="artist-name-text" id="inspect-artist-name">Nombre del Artista</p>
@@ -425,10 +447,24 @@
             <div class="device-lcd-screen">
               <div class="lcd-top-row">
                 <span class="lcd-mode-text" id="lcd-mode-text">TAPE 1</span>
-                <span class="lcd-battery-indicator">🔋 BATT ■■■</span>
+                <span class="lcd-battery-indicator">
+                  <svg class="lcd-battery-svg" viewBox="0 0 24 12" width="18" height="9" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <rect x="1" y="1" width="19" height="10" rx="2"/>
+                    <line x1="22" y1="4" x2="22" y2="8" stroke-linecap="round"/>
+                    <rect x="3" y="3" width="4" height="6" fill="currentColor" stroke="none"/>
+                    <rect x="8.5" y="3" width="4" height="6" fill="currentColor" stroke="none"/>
+                    <rect x="14" y="3" width="4" height="6" fill="currentColor" stroke="none"/>
+                  </svg>
+                  BATT
+                </span>
                 <span class="lcd-timer-display" id="player-time-badge">00:00</span>
               </div>
-              <div class="lcd-track-title" id="track-sample-title">🎵 Pista Seleccionada</div>
+              <div class="lcd-track-title" id="track-sample-title">
+                <svg class="lcd-note-svg" viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true">
+                  <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                </svg>
+                <span id="track-sample-name">Pista Seleccionada</span>
+              </div>
               
               <!-- Equalizer Spectrum VU Meter LED Bars -->
               <div class="lcd-vu-meter" id="lcd-vu-meter" aria-hidden="true">
@@ -450,23 +486,39 @@
 
             <!-- Physical Mechanical Deck Buttons -->
             <div class="device-mechanical-deck">
-              <button class="deck-btn btn-rewind" id="btn-rewind" title="Rebobinar cinta (⏪ -5s)">
-                <span class="deck-key">⏪</span>
+              <button class="deck-btn btn-rewind" id="btn-rewind" title="Rebobinar (-5s)">
+                <span class="deck-key">
+                  <svg class="deck-svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/>
+                  </svg>
+                </span>
                 <span class="deck-label">REW</span>
               </button>
 
               <button class="deck-btn btn-play-pause main-play" id="play-pause-btn" title="Reproducir / Pausar">
-                <span class="deck-key">▶</span>
+                <span class="deck-key">
+                  <svg class="deck-svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <polygon points="6 4 20 12 6 20 6 4"/>
+                  </svg>
+                </span>
                 <span class="deck-label">PLAY</span>
               </button>
 
-              <button class="deck-btn btn-stop" id="btn-stop" title="Detener y rebobinar (⏹)">
-                <span class="deck-key">⏹</span>
+              <button class="deck-btn btn-stop" id="btn-stop" title="Detener">
+                <span class="deck-key">
+                  <svg class="deck-svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <rect x="5" y="5" width="14" height="14" rx="1.5"/>
+                  </svg>
+                </span>
                 <span class="deck-label">STOP</span>
               </button>
 
-              <button class="deck-btn btn-forward" id="btn-forward" title="Avance rápido (⏩ +5s)">
-                <span class="deck-key">⏩</span>
+              <button class="deck-btn btn-forward" id="btn-forward" title="Avance rápido (+5s)">
+                <span class="deck-key">
+                  <svg class="deck-svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/>
+                  </svg>
+                </span>
                 <span class="deck-label">FFWD</span>
               </button>
             </div>
@@ -474,7 +526,13 @@
             <!-- Analog Volume Thumbwheel / Slider -->
             <div class="device-volume-control" id="device-volume-control">
               <button class="vol-mute-btn" id="vol-mute-btn" type="button" title="Silenciar / Activar sonido" aria-label="Silenciar">
-                <span class="vol-icon" id="vol-icon">🔊</span>
+                <span class="vol-icon" id="vol-icon">
+                  <svg class="vol-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" stroke="none"/>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                  </svg>
+                </span>
               </button>
               <div class="vol-slider-track">
                 <span class="vol-legend">VOL</span>
@@ -498,13 +556,22 @@
             </span>
             <div class="external-links-row">
               <a href="#" target="_blank" rel="noopener noreferrer" class="stream-link stream-spotify" id="link-spotify">
-                <span>🟢</span> Spotify
+                <svg class="stream-svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.563.387-.857.208-2.35-1.436-5.308-1.76-8.792-.963-.334.077-.667-.132-.743-.466-.077-.334.132-.667.466-.743 3.812-.871 7.08-.507 9.718 1.107.294.18.387.563.208.857zm1.226-2.724c-.227.369-.714.485-1.083.258-2.69-1.653-6.79-2.132-9.972-1.166-.413.125-.85-.107-.975-.52-.126-.414.107-.851.52-.976 3.632-1.102 8.152-.566 11.252 1.321.369.227.485.714.258 1.083zm.106-2.835C14.692 8.95 9.375 8.775 6.297 9.71c-.495.15-1.02-.132-1.17-.627-.15-.494.133-1.02.627-1.17 3.535-1.073 9.404-.863 13.138 1.354.445.264.59.838.326 1.283-.264.444-.838.59-1.282.326z"/>
+                </svg>
+                Spotify
               </a>
               <a href="#" target="_blank" rel="noopener noreferrer" class="stream-link stream-apple" id="link-apple">
-                <span>🍎</span> Apple Music
+                <svg class="stream-svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.4c.64-.78 1.08-1.86.96-2.95-1 .04-2.12.64-2.77 1.4-.58.68-1.1 1.77-.96 2.84 1.11.09 2.13-.51 2.77-1.29z"/>
+                </svg>
+                Apple Music
               </a>
               <a href="#" target="_blank" rel="noopener noreferrer" class="stream-link stream-youtube" id="link-youtube">
-                <span>▶️</span> YouTube
+                <svg class="stream-svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+                YouTube
               </a>
             </div>
           </div>
@@ -512,10 +579,20 @@
           <!-- Inspection Action Buttons -->
           <div class="inspect-actions-row">
             <button class="inspect-btn btn-return-crate" id="return-crate-btn">
-              🔙 Devolver al cajón
+              <svg class="btn-action-svg" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+              <span>Devolver al cajón</span>
             </button>
             <button class="inspect-btn btn-pick-another" id="pick-another-btn">
-              🎲 Sacar otro al azar
+              <svg class="btn-action-svg" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="16 3 21 3 21 8"/>
+                <line x1="4" y1="20" x2="21" y2="3"/>
+                <polyline points="21 16 21 21 16 21"/>
+                <line x1="15" y1="15" x2="21" y2="21"/>
+                <line x1="4" y1="4" x2="9" y2="9"/>
+              </svg>
+              <span>Sacar otro al azar</span>
             </button>
           </div>
 
@@ -532,6 +609,6 @@
     <span id="loading-text">Buscando joyas en la disquería...</span>
   </div>
 
-  <script src="app.js?v=35"></script>
+  <script src="app.js?v=36"></script>
 </body>
 </html>

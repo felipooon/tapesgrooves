@@ -144,6 +144,19 @@ body {
   box-shadow: 0 0 12px rgba(0, 230, 118, 0.3);
 }
 
+.nav-audio-svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.audio-btn:hover .nav-audio-svg {
+  transform: scale(1.15);
+}
+
 /* Main Viewport Container */
 .stage-container {
   position: relative;
@@ -2081,6 +2094,16 @@ body {
   gap: 0.4rem;
 }
 
+.curator-star-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.curator-star-svg {
+  filter: drop-shadow(0 0 5px rgba(255, 184, 51, 0.7));
+}
+
 .album-title-text {
   font-family: var(--font-display);
   font-size: clamp(1.2rem, 2.2vw, 1.7rem);
@@ -2218,6 +2241,15 @@ body {
   font-family: var(--font-retro);
   font-size: 0.9rem;
   color: #81c784;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.lcd-battery-svg {
+  vertical-align: middle;
+  color: #00e676;
+  filter: drop-shadow(0 0 3px rgba(0, 230, 118, 0.4));
 }
 
 .lcd-timer-display {
@@ -2237,6 +2269,21 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.lcd-note-svg {
+  flex-shrink: 0;
+  color: #00e676;
+  filter: drop-shadow(0 0 4px rgba(0, 230, 118, 0.6));
+}
+
+#track-sample-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Dynamic Equalizer Spectrum VU Meter */
@@ -2335,12 +2382,34 @@ body {
 
 .deck-btn.main-play .deck-key {
   color: #fff;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
 }
 
 .deck-key {
-  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
   color: #d1d5db;
+}
+
+.deck-svg {
+  width: 15px;
+  height: 15px;
+  fill: currentColor;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
+  transition: transform 0.08s ease, filter 0.15s ease;
+}
+
+.deck-btn:hover .deck-svg {
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));
+}
+
+.deck-btn.main-play .deck-svg {
+  width: 17px;
+  height: 17px;
+  fill: #fff;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
 }
 
 .deck-label {
@@ -2371,12 +2440,33 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.15rem;
   transition: transform 0.15s ease;
+}
+
+.vol-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+}
+
+.vol-svg {
+  width: 18px;
+  height: 18px;
+  stroke: #ffaa00;
+  fill: none;
+  filter: drop-shadow(0 0 4px rgba(255, 170, 0, 0.4));
+  transition: stroke 0.15s ease, filter 0.15s ease;
 }
 
 .vol-mute-btn:hover {
   transform: scale(1.15);
+}
+
+.vol-mute-btn:hover .vol-svg {
+  stroke: #ffd700;
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.8));
 }
 
 .vol-slider-track {
@@ -2523,6 +2613,18 @@ body {
   box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
 }
 
+.stream-svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.stream-link:hover .stream-svg {
+  transform: scale(1.15);
+}
+
 /* Inspect Action Buttons */
 .inspect-actions-row {
   display: flex;
@@ -2547,6 +2649,15 @@ body {
   transition: var(--transition-smooth);
 }
 
+.btn-action-svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  stroke: currentColor;
+  fill: none;
+  transition: transform 0.2s ease;
+}
+
 .btn-pick-another {
   background: linear-gradient(135deg, #ffaa00, #ff5500);
   border: none;
@@ -2559,6 +2670,10 @@ body {
   box-shadow: 0 0 30px rgba(255, 85, 0, 0.7);
 }
 
+.btn-pick-another:hover .btn-action-svg {
+  transform: rotate(45deg);
+}
+
 .btn-return-crate {
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -2568,6 +2683,10 @@ body {
 .btn-return-crate:hover {
   background: rgba(255, 255, 255, 0.2);
   color: #fff;
+}
+
+.btn-return-crate:hover .btn-action-svg {
+  transform: translateX(-3px);
 }
 
 /* Loading & Toast Notifications */

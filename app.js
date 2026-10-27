@@ -4353,6 +4353,17 @@ async function fetchArtistTracks(artistSeed, limit = 8) {
   return [];
 }
 
+// Vector Icons for Hi-Fi Retro Player & Deck
+const PLAYER_SVGS = {
+  play: `<svg class="deck-svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><polygon points="6 4 20 12 6 20 6 4"/></svg>`,
+  pause: `<svg class="deck-svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>`,
+  volMute: `<svg class="vol-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" stroke="none"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>`,
+  volLow: `<svg class="vol-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" stroke="none"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>`,
+  volHigh: `<svg class="vol-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" stroke="none"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`,
+  ambientOn: `<svg class="nav-audio-svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" stroke="none"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`,
+  ambientOff: `<svg class="nav-audio-svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>`
+};
+
 // 4. APPLICATION STATE & CONTROLLER
 // ==========================================================================
 class RecordStoreApp {
@@ -4430,9 +4441,9 @@ class RecordStoreApp {
     if (this.deckVolSlider) this.deckVolSlider.value = pct;
     if (this.volValBadge) this.volValBadge.textContent = `${pct}%`;
     if (this.volIcon) {
-      if (pct === 0) this.volIcon.textContent = '🔇';
-      else if (pct < 50) this.volIcon.textContent = '🔉';
-      else this.volIcon.textContent = '🔊';
+      if (pct === 0) this.volIcon.innerHTML = PLAYER_SVGS.volMute;
+      else if (pct < 50) this.volIcon.innerHTML = PLAYER_SVGS.volLow;
+      else this.volIcon.innerHTML = PLAYER_SVGS.volHigh;
     }
     try {
       localStorage.setItem('tapes_grooves_vol', this.currentVolume.toString());
@@ -4456,10 +4467,10 @@ class RecordStoreApp {
       const active = sounds.toggleAmbient();
       if (active) {
         this.ambientBtn.classList.add('active');
-        this.ambientBtn.innerHTML = '<span>🔊</span><span>Vinilo / Lofi: ON</span>';
+        this.ambientBtn.innerHTML = `${PLAYER_SVGS.ambientOn}<span>Vinilo / Lofi: ON</span>`;
       } else {
         this.ambientBtn.classList.remove('active');
-        this.ambientBtn.innerHTML = '<span>📻</span><span>Sonido Ambiente</span>';
+        this.ambientBtn.innerHTML = `${PLAYER_SVGS.ambientOff}<span>Sonido Ambiente</span>`;
       }
     });
 
@@ -5253,7 +5264,10 @@ class RecordStoreApp {
       }
     });
 
-    document.getElementById('track-sample-title').textContent = `🎵 ${album.sampleTrack || 'Muestra de Audio'}`;
+    const sampleTitle = album.sampleTrack || 'Muestra de Audio';
+    const sampleNameEl = document.getElementById('track-sample-name');
+    if (sampleNameEl) sampleNameEl.textContent = sampleTitle;
+    else document.getElementById('track-sample-title').textContent = sampleTitle;
 
     const caseImage = document.getElementById('inspect-case-art');
     caseImage.src = album.artwork;
@@ -5364,6 +5378,19 @@ class RecordStoreApp {
     }
   }
 
+  // Update Play / Pause deck button visual state (SVG icon + label)
+  setPlayPauseBtnState(isPlaying) {
+    if (!this.playPauseBtn) return;
+    const key = this.playPauseBtn.querySelector('.deck-key');
+    const label = this.playPauseBtn.querySelector('.deck-label');
+    if (key) {
+      key.innerHTML = isPlaying ? PLAYER_SVGS.pause : PLAYER_SVGS.play;
+    }
+    if (label) {
+      label.textContent = isPlaying ? 'PAUSE' : 'PLAY';
+    }
+  }
+
   // Audio Preview Controls
   toggleAudioPreview() {
     if (!this.selectedAlbum || !this.selectedAlbum.previewUrl) return;
@@ -5379,8 +5406,7 @@ class RecordStoreApp {
       }
       this.audioElement.pause();
       this.isPlayingAudio = false;
-      this.playPauseBtn.querySelector('.deck-key').textContent = '▶';
-      this.playPauseBtn.querySelector('.deck-label').textContent = 'PLAY';
+      this.setPlayPauseBtnState(false);
       this.lcdModeText.textContent = 'PAUSE';
       this.statusLedDot.classList.remove('playing');
       this.setReelsSpinning(false);
@@ -5394,8 +5420,7 @@ class RecordStoreApp {
       this.audioElement.volume = this.currentVolume;
       this.audioElement.play().then(() => {
         this.isPlayingAudio = true;
-        this.playPauseBtn.querySelector('.deck-key').textContent = '⏸';
-        this.playPauseBtn.querySelector('.deck-label').textContent = 'PAUSE';
+        this.setPlayPauseBtnState(true);
         this.lcdModeText.textContent = 'PLAY';
         this.statusLedDot.classList.add('playing');
         this.setReelsSpinning(true);
@@ -5425,8 +5450,7 @@ class RecordStoreApp {
     this.audioElement.currentTime = 0;
     this.audioElement.volume = this.currentVolume;
     this.isPlayingAudio = false;
-    this.playPauseBtn.querySelector('.deck-key').textContent = '▶';
-    this.playPauseBtn.querySelector('.deck-label').textContent = 'PLAY';
+    this.setPlayPauseBtnState(false);
     this.lcdModeText.textContent = 'STOP';
     this.statusLedDot.classList.remove('playing');
     this.setReelsSpinning(false);
@@ -5567,8 +5591,7 @@ class RecordStoreApp {
     } else {
       // No hay más pistas de muestra disponibles
       this.isPlayingAudio = false;
-      this.playPauseBtn.querySelector('.deck-key').textContent = '▶';
-      this.playPauseBtn.querySelector('.deck-label').textContent = 'PLAY';
+      this.setPlayPauseBtnState(false);
       this.lcdModeText.textContent = 'END';
       this.statusLedDot.classList.remove('playing');
       this.setReelsSpinning(false);
@@ -5626,7 +5649,7 @@ class RecordStoreApp {
     if (!this.tracklistItemsList) return;
     this.activeTrackIndex = 0;
     if (this.tracklistCountBadge) this.tracklistCountBadge.textContent = 'Buscando pistas...';
-    this.tracklistItemsList.innerHTML = '<div class="tracklist-loading-msg">🔍 Desplegando el cancionero del disco...</div>';
+    this.tracklistItemsList.innerHTML = '<div class="tracklist-loading-msg">Desplegando el cancionero del disco...</div>';
 
     const tracks = await fetchAlbumTracklist(album.artist, album.title);
 
@@ -5639,7 +5662,9 @@ class RecordStoreApp {
       const firstTrack = tracks[0];
 
       if (firstTrack) {
-        document.getElementById('track-sample-title').textContent = `🎵 ${firstTrack.title}`;
+        const sampleNameEl = document.getElementById('track-sample-name');
+        if (sampleNameEl) sampleNameEl.textContent = firstTrack.title;
+        else document.getElementById('track-sample-title').textContent = firstTrack.title;
         const isTape = album.format === 'cassette';
         this.lcdModeText.textContent = isTape ? 'TAPE 01' : 'CD-DA 01';
 
@@ -5723,7 +5748,10 @@ class RecordStoreApp {
     });
 
     // Update Walkman / Discman LCD Screen
-    document.getElementById('track-sample-title').textContent = `🎵 ${track.title}`;
+    const sampleNameEl = document.getElementById('track-sample-name');
+    if (sampleNameEl) sampleNameEl.textContent = track.title;
+    else document.getElementById('track-sample-title').textContent = track.title;
+
     const trackMins = (idx + 1).toString().padStart(2, '0');
     if (this.selectedAlbum && this.selectedAlbum.format === 'cassette') {
       this.lcdModeText.textContent = `TAPE ${trackMins}`;
@@ -5740,8 +5768,7 @@ class RecordStoreApp {
       
       this.audioElement.play().then(() => {
         this.isPlayingAudio = true;
-        this.playPauseBtn.querySelector('.deck-key').textContent = '⏸';
-        this.playPauseBtn.querySelector('.deck-label').textContent = 'PAUSE';
+        this.setPlayPauseBtnState(true);
         this.lcdModeText.textContent = 'PLAY';
         this.statusLedDot.classList.add('playing');
         this.setReelsSpinning(true);
